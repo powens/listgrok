@@ -1,0 +1,173 @@
+one last hurrah (2000 points)
+
+T’au Empire
+Strike Force (2000 points)
+Kauyon
+
+
+CHARACTERS
+
+Aun’va (65 points)
+  • 1x Aun’va
+    • 1x Close combat weapon
+  • 2x Ethereal Guard
+    • 2x Supreme honour blade
+
+Commander in Coldstar Battlesuit (125 points)
+  • Warlord
+  • 1x Battlesuit fists
+    1x Cyclic ion blaster
+    3x Cyclic ion blaster
+    1x Marker Drone
+    1x Shield Drone
+  • Enhancement: Exemplar of the Kauyon
+
+Commander in Crisis Battlesuit (80 points)
+  • 1x Battlesuit fists
+    1x Cyclic ion blaster
+    3x Cyclic ion blaster
+    2x Shield Drone
+
+Darkstrider (60 points)
+  • 1x Close combat weapon
+    1x Shade
+
+
+BATTLELINE
+
+Breacher Team (90 points)
+  • 1x Support turret missile system
+  • 1x Breacher Fire Warrior Shas’ui
+    • 1x Close combat weapon
+      1x Guardian Drone
+      1x Pulse blaster
+      1x Pulse pistol
+      1x Shield Drone
+  • 9x Breacher Fire Warrior
+    • 9x Close combat weapon
+      9x Pulse blaster
+      9x Pulse pistol
+
+Breacher Team (90 points)
+  • 1x Support turret missile system
+  • 1x Breacher Fire Warrior Shas’ui
+    • 1x Close combat weapon
+      1x Guardian Drone
+      1x Pulse blaster
+      1x Pulse pistol
+      1x Shield Drone
+  • 9x Breacher Fire Warrior
+    • 9x Close combat weapon
+      9x Pulse blaster
+      9x Pulse pistol
+
+Breacher Team (90 points)
+  • 1x Support turret missile system
+  • 1x Breacher Fire Warrior Shas’ui
+    • 1x Close combat weapon
+      1x Guardian Drone
+      1x Pulse blaster
+      1x Pulse pistol
+      1x Shield Drone
+  • 9x Breacher Fire Warrior
+    • 9x Close combat weapon
+      9x Pulse blaster
+      9x Pulse pistol
+
+Breacher Team (90 points)
+  • 1x Support turret missile system
+  • 1x Breacher Fire Warrior Shas’ui
+    • 1x Close combat weapon
+      1x Guardian Drone
+      1x Pulse blaster
+      1x Pulse pistol
+      1x Shield Drone
+  • 9x Breacher Fire Warrior
+    • 9x Close combat weapon
+      9x Pulse blaster
+      9x Pulse pistol
+
+
+DEDICATED TRANSPORTS
+
+Devilfish (75 points)
+  • 1x Accelerator burst cannon
+    1x Armoured hull
+    2x Seeker missile
+    2x Twin pulse carbine
+
+Devilfish (75 points)
+  • 1x Accelerator burst cannon
+    1x Armoured hull
+    2x Seeker missile
+    2x Twin pulse carbine
+
+
+OTHER DATASHEETS
+
+Broadside Battlesuits (180 points)
+  • 1x Broadside Shas’vre
+    • 1x Crushing bulk
+      1x Heavy rail rifle
+      2x Missile Drone
+      1x Seeker missile
+      1x Twin plasma rifle
+  • 1x Broadside Shas’ui
+    • 1x Crushing bulk
+      1x Heavy rail rifle
+      2x Missile Drone
+      1x Seeker missile
+      1x Twin plasma rifle
+
+Crisis Battlesuits (400 points)
+  • 1x Crisis Shas’vre
+    • 1x Battlesuit fists
+      1x Cyclic ion blaster
+      2x Fusion blaster
+      2x Shield Drone
+      1x Shield Generator
+  • 5x Crisis Shas’ui
+    • 5x Battlesuit fists
+      5x Cyclic ion blaster
+      10x Fusion blaster
+      10x Shield Drone
+      5x Shield Generator
+
+Pathfinder Team (90 points)
+  • 1x Pathfinder Shas’ui
+    • 1x Close combat weapon
+      1x Gun Drone
+      1x Pulse carbine
+      1x Pulse pistol
+      1x Recon Drone
+      1x Semi-automatic grenade launcher
+      1x Shield Drone
+  • 9x Pathfinder
+    • 9x Close combat weapon
+      3x Ion rifle
+      6x Pulse carbine
+      9x Pulse pistol
+
+Riptide Battlesuit (165 points)
+  • 1x Ion accelerator
+    2x Missile Drone
+    1x Riptide fists
+    1x Twin plasma rifle
+
+Riptide Battlesuit (165 points)
+  • 1x Ion accelerator
+    2x Missile Drone
+    1x Riptide fists
+    1x Twin plasma rifle
+
+Tetras (80 points)
+  • 2x Tetra
+    • 2x Close combat weapons
+      4x Pulse rifle
+
+Tetras (80 points)
+  • 2x Tetra
+    • 2x Close combat weapons
+      4x Pulse rifle
+
+Exported with App Version: v1.11.0 (39), Data Version: v352
