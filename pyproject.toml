@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "40klistparser"
+version = "0.1.0"
+description = "Parse Warhammer 40k lists"
+authors = ["Patrick Owens <1919554+powens@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
