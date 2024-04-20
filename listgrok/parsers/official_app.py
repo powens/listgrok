@@ -1,6 +1,6 @@
 import re
-from src.army.army_list import Unit, ArmyList
-from src.game_data import get_factions, get_all_detachments
+from listgrok.army.army_list import Unit, ArmyList
+from listgrok.game_data import get_factions, get_all_detachments
 
 ARMY_NAME_REGEX = r"^(?P<name>.*)\s\((?P<points>\d+)\s[Pp]oints\)$"
 NUM_REGEX = r"^(?P<num>\d+)x\s(?P<name>.*)$"

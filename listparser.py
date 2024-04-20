@@ -1,5 +1,5 @@
 from typing import List
-from src.parsers.official_app import ListParser
+from listgrok.parsers.official_app import ListParser
 
 
 def parse_wh_app_list(list_text: str) -> List:
