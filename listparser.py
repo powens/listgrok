@@ -1,9 +1,9 @@
 from typing import List
-from listgrok.parsers.official_app import ListParser
+from listgrok.parsers.official_app import OfficialAppListParser
 
 
 def parse_wh_app_list(list_text: str) -> List:
-    return ListParser().parse_list(list_text)
+    return OfficialAppListParser().parse_list(list_text)
 
 
 def parse_list(list: str) -> List:

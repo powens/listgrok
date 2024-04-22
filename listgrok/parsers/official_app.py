@@ -34,7 +34,7 @@ def _count_leading_spaces(line: str) -> int:
     return len(line) - len(line.lstrip())
 
 
-class ListParser:
+class OfficialAppListParser:
     def parse_list(self, list_text: str) -> ArmyList:
         self.list = ArmyList()
         self.state_machine = "START"
