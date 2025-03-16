@@ -1,6 +1,6 @@
 import re
 from listgrok.army.army_list import Unit, ArmyList
-from listgrok.game_data import get_factions, get_all_detachments
+from listgrok.parsers.parse_error import ParseError
 
 ARMY_NAME_REGEX = r"^(?P<name>.*)\s\((?P<points>\d+)\s[Pp]oints\)$"
 NUM_REGEX = r"^(?P<num>\d+)x\s(?P<name>.*)$"
@@ -11,27 +11,29 @@ UNIT_TYPES = [
     "BATTLELINE",
     "DEDICATED TRANSPORTS",
 ]
-SUPER_FACTIONS = ["Space Marines"]
 
 
 def _is_army_size_line(line: str) -> bool:
     return re.match(ARMY_NAME_REGEX, line) is not None
 
 
-def _is_superfaction_line(line: str) -> bool:
-    return line in SUPER_FACTIONS
-
-
-def _is_faction_line(line: str) -> bool:
-    return line.replace("’", "'") in get_factions()
-
-
-def _is_detachment_line(line: str) -> bool:
-    return line in get_all_detachments()
-
-
 def _count_leading_spaces(line: str) -> int:
     return len(line) - len(line.lstrip())
+
+
+def _handle_faction_collection(collection: list[str], list: ArmyList):
+    line_count = len(collection)
+    if line_count < 3 or line_count > 4:
+        raise ParseError("Unexpected faction line", collection[0])
+
+    list.army_size = collection[-1]
+    list.detachment = collection[-2]
+
+    if line_count == 4:
+        list.super_faction = collection[0]
+        list.faction = collection[1]
+    else:
+        list.faction = collection[0]
 
 
 class OfficialAppListParser:
@@ -64,26 +66,20 @@ class OfficialAppListParser:
     def _handle_start(self, line: str):
         match = re.match(ARMY_NAME_REGEX, line)
         if match is None:
-            raise ValueError(f"Expected army name, got: {line}")
+            raise ParseError("Expected army name", line)
         self.list.name = match.group("name")
         self.list.points = int(match.group("points"))
         self.state_machine = "FACTION"
 
     def _handle_faction(self, line: str):
         # We need to handle both factions with and without a super faction
-        if _is_army_size_line(line):
-            self.list_army_size = line
-        elif _is_detachment_line(line):
-            self.list.detachment = line
-        elif _is_faction_line(line):
-            self.list.faction = line
-        elif _is_superfaction_line(line):
-            self.list.super_faction = line
-        elif line in UNIT_TYPES:
+        if line in UNIT_TYPES:
+            _handle_faction_collection(self.faction_collection, self.list)
+
             self.state_machine = "UNIT_START"
             self._handle_unit_start(line)
         else:
-            print(f"Unknown faction line: {line}")
+            self.faction_collection.append(line)
 
     def _handle_unit_start(self, line: str):
         if line in UNIT_TYPES:

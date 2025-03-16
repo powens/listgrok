@@ -1,1 +1,1 @@
-from official_app import OfficialAppListParser
+from .official_app import OfficialAppListParser as OfficialAppListParser

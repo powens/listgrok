@@ -25,3 +25,7 @@ dist/
 build/
 egg-info/
 pip-wheel-metadata/
+
+.pytest_cache/
+.ruff_cache/
+.venv/

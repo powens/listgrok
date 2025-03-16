@@ -1,5 +1,5 @@
-from parsers.official_app import OfficialAppListParser
-from army.army_list import ArmyList
+from listgrok.parsers.official_app import OfficialAppListParser
+from listgrok.army.army_list import ArmyList
 
 
 def parse_list(list: str) -> ArmyList:
