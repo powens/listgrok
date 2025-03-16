@@ -63,6 +63,8 @@ class OfficialAppListParser:
 
     def _handle_start(self, line: str):
         match = re.match(ARMY_NAME_REGEX, line)
+        if match is None:
+            raise ValueError(f"Expected army name, got: {line}")
         self.list.name = match.group("name")
         self.list.points = int(match.group("points"))
         self.state_machine = "FACTION"
@@ -92,6 +94,9 @@ class OfficialAppListParser:
             if leading_spaces == 0:
                 self.current_unit = Unit()
                 match = re.match(ARMY_NAME_REGEX, line)
+                if match is None:
+                    raise ValueError("Unexpected unit_start", line)
+                    return
                 self.current_unit.name = match.group("name")
                 self.current_unit.points = int(match.group("points"))
                 self.current_unit.sheet_type = self.most_recent_unit_type
