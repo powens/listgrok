@@ -1,5 +1,5 @@
 import re
-from listgrok.army.army_list import Unit, ArmyList
+from listgrok.army.army_list import Unit, ArmyList, UnitComposition
 from listgrok.parsers.parse_error import ParseError
 
 ARMY_NAME_REGEX = r"^(?P<name>.*)\s\((?P<points>\d+)\s[Pp]oints\)$"
@@ -35,12 +35,76 @@ def _handle_faction_collection(collection: list[str], list: ArmyList):
     else:
         list.faction = collection[0]
 
+def _handle_unit_block(lines: list[str], most_recent_unit_type: str, list: ArmyList):
+    # Determine if this is a single model or multiple model unit
+    most_leading_spaces = 0
+    for line in lines:
+        leading_spaces = _count_leading_spaces(line)
+        if leading_spaces > most_leading_spaces:
+            most_leading_spaces = leading_spaces
+
+    unit = Unit()
+
+    first_line = lines[0]
+    match = re.match(ARMY_NAME_REGEX, first_line)
+    if match is None:
+        raise ValueError("Unexpected unit_start", first_line)
+        return
+    unit.name = match.group("name")
+    unit.points = int(match.group("points"))
+    unit.sheet_type = most_recent_unit_type
+
+    list.add_unit(unit)
+
+    if most_leading_spaces == 2:
+        uc = UnitComposition()
+        uc.num_models = 1
+        unit.add_model_set(uc)
+        for line in lines:
+            line = line.strip().lstrip("• ")
+
+            if line == "Warlord":
+                unit.is_warlord = True
+            elif line.startswith("Enhancements: "):
+                unit.enhancement = line[len("Enhancements: "):]
+            else:
+                match = re.match(NUM_REGEX, line)
+                if match is not None:
+                    count=int(match.group("num"))
+                    name=match.group("name")
+                    uc.add_wargear(name, count)
+                else:
+                    print("Wargear Parser unexpected line", line)
+    else:
+        uc = None
+        for line in lines:
+            line = line.strip()
+            if line.startswith("• "):
+                line = line.lstrip("• ")
+                uc = UnitComposition()
+                
+                match = re.match(NUM_REGEX, line)
+                if match is not None:
+                    uc.num_models = int(match.group("num"))
+                    uc.name = match.group("name")
+                    unit.add_model_set(uc)
+            elif line.startswith("◦ "):
+                line = line.lstrip("◦ ")
+                match = re.match(NUM_REGEX, line)
+                if match is not None:
+                    count=int(match.group("num"))
+                    name=match.group("name")
+                    if uc is None:
+                        print("Wargear Parser unexpected wargear", line)
+                    else:
+                        uc.add_wargear(name, count) 
+
 
 class OfficialAppListParser:
     def parse_list(self, list_text: str) -> ArmyList:
         self.list = ArmyList()
         self.state_machine = "START"
-        self.faction_collection = []
+        self.line_collection = []
 
         self.prev_leading_spaces = 0
         for line in list_text.split("\n"):
@@ -74,12 +138,13 @@ class OfficialAppListParser:
     def _handle_faction(self, line: str):
         # We need to handle both factions with and without a super faction
         if line in UNIT_TYPES:
-            _handle_faction_collection(self.faction_collection, self.list)
+            _handle_faction_collection(self.line_collection, self.list)
+            self.line_collection = []
 
             self.state_machine = "UNIT_START"
             self._handle_unit_start(line)
         else:
-            self.faction_collection.append(line)
+            self.line_collection.append(line)
 
     def _handle_unit_start(self, line: str):
         if line in UNIT_TYPES:
@@ -98,11 +163,15 @@ class OfficialAppListParser:
                 self.current_unit.sheet_type = self.most_recent_unit_type
 
                 self.list.units.append(self.current_unit)
-                # self.state_machine = "UNIT_DETAILS"
+                self.state_machine = "UNIT_DETAILS"
             else:
-                pass
-                # print("Unexpected unit_start", line)
+                print("Unexpected unit_start", line)
 
     def _handle_unit_details(self, line: str):
-        # if leading
-        pass
+        if _count_leading_spaces(line) == 0:
+            _handle_unit_block(self.line_collection, self.most_recent_unit_type, self.list)
+            self.line_collection = []
+            self.state_machine = "UNIT_START"
+            self._handle_unit_start(line)
+        else:
+            self.line_collection.append(line)
