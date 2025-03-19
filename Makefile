@@ -1,6 +1,5 @@
 .PHONY: test
 test:
-	@echo "Running tests..."
 	uv run pytest
 
 .PHONY: lint
@@ -10,3 +9,7 @@ lint:
 .PHONY: fmt
 fmt:
 	uvx ruff format
+
+.PHONY: build
+buiild:
+	uv build
