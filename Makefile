@@ -11,5 +11,19 @@ fmt:
 	uvx ruff format
 
 .PHONY: build
-buiild:
+build:
 	uv build
+
+.PHONY: coverage
+coverage:
+	uv run coverage run -m pytest
+	uv run coverage report
+
+.PHONY: coverage-html
+coverage-html:
+	uv run coverage html
+
+.PHONY: clean
+clean:
+	rm -rf htmlcov
+	rm .coverage

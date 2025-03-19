@@ -157,7 +157,6 @@ class OfficialAppListParser:
                 match = re.match(ARMY_NAME_REGEX, line)
                 if match is None:
                     raise ValueError("Unexpected unit_start", line)
-                    return
                 self.current_unit.name = match.group("name")
                 self.current_unit.points = int(match.group("points"))
                 self.current_unit.sheet_type = self.most_recent_unit_type
