@@ -4,7 +4,7 @@ test:
 
 .PHONY: lint
 lint:
-	uvx ruff check
+	uvx ruff check src
 
 .PHONY: fmt
 fmt:
