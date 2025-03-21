@@ -1,17 +1,42 @@
 # listgrok
 
+**NOTE** listgrok is still in early development. The APIs are unstable and very few features are implemented
+
 ## Description
 
-40klistparser is a tool for parsing and analyzing Warhammer 40,000 army lists.
+listgrok is a library for parsing Warhammer 40k army lists.
 
 ## Features
 
--
+- Parse lists from:
+  - Official 40k app
+  - TODO: NewRecruit formats
+  - TODO: Battlescribe format
+- TODO: Output to a common json (or yaml?) format
+
 
 ## Usage
 
 ```python
-tbd
+from listgrok import parse_list
+
+my_list_text = """
+Boop (1985 Points)
+
+Space Marines
+Space Wolves
+Stormlance Task Force
+Strike Force (2000 Points)
+
+CHARACTERS
+
+Bjorn the Fell-Handed (190 Points)
+  • 1x Heavy flamer
+  • 1x Helfrost cannon
+  • 1x Trueclaw
+"""
+
+list = parse_list(my_list_text)
 ```
 
 ## Contributing
