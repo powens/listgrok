@@ -18,6 +18,13 @@ class UnitComposition:
         else:
             self.wargear[weapon] += count
 
+    def to_json(self) -> dict:
+        return {
+            "name": self.name,
+            "num_models": self.num_models,
+            "wargear": self.wargear,
+        }
+
 
 @dataclass
 class Unit:
@@ -38,6 +45,20 @@ class Unit:
 
     def add_model_set(self, model_set: UnitComposition):
         self.composition.append(model_set)
+
+    def to_json(self) -> dict:
+        o = {
+            "name": self.name,
+            "sheet_type": self.sheet_type,
+            "enhancement": self.enhancement,
+            "points": self.points,
+            "composition": [
+                model.to_json() for model in self.composition
+            ],
+        }
+        if self.is_warlord: 
+            o["is_warlord"] = self.is_warlord
+        return o
 
 @dataclass
 class ArmyList:
@@ -60,3 +81,17 @@ class ArmyList:
 
     def add_unit(self, unit: Unit):
         self.units.append(unit)
+
+    def to_json(self) -> dict:
+        o = {
+            "name": self.name,
+            "points": self.points,
+            "faction": self.faction,
+            "detachment": self.detachment,
+            "army_size": self.army_size,
+            "units": [unit.to_json() for unit in self.units]
+        }
+        if self.super_faction:
+            o["super_faction"] = self.super_faction
+
+        return o

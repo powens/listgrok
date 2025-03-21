@@ -1,0 +1,137 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Xenos - T'au Empire
++ DETACHMENT: Experimental Prototype Cadre
++ TOTAL ARMY POINTS: 1985pts
++
++ WARLORD: Char2: Commander Shadowsun
++ ENHANCEMENT: Plasma Accelerator Rifle (on Char1: Commander in Coldstar Battlesuit)
+& Fusion Blades (on Char2: Commander in Coldstar Battlesuit)
+& Thermoneutronic Projector (on Char3: Commander in Enforcer Battlesuit)
++ NUMBER OF UNITS: 18
++ SECONDARY: - Bring It Down: (9x2) + (1x6) - Assassination: 5 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+CHARACTER
+
+Char1: 1x Commander Farsight (95 pts)
+1 with Dawn Blade, High-intensity plasma rifle
+
+Char2: 1x Commander Shadowsun (100 pts)
+1 with Battlesuit fists, Flechette launcher, 2x High-energy fusion blaster, Light missile pod, Pulse pistol
+  • Warlord
+
+Char3: 1x Commander in Coldstar Battlesuit (105 pts)
+1 with Cyclic ion blaster, Plasma rifle
+  • Plasma Accelerator Rifle upgradeBattlesuit fists
+  • 2x Shield Drone
+Enhancement: Plasma Accelerator Rifle (+10 pts)
+
+Char4: 1x Commander in Coldstar Battlesuit (120 pts)
+1 with Fusion blaster
+  • Fusion Blades upgradeFusion blaster, Fusion blaster, Fusion blaster, Battlesuit fists
+  • 2x Shield Drone
+Enhancement: Fusion Blades (+25 pts)
+
+Char5: 1x Commander in Enforcer Battlesuit (100 pts)
+1 with T'au flamer
+  • Thermoneutronic Projector upgradeT'au flamer, T'au flamer, T'au flamer, Battlesuit fists
+  • 2x Shield Drone
+Enhancement: Thermoneutronic Projector (+20 pts)
+
+OTHER DATASHEETS
+
+10x Kroot Carnivores (65 pts)
+• 1x Long-quill
+    1 with Close combat weapon, Kroot pistol, Kroot carbine
+• 1x Kroot Carnivore
+    1 with Close combat weapon, Tanglebomb launcher
+• 8x Kroot Carnivores
+    8 with Close combat weapon, Kroot rifle
+
+10x Kroot Carnivores (65 pts)
+• 1x Long-quill
+    1 with Close combat weapon, Kroot pistol, Kroot carbine
+• 1x Kroot Carnivore
+    1 with Close combat weapon, Tanglebomb launcher
+• 8x Kroot Carnivores
+    8 with Close combat weapon, Kroot rifle
+
+10x Pathfinder Team (90 pts)
+• 1x Pathfinder Shas'ui
+    1 with Close combat weapon, Pulse carbine, Pulse pistol, Semi-automatic grenade launcher, Drone burst cannon
+      • Recon droneDrone burst cannon
+• 9x Pathfinders
+    9 with Close combat weapon, Pulse carbine, Pulse pistol
+
+3x Stealth Battlesuits (60 pts)
+• 1x Stealth Shas'vre
+    1 with Battlesuit fists, Fusion blaster
+      • Battlesuit support system, Homing beacon, Marker Drone, Shield Drone
+• 2x Stealth Shas'ui
+    1 with Battlesuit fists, Burst cannon
+    1 with Battlesuit fists, Burst cannon
+
+3x Stealth Battlesuits (60 pts)
+• 1x Stealth Shas'vre
+    1 with Battlesuit fists, Fusion blaster
+      • Battlesuit support system, Homing beacon, Marker Drone, Shield Drone
+• 2x Stealth Shas'ui
+    2 with Battlesuit fists, Burst cannon
+
+3x Stealth Battlesuits (60 pts)
+• 1x Stealth Shas'vre
+    1 with Battlesuit fists, Fusion blaster
+      • Battlesuit support system, Homing beacon, Marker Drone, Shield Drone
+• 2x Stealth Shas'ui
+    2 with Battlesuit fists, Burst cannon
+
+5x Vespid Stingwings (65 pts)
+• 1x Vespid Strain Leader
+    1 with Neutron blaster, Stingwing claws
+• 4x Vespid Stingwings
+    4 with Neutron blaster, Stingwing claws
+
+3x Broadside Battlesuits (300 pts)
+• 1x Broadside Shas’vre
+    1 with Crushing bulk, 2x Missile pod, High-yield missile pods, Twin smart missile system
+      • Weapon support system
+• 2x Broadside Shas’ui
+    2 with Crushing bulk, 2x Missile pod, High-yield missile pods, Twin smart missile system
+      • Weapon support system
+
+3x Crisis Fireknife Battlesuits (130 pts)
+• 1x Crisis Fireknife Shas’vre
+    1 with 2x Plasma rifle, Battlesuit fists, Twin pulse carbine
+      • Marker Drone
+• 2x Crisis Fireknife Shas’ui
+    2 with Battlesuit fists, 2x Plasma rifle, Twin pulse carbine
+      • Shield Drone
+
+3x Crisis Starscythe Battlesuits (110 pts)
+• 1x Crisis Starscythe Shas’vre
+    1 with 2x T'au flamer, Battlesuit fists, Twin pulse carbine
+      • Marker Drone
+• 2x Crisis Starscythe Shas’ui
+    2 with 2x T'au flamer, Battlesuit fists, Twin pulse carbine
+      • Shield Drone
+
+3x Crisis Sunforge Battlesuits (150 pts)
+• 1x Crisis Sunforge Shas’vre
+    1 with 2x Fusion blaster, Battlesuit fists, Twin pulse carbine
+      • Marker Drone
+• 2x Crisis Sunforge Shas’ui
+    1 with Battlesuit fists, 2x Fusion blaster, Twin pulse carbine
+      • Shield Drone
+    1 with Battlesuit fists, 2x Fusion blaster, Twin pulse carbine
+      • Shield Drone
+
+3x Crisis Sunforge Battlesuits (150 pts)
+• 1x Crisis Sunforge Shas’vre
+    1 with 2x Fusion blaster, Battlesuit fists, Twin pulse carbine
+      • Marker Drone
+• 2x Crisis Sunforge Shas’ui
+    2 with Battlesuit fists, 2x Fusion blaster, Twin pulse carbine
+      • Shield Drone
+
+1x Ghostkeel Battlesuit (160 pts)
+1 with Ghostkeel fists, Cyclic ion raker, Twin fusion blaster

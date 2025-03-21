@@ -31,3 +31,5 @@ pip-wheel-metadata/
 .venv/
 .coverage
 htmlcov/
+
+.DS_Store

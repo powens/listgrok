@@ -1,0 +1,1 @@
+from .army_list import ArmyList
