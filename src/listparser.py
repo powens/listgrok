@@ -1,5 +1,5 @@
-import argparse
-from listgrok import ArmyList, parse_list
+# import argparse
+from listgrok import parse_list
 
 
 if __name__ == "__main__":
