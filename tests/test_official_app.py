@@ -2,7 +2,6 @@ import pytest
 
 from listgrok.parsers.official_app import (
     _is_army_size_line,
-    _count_leading_spaces,
     _handle_faction_collection,
     _handle_unit_block,
     OfficialAppParser,
@@ -21,18 +20,6 @@ from listgrok.parsers.parse_error import ParseError
 )
 def test_is_army_size_line(line, expected):
     assert _is_army_size_line(line) == expected
-
-
-@pytest.mark.parametrize(
-    "line,expected",
-    [
-        ("foo", 0),
-        ("  • 1x Dawn Blade", 2),
-        ("     ◦ 1x Marksman bolt carbine", 5),
-    ],
-)
-def test_count_leading_spaces(line, expected):
-    assert _count_leading_spaces(line) == expected
 
 
 class TestHandleFaction:
