@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	uv run pytest
+	uv run pytest --random-order
 
 .PHONY: lint
 lint:
@@ -16,7 +16,7 @@ build:
 
 .PHONY: coverage
 coverage:
-	uv run coverage run -m pytest
+	uv run coverage run -m pytest --random-order
 	uv run coverage report
 
 .PHONY: coverage-html
