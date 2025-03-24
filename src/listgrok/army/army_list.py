@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
+
 @dataclass
 class UnitComposition:
     name: str
@@ -52,13 +53,12 @@ class Unit:
             "sheet_type": self.sheet_type,
             "enhancement": self.enhancement,
             "points": self.points,
-            "composition": [
-                model.to_json() for model in self.composition
-            ],
+            "composition": [model.to_json() for model in self.composition],
         }
-        if self.is_warlord: 
+        if self.is_warlord:
             o["is_warlord"] = self.is_warlord
         return o
+
 
 @dataclass
 class ArmyList:
@@ -89,7 +89,7 @@ class ArmyList:
             "faction": self.faction,
             "detachment": self.detachment,
             "army_size": self.army_size,
-            "units": [unit.to_json() for unit in self.units]
+            "units": [unit.to_json() for unit in self.units],
         }
         if self.super_faction:
             o["super_faction"] = self.super_faction

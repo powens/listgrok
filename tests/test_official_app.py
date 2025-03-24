@@ -2,7 +2,6 @@ import pytest
 
 from listgrok.parsers.official_app import (
     _is_army_size_line,
-    _count_leading_spaces,
     _handle_faction_collection,
     _handle_unit_block,
     OfficialAppParser,
@@ -21,18 +20,6 @@ from listgrok.parsers.parse_error import ParseError
 )
 def test_is_army_size_line(line, expected):
     assert _is_army_size_line(line) == expected
-
-
-@pytest.mark.parametrize(
-    "line,expected",
-    [
-        ("foo", 0),
-        ("  • 1x Dawn Blade", 2),
-        ("     ◦ 1x Marksman bolt carbine", 5),
-    ],
-)
-def test_count_leading_spaces(line, expected):
-    assert _count_leading_spaces(line) == expected
 
 
 class TestHandleFaction:
@@ -89,6 +76,7 @@ class TestHandleFaction:
 
         with pytest.raises(ParseError):
             _handle_faction_collection(collection, list)
+
 
 class TestHandleUnitBlock:
     def test_single_character(self):
@@ -167,6 +155,7 @@ class TestHandleUnitBlock:
             "Shield Drone": 2,
             "T’au flamer": 4,
         }
+
 
 class TestOfficialAppParser:
     def test_happy_path(self):
@@ -325,7 +314,7 @@ Strike Force (2000 Points)
 
 Exported with App Version: v1.29.1 (1), Data Version: v581
         """
-        
+
         parser = OfficialAppParser()
         list = parser.parse(list_text)
 
@@ -336,7 +325,6 @@ Exported with App Version: v1.29.1 (1), Data Version: v581
         assert list.detachment == "Champions of Fenris"
         assert list.army_size == "Strike Force (2000 Points)"
         assert len(list.units) == 0
-
 
     def test_no_unittype(self):
         list_text = """
@@ -362,7 +350,6 @@ Exported with App Version: v1.29.1 (1), Data Version: v581
         with pytest.raises(ParseError) as e:
             parser.parse(list_text)
         assert e.value.message == "No unit type found"
-        
 
     def test_multiline_list_name(self):
         list_text = """
