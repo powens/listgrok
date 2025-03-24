@@ -77,6 +77,7 @@ class TestHandleFaction:
         with pytest.raises(ParseError):
             _handle_faction_collection(collection, list)
 
+
 class TestHandleUnitBlock:
     def test_single_character(self):
         list = ArmyList()
@@ -154,6 +155,7 @@ class TestHandleUnitBlock:
             "Shield Drone": 2,
             "T’au flamer": 4,
         }
+
 
 class TestOfficialAppParser:
     def test_happy_path(self):
@@ -312,7 +314,7 @@ Strike Force (2000 Points)
 
 Exported with App Version: v1.29.1 (1), Data Version: v581
         """
-        
+
         parser = OfficialAppParser()
         list = parser.parse(list_text)
 
@@ -323,7 +325,6 @@ Exported with App Version: v1.29.1 (1), Data Version: v581
         assert list.detachment == "Champions of Fenris"
         assert list.army_size == "Strike Force (2000 Points)"
         assert len(list.units) == 0
-
 
     def test_no_unittype(self):
         list_text = """
@@ -349,7 +350,6 @@ Exported with App Version: v1.29.1 (1), Data Version: v581
         with pytest.raises(ParseError) as e:
             parser.parse(list_text)
         assert e.value.message == "No unit type found"
-        
 
     def test_multiline_list_name(self):
         list_text = """

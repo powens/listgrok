@@ -1,6 +1,7 @@
 import pytest
 from listgrok.parsers.helpers import count_leading_spaces
 
+
 @pytest.mark.parametrize(
     "line,expected",
     [

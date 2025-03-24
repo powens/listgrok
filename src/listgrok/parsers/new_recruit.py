@@ -16,7 +16,7 @@ UNIT_TYPES = [
     "DEDICATED TRANSPORT",
     "OTHER DATASHEETS",
 ]
-    
+
 
 def _handle_header(lines: list[str], list: ArmyList):
     header = "\n".join(lines)
@@ -27,7 +27,7 @@ def _handle_header(lines: list[str], list: ArmyList):
         ("detachment", DETACHMENT_REGEX, str),
     ]
 
-    for (key, regex, type) in matches:
+    for key, regex, type in matches:
         match = re.search(regex, header, flags=re.MULTILINE)
         if match is not None:
             val = type(match.group(key))
@@ -60,13 +60,13 @@ def _handle_unit_line(line: str, unit: Unit, uc: UnitComposition):
 def _handle_unit(lines: list[str], list: ArmyList, unit_type: str):
     if len(lines) == 0:
         return
-    
+
     most_leading_spaces = 0
     for line in lines:
         leading_spaces = count_leading_spaces(line)
         if leading_spaces > most_leading_spaces:
             most_leading_spaces = leading_spaces
-        
+
     unit = Unit()
     first_line = lines[0]
     match = re.match(UNIT_NAME_REGEX, first_line)
@@ -90,7 +90,7 @@ def _handle_unit(lines: list[str], list: ArmyList, unit_type: str):
             leading_spaces = count_leading_spaces(line)
             if leading_spaces == 0:
                 uc = UnitComposition()
-                
+
                 match = re.match(LOADOUT_REGEX, line.lstrip("• "))
                 if match is None:
                     raise ParseError("Unexpected unit line", line)
@@ -106,8 +106,10 @@ def _handle_unit(lines: list[str], list: ArmyList, unit_type: str):
             else:
                 raise ParseError(f"Unexpected leading spaces: {leading_spaces}", line)
     else:
-        raise ParseError(f"Unexpected most leading spaces: {most_leading_spaces}", lines)
-    
+        raise ParseError(
+            f"Unexpected most leading spaces: {most_leading_spaces}", lines
+        )
+
 
 class NewRecruitParser:
     def parse(self, list_text: str) -> ArmyList:
@@ -124,15 +126,16 @@ class NewRecruitParser:
                             _handle_header(self.line_collection, self.list)
                             self.state_machine = "UNIT"
                         case "UNIT":
-                            _handle_unit(self.line_collection, self.list, self.last_unit_type)
+                            _handle_unit(
+                                self.line_collection, self.list, self.last_unit_type
+                            )
                     self.line_collection.clear()
                 continue
 
             if line in UNIT_TYPES:
                 self.last_unit_type = line
                 continue
-            
+
             self.line_collection.append(line)
 
         return self.list
-    

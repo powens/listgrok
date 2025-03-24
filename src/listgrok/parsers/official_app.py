@@ -47,6 +47,7 @@ def _handle_unit_line(line: str, unit: Unit, uc: UnitComposition):
 
         uc.add_wargear(match.group("name"), int(match.group("num")))
 
+
 # TODO: Refactor this
 def _handle_unit_block(lines: list[str], unit_type: str, list: ArmyList):
     # Determine if this is a single model or multiple model unit
@@ -91,7 +92,9 @@ def _handle_unit_block(lines: list[str], unit_type: str, list: ArmyList):
                     unit.add_model_set(uc)
             elif line.startswith("◦ "):
                 if uc is None:
-                    raise ParseError("Tried to add wargear to non-existent UnitComposition", line)
+                    raise ParseError(
+                        "Tried to add wargear to non-existent UnitComposition", line
+                    )
                 _handle_unit_line(line, unit, uc)
 
 
@@ -116,7 +119,6 @@ class OfficialAppParser:
 
                     self.line_collection.clear()
                 continue
-            
 
             if line.startswith("Exported with App Version:"):
                 continue
@@ -147,7 +149,5 @@ class OfficialAppParser:
     def _handle_unit_details(self, lines: list[str]):
         if self.most_recent_unit_type == "":
             raise ParseError("No unit type found", lines)
-        
-        _handle_unit_block(
-            lines, self.most_recent_unit_type, self.list
-        )
+
+        _handle_unit_block(lines, self.most_recent_unit_type, self.list)

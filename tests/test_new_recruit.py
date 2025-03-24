@@ -7,6 +7,7 @@ from listgrok.parsers.new_recruit import (
 )
 from listgrok.parsers.parse_error import ParseError
 
+
 class TestHandleHeader:
     def test_happy_header(self):
         header = """
@@ -24,7 +25,7 @@ class TestHandleHeader:
 +++++++++++++++++++++++++++++++++++++++++++++++"""
 
         list = ArmyList()
-        _handle_header(header.split("\n"), list) # type: ignore
+        _handle_header(header.split("\n"), list)  # type: ignore
         assert list.faction == "Xenos - T'au Empire"
         assert list.detachment == "Experimental Prototype Cadre"
         assert list.points == 1985
@@ -44,11 +45,11 @@ class TestHandleHeader:
 +++++++++++++++++++++++++++++++++++++++++++++++"""
 
         list = ArmyList()
-        _handle_header(header.split("\n"), list) # type: ignore
+        _handle_header(header.split("\n"), list)  # type: ignore
         assert list.faction == ""
         assert list.detachment == "Experimental Prototype Cadre"
         assert list.points == 1985
-    
+
     def test_missing_detachment(self):
         header = """
 +++++++++++++++++++++++++++++++++++++++++++++++
@@ -64,7 +65,7 @@ class TestHandleHeader:
 +++++++++++++++++++++++++++++++++++++++++++++++"""
 
         list = ArmyList()
-        _handle_header(header.split("\n"), list) # type: ignore
+        _handle_header(header.split("\n"), list)  # type: ignore
         assert list.faction == "Xenos - T'au Empire"
         assert list.detachment == ""
         assert list.points == 1985
@@ -84,7 +85,7 @@ class TestHandleHeader:
 +++++++++++++++++++++++++++++++++++++++++++++++"""
 
         list = ArmyList()
-        _handle_header(header.split("\n"), list) # type: ignore
+        _handle_header(header.split("\n"), list)  # type: ignore
         assert list.faction == "Xenos - T'au Empire"
         assert list.detachment == "Experimental Prototype Cadre"
         assert list.points == -1
