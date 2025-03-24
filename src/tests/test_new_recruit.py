@@ -1,11 +1,9 @@
-import pytest
 from listgrok.army.army_list import ArmyList, Unit, UnitComposition
 from listgrok.parsers.new_recruit import (
     _handle_header,
     _handle_unit_line,
     _handle_unit,
 )
-from listgrok.parsers.parse_error import ParseError
 
 
 class TestHandleHeader:
