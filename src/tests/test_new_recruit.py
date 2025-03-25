@@ -3,6 +3,7 @@ from listgrok.parsers.new_recruit import (
     _handle_header,
     _handle_unit_line,
     _handle_unit,
+    NewRecruitParser,
 )
 
 
@@ -203,4 +204,101 @@ class TestHandleUnit:
         assert uc.wargear == {
             "Battlesuit fists": 2,
             "Burst cannon": 2,
+        }
+
+class TestNewRecruitParser:
+    def test_parse(self):
+        list_text = """
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Xenos - T'au Empire
++ DETACHMENT: Experimental Prototype Cadre
++ TOTAL ARMY POINTS: 1985pts
++
++ WARLORD: Char2: Commander Shadowsun
++ ENHANCEMENT: Plasma Accelerator Rifle (on Char1: Commander in Coldstar Battlesuit)
+& Fusion Blades (on Char2: Commander in Coldstar Battlesuit)
+& Thermoneutronic Projector (on Char3: Commander in Enforcer Battlesuit)
++ NUMBER OF UNITS: 18
++ SECONDARY: - Bring It Down: (9x2) + (1x6) - Assassination: 5 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+CHARACTER
+
+1x Commander in Coldstar Battlesuit (120 pts)
+• 1x Fusion blaster
+• Fusion Blades upgrade
+• 1x Fusion blaster
+• 1x Fusion blaster
+• 1x Fusion blaster
+• 1x Battlesuit fists
+• 2x Shield Drone
+• Fusion Blades (+25 pts)
+• Warlord
+
+
+OTHER DATASHEETS
+
+10x Kroot Carnivores (65 pts)
+• 1x Long-quill
+    • 1x Close combat weapon
+    • 1x Kroot pistol
+    • 1x Kroot carbine
+• 1x Kroot Carnivore
+    • 1x Close combat weapon
+    • 1x Tanglebomb launcher
+• 8x Kroot Carnivores
+    • 8x Close combat weapon
+    • 8x Kroot rifle 
+"""
+        parser = NewRecruitParser()
+        army_list = parser.parse(list_text)
+        assert army_list.faction == "Xenos - T'au Empire"
+        assert army_list.detachment == "Experimental Prototype Cadre"
+        assert army_list.points == 1985
+        assert len(army_list.units) == 2
+
+        unit = army_list.units[0]
+        assert unit.name == "Commander in Coldstar Battlesuit"
+        assert unit.points == 120
+        assert unit.sheet_type == "CHARACTER"
+        assert len(unit.composition) == 1
+        uc = unit.composition[0]
+        assert uc.name == "Commander in Coldstar Battlesuit"
+        assert uc.num_models == 1
+        assert uc.wargear == {
+            "Fusion blaster": 4,
+            "Battlesuit fists": 1,
+            "Shield Drone": 2,
+        }
+        assert unit.enhancement == "Fusion Blades"
+        assert unit.is_warlord
+
+        unit = army_list.units[1]
+        assert unit.name == "Kroot Carnivores"
+        assert unit.points == 65
+        assert unit.sheet_type == "OTHER DATASHEETS"
+        assert len(unit.composition) == 3
+        uc = unit.composition[0]
+        assert uc.name == "Long-quill"
+        assert uc.num_models == 1
+        assert uc.wargear == {
+            "Close combat weapon": 1,
+            "Kroot pistol": 1,
+            "Kroot carbine": 1,
+        }
+
+        uc = unit.composition[1]
+        assert uc.name == "Kroot Carnivore"
+        assert uc.num_models == 1
+        assert uc.wargear == {
+            "Close combat weapon": 1,
+            "Tanglebomb launcher": 1,
+        }
+
+        uc = unit.composition[2]
+        assert uc.name == "Kroot Carnivores"
+        assert uc.num_models == 8
+        assert uc.wargear == {
+            "Close combat weapon": 8,
+            "Kroot rifle": 8,
         }
