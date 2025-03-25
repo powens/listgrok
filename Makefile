@@ -27,3 +27,4 @@ coverage-html:
 clean:
 	rm -rf htmlcov
 	rm .coverage
+	rm -rf dist
