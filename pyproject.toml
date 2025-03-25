@@ -1,7 +1,7 @@
 [project]
 name = "listgrok"
 version = "0.1.0"
-description = "Parse Warhammer 40k lists"
+description = "Warhammer 40k 10th edition list parser"
 authors = [
     { name = "powens", email = "1919554+powens@users.noreply.github.com" }
 ]
@@ -9,6 +9,12 @@ license = "MIT"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -21,7 +27,7 @@ dev = [
     "pytest-random-order>=1.1.1",
 ]
 lint = [
-  "ruff"
+    "ruff"
 ]
 
 [tool.pytest.ini_options]
@@ -31,6 +37,6 @@ pythonpath = [
 
 [tool.hatch.build.targets.sdist]
 exclude = [
-  "examples/",
-  "tests/",
+    "examples/",
+    "tests/",
 ]
