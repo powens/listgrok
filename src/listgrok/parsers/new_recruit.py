@@ -1,7 +1,6 @@
 import re
-from listgrok.army.army_list import ArmyList, Unit, UnitComposition
+from listgrok.army.army_list import ArmyList
 from listgrok.parsers.parse_error import ParseError
-from listgrok.parsers.helpers import count_leading_hashes
 
 
 TITLE_REGEX = r"^(?P<superfaction>[\w\s]+) - (?P<faction>[\w\s]+) - (?P<list_name>[\w\s]+) - \[(?P<points>\d+) pts\]$"
