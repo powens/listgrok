@@ -6,14 +6,22 @@
 
 listgrok is a library for parsing Warhammer 40k army lists.
 
+## Supported formats
+
+- [x] Official GW 40k app
+- [ ] NewRecruit:
+  - [x] GW format
+  - [ ] Markdown format
+  - [ ] WTC
+  - [ ] WTC-short
+
 ## Features
 
 - Parse lists from:
   - Official 40k app
-  - TODO: NewRecruit formats
-  - TODO: Battlescribe format
-- TODO: Output to a common json (or yaml?) format
-
+  - NewRecruit formats
+  - Battlescribe format
+- Output to a common json (or yaml?) format
 
 ## Usage
 

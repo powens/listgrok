@@ -1,9 +1,10 @@
 # import argparse
 from listgrok import parse_list
+from pathlib import Path
 
 
 def official_app():
-    with open("examples/official_app/example1.txt", "r") as f:
+    with open(Path("official_app/example1.txt"), "r") as f:
         list_text = f.read()
     list = parse_list(list_text)
     print(list.name)
@@ -11,7 +12,7 @@ def official_app():
 
     print("\n\n")
 
-    with open("examples/official_app/example2.txt", "r") as f:
+    with open(Path("official_app/example2.txt"), "r") as f:
         list_text = f.read()
     list = parse_list(list_text)
     print(list.name)
@@ -19,11 +20,11 @@ def official_app():
 
 
 def new_recruit():
-    from listgrok.parsers.new_recruit import NewRecruitParser
+    from listgrok.parsers.new_recruit_gw import NewRecruitGWParser
 
-    with open("examples/nr/nr1_gw.txt", "r") as f:
+    with open(Path("examples/nr/nr1_gw.txt"), "r") as f:
         list_text = f.read()
-    list = NewRecruitParser().parse(list_text)
+    list = NewRecruitGWParser().parse(list_text)
     print(list.name)
     print(list)
 
