@@ -75,8 +75,10 @@ def _handle_unit_line(line: str, unit: Unit, uc: UnitComposition):
 
 
 # TODO: Refactor this
-def _handle_unit_block(lines: list[str], unit_type: str, list: ArmyList):
+def _handle_unit_block(lines: list[str], unit_type: str, army_list: ArmyList):
     # Determine if this is a single model or multiple model unit
+    if len(lines) == 0:
+        raise ParseError("Empty unit block", lines)
     most_leading_spaces = max(count_leading_spaces(line) for line in lines)
 
     unit = Unit()
@@ -89,7 +91,7 @@ def _handle_unit_block(lines: list[str], unit_type: str, list: ArmyList):
     unit.points = int(match.group("points"))
     unit.sheet_type = unit_type
 
-    list.add_unit(unit)
+    army_list.add_unit(unit)
 
     if most_leading_spaces == LEADING_SPACES_FOR_UNIT_COMPOSITION:
         uc = UnitComposition()
