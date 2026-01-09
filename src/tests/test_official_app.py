@@ -4,7 +4,7 @@ from listgrok.parsers.official_app import (
     _is_army_size_line,
     _handle_faction_collection,
     _handle_unit_block,
-    OfficialAppParser,
+    parse_official_app,
 )
 from listgrok.army.army_list import ArmyList
 from listgrok.parsers.parse_error import ParseError
@@ -210,8 +210,7 @@ Callidus Assassin (100 Points)
 Exported with App Version: v1.29.1 (1), Data Version: v581
         """
 
-        parser = OfficialAppParser()
-        list = parser.parse(list_text)
+        list = parse_official_app(list_text)
 
         assert list.name == "Test list"
         assert list.points == 405
@@ -315,8 +314,7 @@ Strike Force (2000 Points)
 Exported with App Version: v1.29.1 (1), Data Version: v581
         """
 
-        parser = OfficialAppParser()
-        list = parser.parse(list_text)
+        list = parse_official_app(list_text)
 
         assert list.name == "Test list"
         assert list.points == 405
@@ -346,9 +344,8 @@ Wolf Lord on Thunderwolf (120 Points)
 Exported with App Version: v1.29.1 (1), Data Version: v581
         """
 
-        parser = OfficialAppParser()
         with pytest.raises(ParseError) as e:
-            parser.parse(list_text)
+            parse_official_app(list_text)
         assert e.value.message == "No unit type found"
 
     def test_multiline_list_name(self):
@@ -362,8 +359,7 @@ Champions of Fenris
 Strike Force (2000 Points)
         """
 
-        parser = OfficialAppParser()
-        list = parser.parse(list_text)
+        list = parse_official_app(list_text)
         assert list.name == "Test list\n1234"
         assert list.points == 405
         assert list.super_faction == "Space Marines"
@@ -396,9 +392,8 @@ Wolf Lord on Thunderwolf (120 Points)
 Exported with App Version: v1.29.1 (1), Data Version: v581
         """
 
-        parser = OfficialAppParser()
+        list = parse_official_app(list_text)
         # with pytest.raises(ParseError) as e:
-        list = parser.parse(list_text)
 
         assert list.name == "Test list"
         assert list.points == 405
