@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass
@@ -34,7 +33,7 @@ class Unit:
     is_warlord: bool
     enhancement: str
     points: int
-    composition: List[UnitComposition]
+    composition: list[UnitComposition]
 
     def __init__(self):
         self.name = ""
@@ -68,7 +67,7 @@ class ArmyList:
     faction: str
     detachment: str
     army_size: str
-    units: List[Unit]
+    units: list[Unit]
 
     def __init__(self):
         self.name = ""
