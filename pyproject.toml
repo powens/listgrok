@@ -9,12 +9,28 @@ license = "MIT"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
+keywords = ["warhammer", "40k", "parser", "army-list", "gaming"]
 classifiers = [
     "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Linguistic",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Operating System :: OS Independent",
     "License :: OSI Approved :: MIT License",
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/powens/listgrok"
+"Bug Reports" = "https://github.com/powens/listgrok/issues"
+"Source" = "https://github.com/powens/listgrok"
+"Documentation" = "https://github.com/powens/listgrok#readme"
 
 [build-system]
 requires = ["hatchling"]
@@ -24,6 +40,7 @@ build-backend = "hatchling.build"
 dev = [
     "coverage>=7.7.0",
     "pytest>=8.3.5",
+    "pytest-cov>=6.2.1",
     "pytest-random-order>=1.1.1",
 ]
 lint = [

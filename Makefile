@@ -6,8 +6,8 @@ test:
 lint:
 	uvx ruff check src
 
-.PHONY: fmt
-fmt:
+.PHONY: format
+format:
 	uvx ruff format
 
 .PHONY: build

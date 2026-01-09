@@ -1,9 +1,9 @@
 from listgrok.army.army_list import ArmyList, Unit, UnitComposition
-from listgrok.parsers.new_recruit import (
+from listgrok.parsers.new_recruit_gw import (
     _handle_header,
     _handle_unit_line,
     _handle_unit,
-    NewRecruitParser,
+    NewRecruitGWParser,
 )
 
 
@@ -206,7 +206,8 @@ class TestHandleUnit:
             "Burst cannon": 2,
         }
 
-class TestNewRecruitParser:
+
+class TestNewRecruitGWParser:
     def test_parse(self):
         list_text = """
 +++++++++++++++++++++++++++++++++++++++++++++++
@@ -250,7 +251,7 @@ OTHER DATASHEETS
     • 8x Close combat weapon
     • 8x Kroot rifle 
 """
-        parser = NewRecruitParser()
+        parser = NewRecruitGWParser()
         army_list = parser.parse(list_text)
         assert army_list.faction == "Xenos - T'au Empire"
         assert army_list.detachment == "Experimental Prototype Cadre"
