@@ -5,7 +5,9 @@ from listgrok.army.army_list import ArmyList
 
 
 def parse_list(list: str) -> ArmyList:
-    try:
-        return parse_official_app(list)
-    except ParseError:
-        return NewRecruitGWParser().parse(list)
+    # try:
+    return parse_official_app(list)
+
+
+# except ParseError:
+# return NewRecruitGWParser().parse(list)

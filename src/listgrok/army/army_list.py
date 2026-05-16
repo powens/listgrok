@@ -34,6 +34,7 @@ class Unit:
     enhancement: str
     points: int
     composition: list[UnitComposition]
+    decorations: list[str]
 
     def __init__(self):
         self.name = ""
@@ -42,6 +43,7 @@ class Unit:
         self.enhancement = ""
         self.points = -1
         self.composition = []
+        self.decorations = []
 
     def add_model_set(self, model_set: UnitComposition):
         self.composition.append(model_set)

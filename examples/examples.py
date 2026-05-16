@@ -4,19 +4,16 @@ from pathlib import Path
 
 
 def official_app():
-    with open(Path("official_app/example1.txt"), "r") as f:
-        list_text = f.read()
-    list = parse_list(list_text)
-    print(list.name)
-    print(list)
-
-    print("\n\n")
-
-    with open(Path("official_app/example2.txt"), "r") as f:
-        list_text = f.read()
-    list = parse_list(list_text)
-    print(list.name)
-    print(list)
+    root_dir = Path("examples/official_app")
+    for file in root_dir.iterdir():
+        if file.suffix != ".txt":
+            continue
+        with open(file, "r") as f:
+            list_text = f.read()
+        list = parse_list(list_text)
+        print(f"Parsed {file.name}: {list.name}")
+        print(list)
+        print("\n\n")
 
 
 def new_recruit():
@@ -31,7 +28,7 @@ def new_recruit():
 
 if __name__ == "__main__":
     official_app()
-    new_recruit()
+    # new_recruit()
 
     # parser = argparse.ArgumentParser(description="Parse army lists from a file or stdin.")
     # parser.add_argument(

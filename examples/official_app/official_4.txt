@@ -1,0 +1,92 @@
+Daemons(Tzeentch) (1995 Points)
+
+Chaos Daemons
+Scintillating Legion
+Strike Force (2,000 Points)
+
+CHARACTERS
+
+Daemon Prince of Chaos with Wings (200 Points)
+  • Daemonic Allegiance: Tzeentch
+  • 1x Hellforged weapons
+  • 1x Infernal cannon
+  • Enhancements: Neverblade
+
+Fluxmaster (70 Points)
+  • 1x Arcane Fireball
+  • 1x Herald combat weapon
+  • Enhancements: Inescapable Eye
+
+Kairos Fateweaver (285 Points)
+  • 1x Infernal Gateway
+  • 1x Staff of Tomorrow
+
+Lord of Change (280 Points)
+  • Warlord
+  • 1x Bolt of Change
+  • 1x Rod of sorcery
+  • 1x Staff of Tzeentch
+  • Enhancements: Infernal Puppeteer
+
+Lord of Change (270 Points)
+  • 1x Bolt of Change
+  • 1x Rod of sorcery
+  • 1x Staff of Tzeentch
+
+BATTLELINE
+
+Blue Horrors (125 Points)
+  • 10x Blue Horror
+     ◦ 10x Blue claws
+     ◦ 10x Coruscating blue flames
+
+Pink Horrors (140 Points)
+  • 10x Pink Horror
+     ◦ 10x Coruscating pink flames
+     ◦ 1x Daemonic Icon
+     ◦ 1x Instrument of Chaos
+     ◦ 10x Pink claws
+
+Pink Horrors (140 Points)
+  • 10x Pink Horror
+     ◦ 10x Coruscating pink flames
+     ◦ 1x Daemonic Icon
+     ◦ 1x Instrument of Chaos
+     ◦ 10x Pink claws
+
+OTHER DATASHEETS
+
+Burning Chariot (115 Points)
+  • 1x Fire of Tzeentch
+  • 1x Flamer mouths
+  • 1x Screamer bites
+
+Flamers (65 Points)
+  • 1x Pyrocaster
+     ◦ 1x Flamer mouths
+     ◦ 1x Flickering flames
+  • 2x Flamer
+     ◦ 2x Flamer mouths
+     ◦ 2x Flickering flames
+
+Flamers (65 Points)
+  • 1x Pyrocaster
+     ◦ 1x Flamer mouths
+     ◦ 1x Flickering flames
+  • 2x Flamer
+     ◦ 2x Flamer mouths
+     ◦ 2x Flickering flames
+
+Screamers (80 Points)
+  • 3x Screamer
+     ◦ 3x Lamprey bite
+
+Screamers (80 Points)
+  • 3x Screamer
+     ◦ 3x Lamprey bite
+
+Screamers (80 Points)
+  • 3x Screamer
+     ◦ 3x Lamprey bite
+
+Exported with App Version: v1.45.0 (1), Data Version: v720

@@ -19,7 +19,11 @@ UNIT_TYPES = frozenset(
         "DEDICATED TRANSPORTS",
     }
 )
-LEADING_SPACES_FOR_UNIT_COMPOSITION = 2
+LEADING_SPACES_FOR_SINGLE_MODEL_UNIT = 2
+
+
+def _is_army_size_line(line: str) -> bool:
+    return POINTS_LABEL_REGEX.match(line) is not None
 
 
 class ParserStateMachine(Enum):
@@ -34,10 +38,6 @@ class ParserState:
     line_collection: list[str]
     most_recent_unit_type: str
     list: ArmyList
-
-
-def _is_army_size_line(line: str) -> bool:
-    return re.match(POINTS_LABEL_REGEX, line) is not None
 
 
 def _handle_faction_collection(collection: list[str], army_list: ArmyList):
@@ -57,11 +57,7 @@ def _handle_faction_collection(collection: list[str], army_list: ArmyList):
 
 def _handle_unit_line(line: str, unit: Unit, uc: UnitComposition):
     line = line.strip()
-
-    remove_prefixes = ["• ", "◦ "]
-    for rp in remove_prefixes:
-        if line.startswith(rp):
-            line = line.removeprefix(rp)
+    line = re.sub(r"^[•◦]\s", "", line)
 
     if line == "Warlord":
         unit.is_warlord = True
@@ -69,9 +65,9 @@ def _handle_unit_line(line: str, unit: Unit, uc: UnitComposition):
         unit.enhancement = line.removeprefix("Enhancements: ")
     else:
         if (match := re.match(NUM_REGEX, line)) is None:
-            raise ParseError("Unexpected unit line", line)
-
-        uc.add_wargear(match.group("name"), int(match.group("num")))
+            unit.decorations.append(line)
+        else:
+            uc.add_wargear(match.group("name"), int(match.group("num")))
 
 
 # TODO: Refactor this
@@ -93,7 +89,7 @@ def _handle_unit_block(lines: list[str], unit_type: str, army_list: ArmyList):
 
     army_list.add_unit(unit)
 
-    if most_leading_spaces == LEADING_SPACES_FOR_UNIT_COMPOSITION:
+    if most_leading_spaces == LEADING_SPACES_FOR_SINGLE_MODEL_UNIT:
         uc = UnitComposition()
         uc.name = unit.name
         uc.num_models = 1
@@ -177,3 +173,73 @@ def _handle_unit_details(state: ParserState):
         raise ParseError("No unit type found", state.line_collection)
 
     _handle_unit_block(state.line_collection, state.most_recent_unit_type, state.list)
+
+
+# def _parse_multi_model(lines: list[str], unit: Unit):
+#     """Bullets are models, indented lines are wargear for that model."""
+#     current_uc: UnitComposition | None = None
+
+#     for line in lines:
+#         stripped = line.strip().removeprefix("• ")
+
+#         if line.strip().startswith("•"):
+#             # New model
+#             current_uc = UnitComposition()
+#             if match := re.match(NUM_REGEX, stripped):
+#                 current_uc.num_models = int(match.group("num"))
+#                 current_uc.name = match.group("name")
+#             unit.add_model_set(current_uc)
+#         else:
+#             # Wargear for current model
+#             if current_uc and (match := re.match(NUM_REGEX, stripped)):
+#                 current_uc.add_wargear(match.group("name"), int(match.group("num")))
+
+
+# def _parse_single_model(lines: list[str], unit: Unit):
+#     """Bullets and indented lines are all wargear for a single model."""
+#     uc = UnitComposition()
+#     uc.name = unit.name
+#     uc.num_models = 1
+#     unit.add_model_set(uc)
+
+#     for line in lines:
+#         stripped = line.strip().removeprefix("• ")
+#         if match := re.match(NUM_REGEX, stripped):
+#             uc.add_wargear(match.group("name"), int(match.group("num")))
+
+
+# def _parse_unit_block(lines: list[str], unit_type: str, army_list: ArmyList):
+#     unit = Unit()
+
+#     # Parse Header: "Unit Name (65 Points)"
+#     first_line = lines[0]
+#     if (match := re.match(POINTS_LABEL_REGEX, first_line)) is None:
+#         raise ParseError("Unexpected unit_start", first_line)
+#     unit.name = match.group("name")
+#     unit.points = int(match.group("points"))
+
+#     # Detect format by checking indentation levels
+#     # Multi-model: bullets at level 1, wargear indented further
+#     # Single-model: wargear at level 1, all at same indent level
+
+#     bullet_lines = [l for l in lines[1:] if l.strip().startswith("•")]
+#     indented_lines = [
+#         l for l in lines[1:] if not l.strip().startswith("•") and l.strip()
+#     ]
+
+#     # If we have indented lines after bullets → multi-model format
+#     is_multi_model = (
+#         any(
+#             count_leading_spaces(l) > count_leading_spaces(bullet_lines[0])
+#             for l in indented_lines
+#         )
+#         if bullet_lines and indented_lines
+#         else False
+#     )
+
+#     if is_multi_model:
+#         _parse_multi_model(lines[1:], unit)
+#     else:
+#         _parse_single_model(lines[1:], unit)
+
+#     return unit

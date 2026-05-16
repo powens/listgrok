@@ -1,0 +1,110 @@
+Siege Saboteurs (1990 points)
+
+Chaos Space Marines
+Strike Force (2000 points)
+Nightmare Hunt
+
+
+CHARACTERS
+
+Abaddon the Despoiler (270 points)
+  • Warlord
+  • 1x Drach’nyen
+    1x Talon of Horus
+
+Chaos Lord with Jump Pack (115 points)
+  • 1x Plasma pistol
+    1x Power fist
+  • Enhancement: Sorrowscent Vulture
+
+Cypher (90 points)
+  • 1x Cypher’s bolt pistol
+    1x Cypher’s plasma pistol
+
+Traitor Enforcer (55 points)
+  • 1x Traitor Enforcer
+    • 1x Bolt pistol
+      1x Power fist
+  • 1x Traitor Ogryn
+    • 1x Ogryn weapons
+
+Warpsmith (70 points)
+  • 1x Flamer tendril
+    1x Forge weapon
+    1x Melta tendril
+    1x Plasma pistol
+
+
+BATTLELINE
+
+Cultist Mob (50 points)
+  • 1x Cultist Champion
+    • 1x Autopistol
+      1x Brutal assault weapon
+  • 9x Chaos Cultist
+    • 9x Autopistol
+      9x Brutal assault weapon
+
+
+OTHER DATASHEETS
+
+Forgefiend (170 points)
+  • 1x Armoured limbs
+    3x Ectoplasma cannon
+
+Obliterators (160 points)
+  • 2x Obliterator
+    • 2x Crushing fists
+      2x Fleshmetal guns
+
+Obliterators (160 points)
+  • 2x Obliterator
+    • 2x Crushing fists
+      2x Fleshmetal guns
+
+Obliterators (160 points)
+  • 2x Obliterator
+    • 2x Crushing fists
+      2x Fleshmetal guns
+
+Possessed (120 points)
+  • 1x Possessed Champion
+    • 1x Chaos Icon
+      1x Hideous mutations
+  • 4x Possessed
+    • 4x Hideous mutations
+
+Possessed (120 points)
+  • 1x Possessed Champion
+    • 1x Chaos Icon
+      1x Hideous mutations
+  • 4x Possessed
+    • 4x Hideous mutations
+
+Raptors (90 points)
+  • 1x Raptor Champion
+    • 1x Plasma pistol
+      1x Power fist
+  • 4x Raptor
+    • 2x Astartes chainsword
+      2x Bolt pistol
+      2x Close combat weapon
+      2x Meltagun
+
+Raptors (90 points)
+  • 1x Raptor Champion
+    • 1x Plasma pistol
+      1x Power fist
+  • 4x Raptor
+    • 2x Astartes chainsword
+      2x Bolt pistol
+      2x Close combat weapon
+      2x Meltagun
+
+Warp Talons (270 points)
+  • 1x Warp Talon Champion
+    • 1x Warp claws
+  • 9x Warp Talon
+    • 9x Warp claws
+
+Exported with App Version: v1.45.0 (105), Data Version: v720
