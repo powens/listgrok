@@ -2,6 +2,10 @@
 test:
 	uv run pytest --random-order
 
+.PHONY: typecheck
+typecheck:
+	uv run ty check src/
+
 .PHONY: lint
 lint:
 	uvx ruff check src
