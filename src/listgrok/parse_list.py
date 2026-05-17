@@ -4,10 +4,8 @@ from listgrok.parsers.parse_error import ParseError
 from listgrok.army.army_list import ArmyList
 
 
-def parse_list(list: str) -> ArmyList:
-    # try:
-    return parse_official_app(list)
-
-
-# except ParseError:
-# return NewRecruitGWParser().parse(list)
+def parse_list(list_text: str) -> ArmyList:
+    try:
+        return parse_official_app(list_text)
+    except ParseError:
+        return NewRecruitGWParser().parse(list_text)
