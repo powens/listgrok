@@ -87,7 +87,7 @@ class TestHandleHeader:
         _handle_header(header.split("\n"), list)  # type: ignore
         assert list.faction == "Xenos - T'au Empire"
         assert list.detachment == "Experimental Prototype Cadre"
-        assert list.points == -1
+        assert list.points is None
 
 
 class TestHandleUnitLine:

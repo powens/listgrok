@@ -1,16 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Optional
 
 
 @dataclass
 class UnitComposition:
-    name: str
-    num_models: int
-    wargear: dict[str, int]
-
-    def __init__(self):
-        self.name = ""
-        self.num_models = -1
-        self.wargear = {}
+    name: str = ""
+    num_models: Optional[int] = None
+    wargear: dict[str, int] = field(default_factory=dict)
 
     def add_wargear(self, weapon: str, count: int):
         if weapon not in self.wargear:
@@ -28,22 +24,13 @@ class UnitComposition:
 
 @dataclass
 class Unit:
-    name: str
-    sheet_type: str
-    is_warlord: bool
-    enhancement: str
-    points: int
-    composition: list[UnitComposition]
-    decorations: list[str]
-
-    def __init__(self):
-        self.name = ""
-        self.sheet_type = ""
-        self.is_warlord = False
-        self.enhancement = ""
-        self.points = -1
-        self.composition = []
-        self.decorations = []
+    name: str = ""
+    sheet_type: str = ""
+    is_warlord: bool = False
+    enhancement: str = ""
+    points: Optional[int] = None
+    composition: list[UnitComposition] = field(default_factory=list)
+    decorations: list[str] = field(default_factory=list)
 
     def add_model_set(self, model_set: UnitComposition):
         self.composition.append(model_set)
@@ -55,6 +42,7 @@ class Unit:
             "enhancement": self.enhancement,
             "points": self.points,
             "composition": [model.to_json() for model in self.composition],
+            "decorations": self.decorations,
         }
         if self.is_warlord:
             o["is_warlord"] = self.is_warlord
@@ -63,22 +51,13 @@ class Unit:
 
 @dataclass
 class ArmyList:
-    name: str
-    points: int
-    super_faction: str
-    faction: str
-    detachment: str
-    army_size: str
-    units: list[Unit]
-
-    def __init__(self):
-        self.name = ""
-        self.points = -1
-        self.super_faction = ""
-        self.faction = ""
-        self.detachment = ""
-        self.army_size = ""
-        self.units = []
+    name: str = ""
+    points: Optional[int] = None
+    super_faction: str = ""
+    faction: str = ""
+    detachment: str = ""
+    army_size: str = ""
+    units: list[Unit] = field(default_factory=list)
 
     def add_unit(self, unit: Unit):
         self.units.append(unit)
