@@ -18,7 +18,7 @@ UNIT_TYPES = [
 ]
 
 
-def _handle_header(lines: list[str], list: ArmyList):
+def _handle_header(lines: list[str], army_list: ArmyList):
     header = "\n".join(lines)
     matches = [
         # ("list_name", "")
@@ -31,7 +31,7 @@ def _handle_header(lines: list[str], list: ArmyList):
         match = re.search(regex, header, flags=re.MULTILINE)
         if match is not None:
             val = type(match.group(key))
-            setattr(list, key, val)
+            setattr(army_list, key, val)
 
 
 def _handle_unit_line(line: str, unit: Unit, uc: UnitComposition):
@@ -57,7 +57,7 @@ def _handle_unit_line(line: str, unit: Unit, uc: UnitComposition):
         uc.add_wargear(match.group("name"), int(match.group("num")))
 
 
-def _handle_unit(lines: list[str], list: ArmyList, unit_type: str):
+def _handle_unit(lines: list[str], army_list: ArmyList, unit_type: str):
     if len(lines) == 0:
         return
 
@@ -75,7 +75,7 @@ def _handle_unit(lines: list[str], list: ArmyList, unit_type: str):
     unit.name = match.group("name")
     unit.points = int(match.group("points"))
     unit.sheet_type = unit_type
-    list.add_unit(unit)
+    army_list.add_unit(unit)
 
     if most_leading_spaces == 0:
         uc = UnitComposition()
@@ -113,7 +113,7 @@ def _handle_unit(lines: list[str], list: ArmyList, unit_type: str):
 
 class NewRecruitGWParser:
     def parse(self, list_text: str) -> ArmyList:
-        self.list = ArmyList()
+        self.army_list = ArmyList()
         self.state_machine = "HEADER"
         self.last_unit_type = ""
         self.line_collection = []
@@ -123,11 +123,11 @@ class NewRecruitGWParser:
                 if len(self.line_collection) > 0:
                     match self.state_machine:
                         case "HEADER":
-                            _handle_header(self.line_collection, self.list)
+                            _handle_header(self.line_collection, self.army_list)
                             self.state_machine = "UNIT"
                         case "UNIT":
                             _handle_unit(
-                                self.line_collection, self.list, self.last_unit_type
+                                self.line_collection, self.army_list, self.last_unit_type
                             )
                     self.line_collection.clear()
                 continue
@@ -138,4 +138,4 @@ class NewRecruitGWParser:
 
             self.line_collection.append(line)
 
-        return self.list
+        return self.army_list

@@ -10,9 +10,9 @@ def official_app():
             continue
         with open(file, "r") as f:
             list_text = f.read()
-        list = parse_list(list_text)
-        print(f"Parsed {file.name}: {list.name}")
-        print(list)
+        army_list = parse_list(list_text)
+        print(f"Parsed {file.name}: {army_list.name}")
+        print(army_list)
         print("\n\n")
 
 
@@ -21,9 +21,9 @@ def new_recruit():
 
     with open(Path("examples/nr/nr1_gw.txt"), "r") as f:
         list_text = f.read()
-    list = NewRecruitGWParser().parse(list_text)
-    print(list.name)
-    print(list)
+    army_list = NewRecruitGWParser().parse(list_text)
+    print(army_list.name)
+    print(army_list)
 
 
 if __name__ == "__main__":

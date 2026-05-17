@@ -24,22 +24,22 @@ def test_is_army_size_line(line, expected):
 
 class TestHandleFaction:
     def test_3_lines(self):
-        list = ArmyList()
+        army_list = ArmyList()
         collection = [
             "T’au Empire",
             "Retaliation Cadre",
             "Strike Force (2000 Points)",
         ]
 
-        _handle_faction_collection(collection, list)
+        _handle_faction_collection(collection, army_list)
 
-        assert list.faction == "T’au Empire"
-        assert list.super_faction == ""
-        assert list.detachment == "Retaliation Cadre"
-        assert list.army_size == "Strike Force (2000 Points)"
+        assert army_list.faction == "T’au Empire"
+        assert army_list.super_faction == ""
+        assert army_list.detachment == "Retaliation Cadre"
+        assert army_list.army_size == "Strike Force (2000 Points)"
 
     def test_4_lines(self):
-        list = ArmyList()
+        army_list = ArmyList()
         collection = [
             "Space Marines",
             "Space Wolves",
@@ -47,25 +47,25 @@ class TestHandleFaction:
             "Strike Force (2000 Points)",
         ]
 
-        _handle_faction_collection(collection, list)
+        _handle_faction_collection(collection, army_list)
 
-        assert list.faction == "Space Wolves"
-        assert list.super_faction == "Space Marines"
-        assert list.detachment == "Stormlance Task Force"
-        assert list.army_size == "Strike Force (2000 Points)"
+        assert army_list.faction == "Space Wolves"
+        assert army_list.super_faction == "Space Marines"
+        assert army_list.detachment == "Stormlance Task Force"
+        assert army_list.army_size == "Strike Force (2000 Points)"
 
     def test_too_few_lines(self):
-        list = ArmyList()
+        army_list = ArmyList()
         collection = [
             "Space Marines",
             "Stormlance Task Force",
         ]
 
         with pytest.raises(ParseError):
-            _handle_faction_collection(collection, list)
+            _handle_faction_collection(collection, army_list)
 
     def test_too_many_lines(self):
-        list = ArmyList()
+        army_list = ArmyList()
         collection = [
             "Space Marines",
             "Stormlance Task Force",
@@ -75,13 +75,13 @@ class TestHandleFaction:
         ]
 
         with pytest.raises(ParseError):
-            _handle_faction_collection(collection, list)
+            _handle_faction_collection(collection, army_list)
 
 
 class TestHandleUnitBlock:
     def test_single_character(self):
-        list = ArmyList()
-        assert len(list.units) == 0
+        army_list = ArmyList()
+        assert len(army_list.units) == 0
         collection = [
             "Wolf Guard Battle Leader on Thunderwolf (95 Points)",
             "  • Warlord",
@@ -91,10 +91,10 @@ class TestHandleUnitBlock:
             "  • 1x Storm Shield",
             "  • Enhancements: Portents of Wisdom",
         ]
-        _handle_unit_block(collection, "CHARACTERS", list)
+        _handle_unit_block(collection, "CHARACTERS", army_list)
 
-        assert len(list.units) == 1
-        unit = list.units[0]
+        assert len(army_list.units) == 1
+        unit = army_list.units[0]
         assert unit.name == "Wolf Guard Battle Leader on Thunderwolf"
         assert unit.points == 95
         assert unit.sheet_type == "CHARACTERS"
@@ -112,8 +112,8 @@ class TestHandleUnitBlock:
         }
 
     def test_multi_model_unit(self):
-        list = ArmyList()
-        assert len(list.units) == 0
+        army_list = ArmyList()
+        assert len(army_list.units) == 0
         collection = [
             "Crisis Starscythe Battlesuits (110 Points)",
             "  • 1x Crisis Starscythe Shas’vre",
@@ -127,10 +127,10 @@ class TestHandleUnitBlock:
             "     ◦ 2x Shield Drone",
             "     ◦ 4x T’au flamer",
         ]
-        _handle_unit_block(collection, "OTHER DATASHEETS", list)
+        _handle_unit_block(collection, "OTHER DATASHEETS", army_list)
 
-        assert len(list.units) == 1
-        unit = list.units[0]
+        assert len(army_list.units) == 1
+        unit = army_list.units[0]
         assert unit.name == "Crisis Starscythe Battlesuits"
         assert unit.points == 110
         assert unit.sheet_type == "OTHER DATASHEETS"
@@ -210,17 +210,17 @@ Callidus Assassin (100 Points)
 Exported with App Version: v1.29.1 (1), Data Version: v581
         """
 
-        list = parse_official_app(list_text)
+        army_list = parse_official_app(list_text)
 
-        assert list.name == "Test list"
-        assert list.points == 405
-        assert list.super_faction == "Space Marines"
-        assert list.faction == "Space Wolves"
-        assert list.detachment == "Champions of Fenris"
-        assert list.army_size == "Strike Force (2000 Points)"
-        assert len(list.units) == 5
+        assert army_list.name == "Test list"
+        assert army_list.points == 405
+        assert army_list.super_faction == "Space Marines"
+        assert army_list.faction == "Space Wolves"
+        assert army_list.detachment == "Champions of Fenris"
+        assert army_list.army_size == "Strike Force (2000 Points)"
+        assert len(army_list.units) == 5
 
-        unit = list.units[0]
+        unit = army_list.units[0]
         assert unit.name == "Wolf Lord on Thunderwolf"
         assert unit.points == 120
         assert unit.sheet_type == "CHARACTERS"
@@ -237,7 +237,7 @@ Exported with App Version: v1.29.1 (1), Data Version: v581
             "Relic Shield": 1,
         }
 
-        unit = list.units[1]
+        unit = army_list.units[1]
         assert unit.name == "Assault Intercessor Squad"
         assert unit.points == 75
         assert unit.sheet_type == "BATTLELINE"
@@ -259,7 +259,7 @@ Exported with App Version: v1.29.1 (1), Data Version: v581
             "Heavy bolt pistol": 4,
         }
 
-        unit = list.units[2]
+        unit = army_list.units[2]
         assert unit.name == "Impulsor"
         assert unit.points == 80
         assert unit.sheet_type == "DEDICATED TRANSPORTS"
@@ -276,7 +276,7 @@ Exported with App Version: v1.29.1 (1), Data Version: v581
             "Storm bolter": 2,
         }
 
-        unit = list.units[3]
+        unit = army_list.units[3]
         assert unit.name == "Fenrisian Wolves"
         assert unit.points == 30
         assert unit.sheet_type == "OTHER DATASHEETS"
@@ -287,7 +287,7 @@ Exported with App Version: v1.29.1 (1), Data Version: v581
         assert uc.name == "Fenrisian Wolf"
         assert uc.num_models == 5
 
-        unit = list.units[4]
+        unit = army_list.units[4]
         assert unit.name == "Callidus Assassin"
         assert unit.points == 100
         assert unit.sheet_type == "ALLIED UNITS"
@@ -314,15 +314,15 @@ Strike Force (2000 Points)
 Exported with App Version: v1.29.1 (1), Data Version: v581
         """
 
-        list = parse_official_app(list_text)
+        army_list = parse_official_app(list_text)
 
-        assert list.name == "Test list"
-        assert list.points == 405
-        assert list.super_faction == "Space Marines"
-        assert list.faction == "Space Wolves"
-        assert list.detachment == "Champions of Fenris"
-        assert list.army_size == "Strike Force (2000 Points)"
-        assert len(list.units) == 0
+        assert army_list.name == "Test list"
+        assert army_list.points == 405
+        assert army_list.super_faction == "Space Marines"
+        assert army_list.faction == "Space Wolves"
+        assert army_list.detachment == "Champions of Fenris"
+        assert army_list.army_size == "Strike Force (2000 Points)"
+        assert len(army_list.units) == 0
 
     def test_no_unittype(self):
         list_text = """
@@ -359,14 +359,14 @@ Champions of Fenris
 Strike Force (2000 Points)
         """
 
-        list = parse_official_app(list_text)
-        assert list.name == "Test list\n1234"
-        assert list.points == 405
-        assert list.super_faction == "Space Marines"
-        assert list.faction == "Space Wolves"
-        assert list.detachment == "Champions of Fenris"
-        assert list.army_size == "Strike Force (2000 Points)"
-        assert len(list.units) == 0
+        army_list = parse_official_app(list_text)
+        assert army_list.name == "Test list\n1234"
+        assert army_list.points == 405
+        assert army_list.super_faction == "Space Marines"
+        assert army_list.faction == "Space Wolves"
+        assert army_list.detachment == "Champions of Fenris"
+        assert army_list.army_size == "Strike Force (2000 Points)"
+        assert len(army_list.units) == 0
 
     @pytest.mark.skip("Not sure how to handle this case yet")
     def test_invalid_unit(self):
@@ -392,18 +392,18 @@ Wolf Lord on Thunderwolf (120 Points)
 Exported with App Version: v1.29.1 (1), Data Version: v581
         """
 
-        list = parse_official_app(list_text)
+        army_list = parse_official_app(list_text)
         # with pytest.raises(ParseError) as e:
 
-        assert list.name == "Test list"
-        assert list.points == 405
-        assert list.super_faction == "Space Marines"
-        assert list.faction == "Space Wolves"
-        assert list.detachment == "Champions of Fenris"
-        assert list.army_size == "Strike Force (2000 Points)"
-        assert len(list.units) == 1
+        assert army_list.name == "Test list"
+        assert army_list.points == 405
+        assert army_list.super_faction == "Space Marines"
+        assert army_list.faction == "Space Wolves"
+        assert army_list.detachment == "Champions of Fenris"
+        assert army_list.army_size == "Strike Force (2000 Points)"
+        assert len(army_list.units) == 1
 
-        unit = list.units[0]
+        unit = army_list.units[0]
         assert unit.name == "Wolf Lord on Thunderwolf"
         assert unit.points == 120
         assert unit.sheet_type == "CHARACTERS"

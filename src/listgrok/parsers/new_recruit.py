@@ -32,10 +32,10 @@ class NewRecruitGWParser:
         header = "\n".join(lines)
         match = re.match(TITLE_REGEX, header, flags=re.MULTILINE)
         if match:
-            self.list.super_faction = match.group("superfaction").strip()
-            self.list.faction = match.group("faction").strip()
-            self.list.name = match.group("list_name").strip()
-            self.list.points = int(match.group("points"))
+            self.army_list.super_faction = match.group("superfaction").strip()
+            self.army_list.faction = match.group("faction").strip()
+            self.army_list.name = match.group("list_name").strip()
+            self.army_list.points = int(match.group("points"))
         else:
             raise ParseError("Invalid header format", lines)
 
@@ -43,7 +43,7 @@ class NewRecruitGWParser:
         config = "\n".join(lines)
         match = re.match(ARMY_ROSTER_REGEX, config, flags=re.MULTILINE)
         if match:
-            self.list.points = int(match.group("points"))
+            self.army_list.points = int(match.group("points"))
         else:
             raise ParseError("Invalid army roster format", lines)
 
@@ -51,7 +51,7 @@ class NewRecruitGWParser:
         pass
 
     def parse(self, list_text: str) -> ArmyList:
-        self.list = ArmyList()
+        self.army_list = ArmyList()
         self.state_machine = "HEADER"
 
         self.line_collection: list[str] = []
@@ -74,4 +74,4 @@ class NewRecruitGWParser:
                 continue
 
             self.line_collection.append(line)
-        return self.list
+        return self.army_list

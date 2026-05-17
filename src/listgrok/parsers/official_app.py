@@ -37,7 +37,7 @@ class ParserState:
     state: ParserStateMachine
     line_collection: list[str]
     most_recent_unit_type: str
-    list: ArmyList
+    army_list: ArmyList
 
 
 def _handle_faction_collection(collection: list[str], army_list: ArmyList):
@@ -127,7 +127,7 @@ def parse_official_app(list_text: str) -> ArmyList:
         state=ParserStateMachine.START,
         line_collection=[],
         most_recent_unit_type="",
-        list=ArmyList(),
+        army_list=ArmyList(),
     )
 
     for line in list_text.split("\n"):
@@ -153,7 +153,7 @@ def parse_official_app(list_text: str) -> ArmyList:
 
         state.line_collection.append(line)
 
-    return state.list
+    return state.army_list
 
 
 def _handle_start(state: ParserState):
@@ -161,14 +161,14 @@ def _handle_start(state: ParserState):
     # Need re.DOTALL here because some army lists have newlines in them, for some reason
     if (match := re.match(POINTS_LABEL_REGEX_DOTALL, line)) is None:
         raise ParseError("Expected army name", line)
-    state.list.name = match.group("name")
-    state.list.points = int(match.group("points"))
+    state.army_list.name = match.group("name")
+    state.army_list.points = int(match.group("points"))
     state.state = ParserStateMachine.FACTION
 
 
 def _handle_faction(state: ParserState):
     # We need to handle both factions with and without a super faction
-    _handle_faction_collection(state.line_collection, state.list)
+    _handle_faction_collection(state.line_collection, state.army_list)
     state.state = ParserStateMachine.UNIT_DETAILS
 
 
@@ -176,7 +176,7 @@ def _handle_unit_details(state: ParserState):
     if state.most_recent_unit_type == "":
         raise ParseError("No unit type found", state.line_collection)
 
-    _handle_unit_block(state.line_collection, state.most_recent_unit_type, state.list)
+    _handle_unit_block(state.line_collection, state.most_recent_unit_type, state.army_list)
 
 
 # def _parse_multi_model(lines: list[str], unit: Unit):

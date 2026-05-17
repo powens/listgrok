@@ -4,11 +4,6 @@
 
 - **Trivial `add_*` wrappers** (lines 15, 48, 83): `add_wargear`, `add_model_set`, and `add_unit` wrap single `dict`/`list` operations with no validation or transformation. Callers can operate on the collections directly.
 
-## `parse_list.py`
-
-- **Commented-out dead code** (lines 8–13): The entire try/except fallback is commented out, making this function an alias for `parse_official_app`. Either implement the fallback or remove the dead code.
-- **`list` shadows the built-in** (line 7): `def parse_list(list: str)` — `list` is a Python built-in. Rename the parameter to `list_text` for consistency with how tests refer to it.
-
 ## `official_app.py`
 
 - **Duplicate compiled regex** (lines 8–11): `POINTS_LABEL_REGEX` and `POINTS_LABEL_REGEX_DOTALL` are identical patterns differing only by a flag. Use one definition and pass `re.DOTALL` at the call site, or compile a single pattern with the flag included.
@@ -41,7 +36,7 @@
 
 ## Cross-Cutting Concerns
 
-- **No type checker configured**: `mypy` or `pyright` is absent from dev dependencies. Given the codebase uses type annotations throughout, adding one would catch many of the above issues automatically.
+
 - **`list` shadows the built-in in multiple places**: Used as a variable name in tests and source (`test_official_app.py:28`, `test_new_recruit.py:26`, etc.).
 - **`decorations` field is untested**: It is populated in `_handle_unit_line` but no test asserts on it, and it is dropped by `to_json()`.
 - **Tests import private functions**: Tests directly call `_handle_faction_collection`, `_handle_unit_block`, `_handle_unit_line`, etc. The leading `_` convention signals these are not public API — either document the intent or restructure accordingly.

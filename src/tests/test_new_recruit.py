@@ -23,11 +23,11 @@ class TestHandleHeader:
 + SECONDARY: - Bring It Down: (9x2) + (1x6) - Assassination: 5 Characters
 +++++++++++++++++++++++++++++++++++++++++++++++"""
 
-        list = ArmyList()
-        _handle_header(header.split("\n"), list)  # type: ignore
-        assert list.faction == "Xenos - T'au Empire"
-        assert list.detachment == "Experimental Prototype Cadre"
-        assert list.points == 1985
+        army_list = ArmyList()
+        _handle_header(header.split("\\n"), army_list)  # type: ignore
+        assert army_list.faction == "Xenos - T'au Empire"
+        assert army_list.detachment == "Experimental Prototype Cadre"
+        assert army_list.points == 1985
 
     def test_missing_faction(self):
         header = """
@@ -43,11 +43,11 @@ class TestHandleHeader:
 + SECONDARY: - Bring It Down: (9x2) + (1x6) - Assassination: 5 Characters
 +++++++++++++++++++++++++++++++++++++++++++++++"""
 
-        list = ArmyList()
-        _handle_header(header.split("\n"), list)  # type: ignore
-        assert list.faction == ""
-        assert list.detachment == "Experimental Prototype Cadre"
-        assert list.points == 1985
+        army_list = ArmyList()
+        _handle_header(header.split("\\n"), army_list)  # type: ignore
+        assert army_list.faction == ""
+        assert army_list.detachment == "Experimental Prototype Cadre"
+        assert army_list.points == 1985
 
     def test_missing_detachment(self):
         header = """
@@ -63,11 +63,11 @@ class TestHandleHeader:
 + SECONDARY: - Bring It Down: (9x2) + (1x6) - Assassination: 5 Characters
 +++++++++++++++++++++++++++++++++++++++++++++++"""
 
-        list = ArmyList()
-        _handle_header(header.split("\n"), list)  # type: ignore
-        assert list.faction == "Xenos - T'au Empire"
-        assert list.detachment == ""
-        assert list.points == 1985
+        army_list = ArmyList()
+        _handle_header(header.split("\\n"), army_list)  # type: ignore
+        assert army_list.faction == "Xenos - T'au Empire"
+        assert army_list.detachment == ""
+        assert army_list.points == 1985
 
     def test_missing_army_size(self):
         header = """
@@ -83,11 +83,11 @@ class TestHandleHeader:
 + SECONDARY: - Bring It Down: (9x2) + (1x6) - Assassination: 5 Characters
 +++++++++++++++++++++++++++++++++++++++++++++++"""
 
-        list = ArmyList()
-        _handle_header(header.split("\n"), list)  # type: ignore
-        assert list.faction == "Xenos - T'au Empire"
-        assert list.detachment == "Experimental Prototype Cadre"
-        assert list.points is None
+        army_list = ArmyList()
+        _handle_header(header.split("\\n"), army_list)  # type: ignore
+        assert army_list.faction == "Xenos - T'au Empire"
+        assert army_list.detachment == "Experimental Prototype Cadre"
+        assert army_list.points is None
 
 
 class TestHandleUnitLine:
@@ -147,10 +147,10 @@ class TestHandleUnit:
             "• Warlord",
         ]
 
-        list = ArmyList()
-        _handle_unit(lines, list, "CHARACTER")
-        assert len(list.units) == 1
-        unit = list.units[0]
+        army_list = ArmyList()
+        _handle_unit(lines, army_list, "CHARACTER")
+        assert len(army_list.units) == 1
+        unit = army_list.units[0]
         assert unit.name == "Commander in Coldstar Battlesuit"
         assert unit.points == 120
         assert len(unit.composition) == 1
@@ -178,11 +178,11 @@ class TestHandleUnit:
             "    • 2x Burst cannon",
         ]
 
-        list = ArmyList()
-        _handle_unit(lines, list, "OTHER DATASHEETS")
+        army_list = ArmyList()
+        _handle_unit(lines, army_list, "OTHER DATASHEETS")
 
-        assert len(list.units) == 1
-        unit = list.units[0]
+        assert len(army_list.units) == 1
+        unit = army_list.units[0]
         assert unit.name == "Stealth Battlesuits"
         assert unit.points == 60
         assert len(unit.composition) == 2
