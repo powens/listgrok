@@ -1,24 +1,16 @@
-from dataclasses import dataclass
 import re
-from listgrok.army.army_list import Unit, ArmyList, UnitComposition
-from listgrok.parsers.parse_error import ParseError
-from listgrok.parsers.helpers import count_leading_spaces
-from enum import Enum, auto
+from dataclasses import dataclass
 
-POINTS_LABEL_REGEX = re.compile(r"^(?P<name>.+)\s\((?P<points>\d+)\s[Pp]oints\)$")
-POINTS_LABEL_REGEX_DOTALL = re.compile(
-    r"^(?P<name>.+)\s\((?P<points>\d+)\s[Pp]oints\)$", re.DOTALL
+from listgrok.army.army_list import ArmyList, Unit, UnitComposition
+from listgrok.parsers.helpers import (
+    NUM_REGEX,
+    POINTS_LABEL_REGEX,
+    UNIT_TYPES,
+    ParserStage,
+    count_leading_spaces,
 )
-NUM_REGEX = re.compile(r"^(?P<num>\d+)x\s(?P<name>.*)$")
-UNIT_TYPES = frozenset(
-    {
-        "CHARACTERS",
-        "OTHER DATASHEETS",
-        "ALLIED UNITS",
-        "BATTLELINE",
-        "DEDICATED TRANSPORTS",
-    }
-)
+from listgrok.parsers.parse_error import ParseError
+
 LEADING_SPACES_FOR_SINGLE_MODEL_UNIT = 2
 
 
@@ -26,15 +18,9 @@ def _is_army_size_line(line: str) -> bool:
     return POINTS_LABEL_REGEX.match(line) is not None
 
 
-class ParserStateMachine(Enum):
-    START = auto()
-    FACTION = auto()
-    UNIT_DETAILS = auto()
-
-
 @dataclass
 class ParserState:
-    state: ParserStateMachine
+    state: ParserStage
     line_collection: list[str]
     most_recent_unit_type: str
     army_list: ArmyList
@@ -124,7 +110,7 @@ def _handle_unit_block(lines: list[str], unit_type: str, army_list: ArmyList):
 
 def parse_official_app(list_text: str) -> ArmyList:
     state = ParserState(
-        state=ParserStateMachine.START,
+        state=ParserStage.START,
         line_collection=[],
         most_recent_unit_type="",
         army_list=ArmyList(),
@@ -135,11 +121,11 @@ def parse_official_app(list_text: str) -> ArmyList:
             # We've reached the end of a chunk of list. Handle it
             if len(state.line_collection) > 0:
                 match state.state:
-                    case ParserStateMachine.START:
+                    case ParserStage.START:
                         _handle_start(state)
-                    case ParserStateMachine.FACTION:
+                    case ParserStage.FACTION:
                         _handle_faction(state)
-                    case ParserStateMachine.UNIT_DETAILS:
+                    case ParserStage.UNIT_DETAILS:
                         _handle_unit_details(state)
                 state.line_collection.clear()
             continue
@@ -159,17 +145,17 @@ def parse_official_app(list_text: str) -> ArmyList:
 def _handle_start(state: ParserState):
     line = "\n".join(state.line_collection).strip()
     # Need re.DOTALL here because some army lists have newlines in them, for some reason
-    if (match := re.match(POINTS_LABEL_REGEX_DOTALL, line)) is None:
+    if (match := re.match(POINTS_LABEL_REGEX, line)) is None:
         raise ParseError("Expected army name", line)
     state.army_list.name = match.group("name")
     state.army_list.points = int(match.group("points"))
-    state.state = ParserStateMachine.FACTION
+    state.state = ParserStage.FACTION
 
 
 def _handle_faction(state: ParserState):
     # We need to handle both factions with and without a super faction
     _handle_faction_collection(state.line_collection, state.army_list)
-    state.state = ParserStateMachine.UNIT_DETAILS
+    state.state = ParserStage.UNIT_DETAILS
 
 
 def _handle_unit_details(state: ParserState):

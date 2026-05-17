@@ -1,11 +1,10 @@
 from dataclasses import dataclass, field
-from typing import Optional
 
 
 @dataclass
 class UnitComposition:
     name: str = ""
-    num_models: Optional[int] = None
+    num_models: int | None = None
     wargear: dict[str, int] = field(default_factory=dict)
 
     def add_wargear(self, weapon: str, count: int):
@@ -28,7 +27,7 @@ class Unit:
     sheet_type: str = ""
     is_warlord: bool = False
     enhancement: str = ""
-    points: Optional[int] = None
+    points: int | None = None
     composition: list[UnitComposition] = field(default_factory=list)
     decorations: list[str] = field(default_factory=list)
 
@@ -52,7 +51,7 @@ class Unit:
 @dataclass
 class ArmyList:
     name: str = ""
-    points: Optional[int] = None
+    points: int | None = None
     super_faction: str = ""
     faction: str = ""
     detachment: str = ""
