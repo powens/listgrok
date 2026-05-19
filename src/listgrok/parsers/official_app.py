@@ -1,5 +1,5 @@
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from listgrok.army.army_list import ArmyList, Unit, UnitComposition
 from listgrok.parsers.helpers import (
@@ -11,54 +11,59 @@ from listgrok.parsers.helpers import (
 )
 from listgrok.parsers.parse_error import ParseError
 
-LEADING_SPACES_FOR_SINGLE_MODEL_UNIT = 2
-
-
-def _is_army_size_line(line: str) -> bool:
-    return POINTS_LABEL_REGEX.match(line) is not None
+BULLET_REGEX = re.compile(r"^[•◦]\s+")
+# An army-size line ends with a points label; the count may carry thousands commas.
+ARMY_SIZE_REGEX = re.compile(r".+\(\d[\d,]*\s[Pp]oints\)$")
 
 
 @dataclass
-class ParserState:
-    state: ParserStage
-    line_collection: list[str]
-    most_recent_unit_type: str
-    army_list: ArmyList
+class Node:
+    text: str
+    indent: int
+    children: list["Node"] = field(default_factory=list)
 
 
-def _handle_faction_collection(collection: list[str], army_list: ArmyList):
-    line_count = len(collection)
-    if line_count < 3 or line_count > 4:
-        raise ParseError(f"line_count is {line_count}. Expected [3,4]", collection)
-
-    army_list.army_size = collection[-1]
-    army_list.detachment = collection[-2]
-
-    if line_count == 4:
-        army_list.super_faction = collection[0]
-        army_list.faction = collection[1]
-    else:
-        army_list.faction = collection[0]
+def _strip_bullet(line: str) -> tuple[str, bool]:
+    if (match := BULLET_REGEX.match(line)) is not None:
+        return line[match.end() :], True
+    return line, False
 
 
-def _handle_unit_line(line: str, unit: Unit, uc: UnitComposition):
-    line = line.strip()
-    line = re.sub(r"^[•◦]\s", "", line)
+def build_tree(body_lines: list[str]) -> list[Node]:
+    """Build the indentation forest for a unit block's body (header excluded).
 
-    if line == "Warlord":
-        unit.is_warlord = True
-    elif line.startswith("Enhancements: "):
-        unit.enhancement = line.removeprefix("Enhancements: ")
-    else:
-        if (match := re.match(NUM_REGEX, line)) is None:
-            unit.decorations.append(line)
+    Bullet glyphs vary between export dialects, so indentation is authoritative.
+    A bulletless line is a continuation: it inherits the level of the most
+    recent bulleted line, making it a sibling of that bullet rather than a child.
+    """
+    roots: list[Node] = []
+    stack: list[Node] = []
+    last_bulleted_indent: int | None = None
+
+    for raw in body_lines:
+        text, had_bullet = _strip_bullet(raw.strip())
+
+        if had_bullet:
+            indent = count_leading_spaces(raw)
+            last_bulleted_indent = indent
+        elif last_bulleted_indent is not None:
+            indent = last_bulleted_indent
         else:
-            uc.add_wargear(match.group("name"), int(match.group("num")))
+            indent = count_leading_spaces(raw)
+
+        node = Node(text=text, indent=indent)
+
+        while stack and stack[-1].indent >= indent:
+            stack.pop()
+        (stack[-1].children if stack else roots).append(node)
+        stack.append(node)
+
+    return roots
 
 
-def _parse_unit_header(line: str, unit_type: str) -> Unit:
-    if (match := re.match(POINTS_LABEL_REGEX, line)) is None:
-        raise ParseError("Unexpected unit_start", line)
+def _parse_header(line: str, unit_type: str) -> Unit:
+    if (match := POINTS_LABEL_REGEX.match(line)) is None:
+        raise ParseError("Unexpected unit header", line)
     unit = Unit()
     unit.name = match.group("name")
     unit.points = int(match.group("points"))
@@ -66,170 +71,135 @@ def _parse_unit_header(line: str, unit_type: str) -> Unit:
     return unit
 
 
-def _populate_single_model_unit(lines: list[str], unit: Unit):
+def _composition_from(text: str) -> UnitComposition:
     uc = UnitComposition()
-    uc.name = unit.name
-    uc.num_models = 1
-    unit.add_model_set(uc)
-    for line in lines:
-        _handle_unit_line(line, unit, uc)
+    if (match := NUM_REGEX.match(text)) is not None:
+        uc.num_models = int(match.group("num"))
+        uc.name = match.group("name")
+    else:
+        uc.name = text
+    return uc
 
 
-def _populate_multi_model_unit(lines: list[str], unit: Unit):
-    uc = None
-    for line in lines:
-        line = line.strip()
-        if line.startswith("• "):
-            line = line.removeprefix("• ")
-            uc = UnitComposition()
-            if (match := re.match(NUM_REGEX, line)) is not None:
-                uc.num_models = int(match.group("num"))
-                uc.name = match.group("name")
-                unit.add_model_set(uc)
-        elif line.startswith("◦ "):
-            if uc is None:
-                raise ParseError(
-                    "Tried to add wargear to non-existent UnitComposition", line
-                )
-            _handle_unit_line(line, unit, uc)
+def _apply_wargear(unit: Unit, uc: UnitComposition, text: str) -> None:
+    if (match := NUM_REGEX.match(text)) is not None:
+        uc.add_wargear(match.group("name"), int(match.group("num")))
+    else:
+        unit.decorations.append(text)
 
 
-def _handle_unit_block(lines: list[str], unit_type: str, army_list: ArmyList):
+def _populate_unit(unit: Unit, roots: list[Node]) -> None:
+    models: list[Node] = []
+    for node in roots:
+        if node.text == "Warlord":
+            unit.is_warlord = True
+        elif node.text.startswith(("Enhancement:", "Enhancements:")):
+            unit.enhancement = node.text.split(":", 1)[1].strip()
+        else:
+            models.append(node)
+
+    # A multi-model unit has model nodes with wargear nested beneath them.
+    # A single-model unit has all wargear flat under one implicit model.
+    if any(node.children for node in models):
+        for node in models:
+            uc = _composition_from(node.text)
+            unit.add_model_set(uc)
+            for child in node.children:
+                _apply_wargear(unit, uc, child.text)
+    else:
+        uc = UnitComposition()
+        uc.name = unit.name
+        uc.num_models = 1
+        unit.add_model_set(uc)
+        for node in models:
+            _apply_wargear(unit, uc, node.text)
+
+
+def parse_unit_block(lines: list[str], unit_type: str, army_list: ArmyList) -> None:
     if len(lines) == 0:
         raise ParseError("Empty unit block", lines)
 
-    unit = _parse_unit_header(lines[0], unit_type)
+    unit = _parse_header(lines[0], unit_type)
     army_list.add_unit(unit)
+    _populate_unit(unit, build_tree(lines[1:]))
 
-    most_leading_spaces = max(count_leading_spaces(line) for line in lines)
-    if most_leading_spaces == LEADING_SPACES_FOR_SINGLE_MODEL_UNIT:
-        _populate_single_model_unit(lines[1:], unit)
+
+def _parse_faction_block(collection: list[str], army_list: ArmyList) -> None:
+    """Assign faction fields. The army-size line is found by pattern rather than
+    position, since dialects place it either last or in the middle of the block.
+    """
+    size_lines = [line for line in collection if ARMY_SIZE_REGEX.match(line)]
+    if len(size_lines) != 1:
+        raise ParseError(
+            f"Expected exactly one army-size line, found {len(size_lines)}",
+            collection,
+        )
+
+    army_list.army_size = size_lines[0]
+    rest = [line for line in collection if line != size_lines[0]]
+
+    if len(rest) == 3:
+        army_list.super_faction = rest[0]
+        army_list.faction = rest[1]
+        army_list.detachment = rest[2]
+    elif len(rest) == 2:
+        army_list.faction = rest[0]
+        army_list.detachment = rest[1]
     else:
-        _populate_multi_model_unit(lines[1:], unit)
+        raise ParseError(
+            f"Expected 2 or 3 faction lines, found {len(rest)}", collection
+        )
+
+
+def _handle_start(collection: list[str], army_list: ArmyList) -> bool:
+    """Parse the army-name block, returning True on success.
+
+    Some exports omit the army name entirely and lead with the faction block.
+    In that case the collection has no points label; return False and leave
+    army_list untouched so the caller can treat it as the faction block.
+    POINTS_LABEL_REGEX is re.DOTALL because some army names span multiple lines.
+    """
+    line = "\n".join(collection).strip()
+    if (match := POINTS_LABEL_REGEX.match(line)) is None:
+        return False
+    army_list.name = match.group("name")
+    army_list.points = int(match.group("points"))
+    return True
 
 
 def parse_official_app(list_text: str) -> ArmyList:
-    state = ParserState(
-        state=ParserStage.START,
-        line_collection=[],
-        most_recent_unit_type="",
-        army_list=ArmyList(),
-    )
+    army_list = ArmyList()
+    state = ParserStage.START
+    unit_type = ""
+    collection: list[str] = []
 
     for line in list_text.split("\n"):
         if not line.strip():
-            # We've reached the end of a chunk of list. Handle it
-            if len(state.line_collection) > 0:
-                match state.state:
-                    case ParserStage.START:
-                        _handle_start(state)
-                    case ParserStage.FACTION:
-                        _handle_faction(state)
-                    case ParserStage.UNIT_DETAILS:
-                        _handle_unit_details(state)
-                state.line_collection.clear()
+            if collection:
+                if state == ParserStage.START:
+                    if _handle_start(collection, army_list):
+                        state = ParserStage.FACTION
+                    else:
+                        # No army-name header; this is already the faction block.
+                        _parse_faction_block(collection, army_list)
+                        state = ParserStage.UNIT_DETAILS
+                elif state == ParserStage.FACTION:
+                    _parse_faction_block(collection, army_list)
+                    state = ParserStage.UNIT_DETAILS
+                else:
+                    if unit_type == "":
+                        raise ParseError("No unit type found", collection)
+                    parse_unit_block(collection, unit_type, army_list)
+                collection = []
             continue
 
         if line.startswith("Exported with App Version:"):
             continue
 
         if line in UNIT_TYPES:
-            state.most_recent_unit_type = line
+            unit_type = line
             continue
 
-        state.line_collection.append(line)
+        collection.append(line)
 
-    return state.army_list
-
-
-def _handle_start(state: ParserState):
-    line = "\n".join(state.line_collection).strip()
-    # Need re.DOTALL here because some army lists have newlines in them, for some reason
-    if (match := re.match(POINTS_LABEL_REGEX, line)) is None:
-        raise ParseError("Expected army name", line)
-    state.army_list.name = match.group("name")
-    state.army_list.points = int(match.group("points"))
-    state.state = ParserStage.FACTION
-
-
-def _handle_faction(state: ParserState):
-    # We need to handle both factions with and without a super faction
-    _handle_faction_collection(state.line_collection, state.army_list)
-    state.state = ParserStage.UNIT_DETAILS
-
-
-def _handle_unit_details(state: ParserState):
-    if state.most_recent_unit_type == "":
-        raise ParseError("No unit type found", state.line_collection)
-
-    _handle_unit_block(state.line_collection, state.most_recent_unit_type, state.army_list)
-
-
-# def _parse_multi_model(lines: list[str], unit: Unit):
-#     """Bullets are models, indented lines are wargear for that model."""
-#     current_uc: UnitComposition | None = None
-
-#     for line in lines:
-#         stripped = line.strip().removeprefix("• ")
-
-#         if line.strip().startswith("•"):
-#             # New model
-#             current_uc = UnitComposition()
-#             if match := re.match(NUM_REGEX, stripped):
-#                 current_uc.num_models = int(match.group("num"))
-#                 current_uc.name = match.group("name")
-#             unit.add_model_set(current_uc)
-#         else:
-#             # Wargear for current model
-#             if current_uc and (match := re.match(NUM_REGEX, stripped)):
-#                 current_uc.add_wargear(match.group("name"), int(match.group("num")))
-
-
-# def _parse_single_model(lines: list[str], unit: Unit):
-#     """Bullets and indented lines are all wargear for a single model."""
-#     uc = UnitComposition()
-#     uc.name = unit.name
-#     uc.num_models = 1
-#     unit.add_model_set(uc)
-
-#     for line in lines:
-#         stripped = line.strip().removeprefix("• ")
-#         if match := re.match(NUM_REGEX, stripped):
-#             uc.add_wargear(match.group("name"), int(match.group("num")))
-
-
-# def _parse_unit_block(lines: list[str], unit_type: str, army_list: ArmyList):
-#     unit = Unit()
-
-#     # Parse Header: "Unit Name (65 Points)"
-#     first_line = lines[0]
-#     if (match := re.match(POINTS_LABEL_REGEX, first_line)) is None:
-#         raise ParseError("Unexpected unit_start", first_line)
-#     unit.name = match.group("name")
-#     unit.points = int(match.group("points"))
-
-#     # Detect format by checking indentation levels
-#     # Multi-model: bullets at level 1, wargear indented further
-#     # Single-model: wargear at level 1, all at same indent level
-
-#     bullet_lines = [l for l in lines[1:] if l.strip().startswith("•")]
-#     indented_lines = [
-#         l for l in lines[1:] if not l.strip().startswith("•") and l.strip()
-#     ]
-
-#     # If we have indented lines after bullets → multi-model format
-#     is_multi_model = (
-#         any(
-#             count_leading_spaces(l) > count_leading_spaces(bullet_lines[0])
-#             for l in indented_lines
-#         )
-#         if bullet_lines and indented_lines
-#         else False
-#     )
-
-#     if is_multi_model:
-#         _parse_multi_model(lines[1:], unit)
-#     else:
-#         _parse_single_model(lines[1:], unit)
-
-#     return unit
+    return army_list
