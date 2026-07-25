@@ -81,8 +81,20 @@ def _populate(unit: Unit, roots: list[Node]) -> None:
     # A flat body means one implicit model set holding all of the wargear.
     if any(node.children for node in models):
         for node in models:
-            model_set = _model_set_from(node.text)
+            match = NUM_REGEX.match(node.text)
+            if match is None:
+                # Mirrors _add_wargear: a root that isn't "Nx name" is not a
+                # model set we can name or count, so it goes to decorations
+                # rather than fabricating a UnitComposition with num_models=None.
+                unit.decorations.append(node.text)
+                continue
+            model_set = UnitComposition(
+                name=match.group("name"), num_models=int(match.group("num"))
+            )
             unit.add_model_set(model_set)
+            # NOTE: only one level of nesting is visited here (child.text, not
+            # child.children). No 11th ed fixture nests a third level, but if
+            # one ever does, it would be silently dropped rather than raising.
             for child in node.children:
                 _add_wargear(unit, model_set, child.text)
     else:
@@ -90,14 +102,6 @@ def _populate(unit: Unit, roots: list[Node]) -> None:
         unit.add_model_set(model_set)
         for node in models:
             _add_wargear(unit, model_set, node.text)
-
-
-def _model_set_from(text: str) -> UnitComposition:
-    if (match := NUM_REGEX.match(text)) is not None:
-        return UnitComposition(
-            name=match.group("name"), num_models=int(match.group("num"))
-        )
-    return UnitComposition(name=text)
 
 
 def _add_wargear(unit: Unit, model_set: UnitComposition, text: str) -> None:

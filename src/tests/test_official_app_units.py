@@ -191,6 +191,29 @@ class TestParseUnit:
         assert unit.decorations == ["Daemonic Allegiance: Tzeentch"]
         assert unit.composition[0].wargear == {"Ghostkeel fists": 1}
 
+    def test_unrecognised_nested_root_becomes_a_decoration(self):
+        # Synthetic: no 11th fixture has a nested (multi-model) unit whose
+        # root line fails NUM_REGEX, but the parser must not fabricate a
+        # UnitComposition(num_models=None) for one — it goes to decorations,
+        # mirroring the flat-body case above and what _add_wargear already
+        # does for an unrecognised child line.
+        unit = parse_unit(
+            [
+                "Kroot Carnivores (65 Points)",
+                "  • Something odd",
+                "     ◦ 1x Kroot rifle",
+                "  • 9x Kroot Carnivore",
+                "     ◦ 9x Kroot rifle",
+            ],
+            "OTHER DATASHEETS",
+        )
+
+        assert unit.decorations == ["Something odd"]
+        assert len(unit.composition) == 1
+        assert unit.composition[0].name == "Kroot Carnivore"
+        assert unit.composition[0].num_models == 9
+        assert unit.composition[0].wargear == {"Kroot rifle": 9}
+
     def test_comma_formatted_unit_points(self):
         unit = parse_unit(
             ["Titanic Thing (1,000 Points)", "  • 1x Big gun"], "CHARACTERS"
