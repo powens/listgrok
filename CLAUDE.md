@@ -50,7 +50,7 @@ Older-style parser, still class-based with string states, and driven by `count_l
 
 ## Fixtures are the spec
 
-`examples/official_app/*.txt` and `examples/nr/*.txt` are real exports and drive the tests. When adding a new export sample, add an entry to `OFFICIAL_EXAMPLES` in `src/tests/test_official_app.py` — the parametrized `TestAllOfficialExamples` checks faction metadata and unit count for every file listed there, asserts all units are well-formed, and asserts the units' points sum to the list total. Unit tests in `test_official_app_blocks.py`, `test_official_app_header.py` and `test_official_app_units.py` state which example file each case came from; keep that convention when adding cases.
+`examples/official_app/*.txt` and `examples/nr/*.txt` are real exports and drive the tests. When adding a new export sample, add an entry to `OFFICIAL_EXAMPLES` in `src/tests/test_official_app.py` — the parametrized `TestAllOfficialExamples` checks faction metadata and unit count for every file listed there, asserts all units are well-formed, and asserts the units' points sum to the list total. Each entry must also carry an `attached_groups` key (the number of `Attached unit N` groups expected), which the attachment-grouping test reads directly — an entry missing it raises `KeyError`. Unit tests in `test_official_app_blocks.py`, `test_official_app_header.py` and `test_official_app_units.py` state which example file each case came from; keep that convention when adding cases.
 
 ## Agent skills
 
