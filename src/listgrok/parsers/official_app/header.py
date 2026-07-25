@@ -60,7 +60,7 @@ def parse_header(lines: list[str], army_list: ArmyList) -> None:
     army_list.army_size = size.group("name")
     army_list.army_size_points = parse_points(size.group("points"))
     army_list.detachments = split_detachments(detachment.group("name"))
-    army_list.detachment_points = int(detachment.group("points"))
+    army_list.detachment_points = parse_points(detachment.group("points"))
 
     consumed = {size.group(0), detachment.group(0)}
     rest = [line for line in lines if line not in consumed]
