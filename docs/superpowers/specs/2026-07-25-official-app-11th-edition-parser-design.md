@@ -389,9 +389,18 @@ Updated:
 
 - `CLAUDE.md` Architecture section, which currently documents 10th ed dialects
   and `build_tree`.
+- `pyproject.toml`'s description, which says "10th edition".
 - `parse_list.py` import and fallback chain.
+- `new_recruit_gw.py` and its tests, which follow the `detachment` →
+  `detachments` rename. `_handle_header` writes the field with
+  `setattr(army_list, "detachment", ...)`; because `ArmyList` is a plain
+  dataclass with no `__slots__`, that call would keep succeeding after the
+  rename, quietly writing a stray instance attribute that `to_json()` drops
+  while `test_new_recruit.py`'s assertions keep reading it and passing. The
+  rename must be followed through by hand, and verified with
+  `grep -rn --include='*.py' "\.detachment\b" src/` returning nothing.
 
-Untouched: `new_recruit_gw.py`, `parse_error.py`, `examples/examples.py`.
+Untouched: `parse_error.py`, `examples/examples.py`.
 
 ## Done means
 
