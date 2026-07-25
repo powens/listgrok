@@ -22,12 +22,16 @@ def parse_official_app(list_text: str) -> ArmyList:
     army_list = ArmyList()
     sheet_type = ""
     group = ""
+    seen_header = False
 
     for block in classify_blocks(list_text):
         if block.kind is BlockKind.ARMY_NAME:
             _parse_army_name(block.lines, army_list)
         elif block.kind is BlockKind.HEADER:
+            if seen_header:
+                raise ParseError("Duplicate header block", block.lines)
             parse_header(block.lines, army_list)
+            seen_header = True
         elif block.kind is BlockKind.SECTION:
             sheet_type = block.lines[0].strip()
             group = ""
@@ -35,6 +39,13 @@ def parse_official_app(list_text: str) -> ArmyList:
             group = block.lines[0].strip()
         elif block.kind is BlockKind.UNIT:
             army_list.add_unit(_parse_unit_in(block.lines, sheet_type, group))
+        elif block.kind is BlockKind.TRAILER:
+            pass
+        else:
+            # classify_blocks only ever emits the BlockKind members handled
+            # above; this guards against a future kind being added there and
+            # silently falling through here instead of being wired in.
+            raise ParseError(f"Unhandled block kind: {block.kind}", block.lines)
 
     return army_list
 
@@ -42,6 +53,9 @@ def parse_official_app(list_text: str) -> ArmyList:
 def _parse_army_name(lines: list[str], army_list: ArmyList) -> None:
     match = POINTS_REGEX.match("\n".join(lines).strip())
     if match is None:
+        # Unreachable in practice: classify_blocks only labels a block
+        # ARMY_NAME after this exact regex already matched it. Kept as
+        # defensive insurance against that invariant changing underfoot.
         raise ParseError("Unexpected army-name block", lines)
     army_list.name = match.group("name")
     army_list.points = parse_points(match.group("points"))
