@@ -44,6 +44,26 @@ def parse_example(filename: str):
     return parse_official_app((EXAMPLES / filename).read_text())
 
 
+# Synthetic: no 11th edition fixture has a grouped unit that omits its
+# "Attached as:" line, so this input is hand-built to exercise that path —
+# the fold must still stamp the group onto the unit with an empty role
+# rather than leaving attachment=None.
+GROUPED_UNIT_WITHOUT_ATTACHED_AS = """Test Army (100 Points)
+
+Test Faction
+Test Detachment (3 Detachment Points)
+Test Disposition
+Strike Force (100 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Test Unit (50 Points)
+  • 1x Test Wargear
+"""
+
+
 class TestAllOfficialExamples:
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_metadata(self, filename):
@@ -152,3 +172,14 @@ class TestOfficial2Details:
         assert blood_claws.attachment.role == "Bodyguard"
         assert blood_claws.attachment.role_detail == "Battleline"
         assert blood_claws.attachment.group == "Attached unit 1"
+
+
+class TestGroupAttachmentFold:
+    def test_unit_with_no_attached_as_line_is_still_stamped_with_its_group(self):
+        army_list = parse_official_app(GROUPED_UNIT_WITHOUT_ATTACHED_AS)
+
+        unit = army_list.units[0]
+        assert unit.attachment is not None
+        assert unit.attachment.group == "Attached unit 1"
+        assert unit.attachment.role == ""
+        assert unit.attachment.role_detail == ""
