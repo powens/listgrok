@@ -122,6 +122,16 @@ def test_unclassifiable_block_before_the_header_raises():
         classify_blocks("stray line\n\n" + NO_ARMY_NAME)
 
 
-@pytest.mark.parametrize("text,expected", [("2,000", 2000), ("70", 70), ("1,260", 1260)])
+def test_title_case_lone_line_after_the_header_raises():
+    # A section heading the app hasn't been seen writing ("Other Datasheets"
+    # rather than "OTHER DATASHEETS") must not be guessed as a GROUP — that
+    # would silently stamp a fake attachment group onto every unit after it.
+    with pytest.raises(ParseError):
+        classify_blocks(NO_ARMY_NAME + "\nOther Datasheets\n")
+
+
+@pytest.mark.parametrize(
+    "text,expected", [("2,000", 2000), ("70", 70), ("1,260", 1260)]
+)
 def test_parse_points_strips_thousands_commas(text, expected):
     assert parse_points(text) == expected

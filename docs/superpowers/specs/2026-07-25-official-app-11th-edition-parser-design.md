@@ -206,7 +206,7 @@ Split on blank lines, drop empties, classify each block by shape:
 | Points-labelled when joined, before the header | `ARMY_NAME` |
 | First line points-labelled, after the header | `UNIT` |
 | Single line, ALL CAPS | `SECTION` |
-| Single line, otherwise | `GROUP` |
+| Single line, matches `^Attached unit\b` | `GROUP` |
 | anything else | raise `ParseError` |
 
 The header signature is the detachment-points line: the metadata block is the
@@ -215,6 +215,16 @@ position. Everything before it is the army name, everything after is sections,
 groups and units. Classification is a single pass carrying one boolean (header
 seen yet), so `ARMY_NAME` and `UNIT` stay distinguishable without lookahead or
 backtracking.
+
+A lone line only becomes `GROUP` if it matches `^Attached unit\b`; any other
+lone line raises `ParseError`. An earlier version guessed — SECTION if
+ALL CAPS, GROUP otherwise — which meant a title-case heading the app hadn't
+been seen writing yet (`Other Datasheets`, say) silently became a fake group,
+stamping a fabricated `Attachment` onto every unit that followed while leaving
+their `sheet_type` stale. Raising instead of guessing is the right trade here:
+the corruption was silent and two fields deep, and `parse_list`'s NewRecruit
+fallback can't catch it because the block stream is already past the header
+and unmistakably an official-app export.
 
 `ARMY_NAME` matches against the block's lines joined with `\n`, and
 `POINTS_REGEX` is compiled `re.DOTALL`, so a multi-line army name still yields
@@ -231,6 +241,7 @@ DETACHMENT_REGEX  = r"^(?P<name>.+?)\s\((?P<points>\d+)\sDetachment\s[Pp]oints?\
 NUM_REGEX         = r"^(?P<num>\d+)x\s(?P<name>.+)$"
 ATTACHED_AS_REGEX = r"^Attached as:\s*(?P<role>[^(]+?)\s*\((?P<detail>[^)]*)\)$"
 BULLET_REGEX      = r"^[•◦]\s*"
+GROUP_REGEX       = r"^Attached unit\b"
 ```
 
 `POINTS_REGEX` accepts thousands commas and cannot match a detachment line,
