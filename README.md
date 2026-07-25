@@ -8,7 +8,7 @@ listgrok is a library for parsing Warhammer 40k army lists.
 
 ## Supported formats
 
-- [x] Official GW 40k app
+- [x] Official GW 40k app (11th edition)
 - [ ] NewRecruit:
   - [x] GW format
   - [ ] Markdown format

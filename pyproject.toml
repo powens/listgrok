@@ -1,7 +1,7 @@
 [project]
 name = "listgrok"
 version = "0.1.0"
-description = "Warhammer 40k 10th edition list parser"
+description = "Warhammer 40k 11th edition list parser"
 authors = [
     { name = "powens", email = "1919554+powens@users.noreply.github.com" }
 ]
