@@ -17,7 +17,17 @@
 - **A parser raises `ParseError` rather than returning a half-filled `ArmyList`.** `parse_list` falls back on `ParseError`, so a partial return silently produces garbage.
 - **Commit message style:** plain imperative subject lines matching repo history (`Add official_app_v2 parser and share parser constants`). Not conventional-commits. **Do not add `Co-Authored-By` trailers.**
 - **Fixtures are the spec.** `examples/official_app/*.txt` are real exports; expected values come from reading them, never from adjusting a fixture to match the code.
-- Verification commands: `make test`, `make lint`, `make typecheck`.
+- Verification commands: `make test`, `make typecheck`, and ruff.
+- **`make lint` is already red on `main`** — `uvx ruff check src` reports 5
+  pre-existing findings (`I001` import sorting in `new_recruit_gw.py`,
+  `test_helpers.py` and `test_new_recruit.py`; `PLR1730` and `SIM114` inside
+  `new_recruit_gw.py`). None are caused by this plan and none are in files it
+  creates. The lint gate for every task is therefore: **`uvx ruff check
+  <the files this task created or modified>` is clean.** Do not "fix" the
+  pre-existing findings in passing — reformatting unrelated code is out of
+  scope and `PLR1730`/`SIM114` would change `new_recruit_gw.py`'s logic.
+  Exception: Task 2 edits `new_recruit_gw.py`, so it may sort that file's
+  import block (`I001`) as ordinary tidying of a file it is already touching.
 
 ## Reference: the 11th edition format
 
