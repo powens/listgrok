@@ -10,7 +10,7 @@ from listgrok.parsers.parse_error import ParseError
 # Trimmed from official_1.txt: one of each block kind.
 MINIMAL = """11th stuff (2,000 Points)
 
-T'au Empire
+T’au Empire
 Retaliation Cadre (3 Detachment Points)
 Purge the Foe
 Strike Force (2,000 Points)
@@ -26,7 +26,7 @@ Exported with App Version: v2.3.0 (1), Data Version: v912
 # Trimmed from official_1.txt: the attached-units section.
 ATTACHED = """11th stuff (2,000 Points)
 
-T'au Empire
+T’au Empire
 Retaliation Cadre (3 Detachment Points)
 Purge the Foe
 Strike Force (2,000 Points)
@@ -40,7 +40,7 @@ Commander Farsight (70 Points)
   • 1x Dawn Blade
 """
 
-NO_ARMY_NAME = """T'au Empire
+NO_ARMY_NAME = """T’au Empire
 Retaliation Cadre (3 Detachment Points)
 Purge the Foe
 Strike Force (2,000 Points)
@@ -77,7 +77,7 @@ def test_header_keeps_its_lines_verbatim():
     header = classify_blocks(MINIMAL)[1]
 
     assert header.lines == [
-        "T'au Empire",
+        "T’au Empire",
         "Retaliation Cadre (3 Detachment Points)",
         "Purge the Foe",
         "Strike Force (2,000 Points)",
@@ -109,7 +109,7 @@ def test_multi_line_army_name_stays_one_block():
 def test_text_with_no_header_raises():
     # A NewRecruit export: no "(N Detachment Points)" line anywhere.
     with pytest.raises(ParseError):
-        classify_blocks("+ FACTION KEYWORD: Xenos - T'au Empire\n")
+        classify_blocks("+ FACTION KEYWORD: Xenos - T’au Empire\n")
 
 
 def test_unclassifiable_block_after_the_header_raises():
