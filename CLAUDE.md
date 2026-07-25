@@ -16,7 +16,7 @@ make typecheck   # uv run ty check src/
 make coverage    # coverage run + report
 make build       # uv build
 
-uv run pytest src/tests/test_official_app.py::TestBuildTree::test_flat_single_model  # single test
+uv run pytest src/tests/test_official_app_units.py::TestBuildTree::test_flat_body_has_no_children  # single test
 uv run python examples/examples.py   # manual smoke run over examples/ (must run from repo root)
 ```
 
