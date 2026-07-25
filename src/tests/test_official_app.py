@@ -1,8 +1,10 @@
+import json
 from pathlib import Path
 
 import pytest
 
 from listgrok.parsers.official_app import parse_official_app
+from listgrok.parsers.parse_error import ParseError
 
 EXAMPLES = Path(__file__).parents[2] / "examples" / "official_app"
 
@@ -63,6 +65,28 @@ Test Unit (50 Points)
   • 1x Test Wargear
 """
 
+# Synthetic: a second block carrying a "(N Detachment Points)" line, which is
+# the HEADER signature. classify_blocks has no way to tell this apart from a
+# legitimate header, so the fold itself must reject the second one rather than
+# silently overwriting all the metadata parsed from the first.
+TWO_HEADER_BLOCKS = """Test Army (100 Points)
+
+Test Faction
+Test Detachment (3 Detachment Points)
+Test Disposition
+Strike Force (100 Points)
+
+Test Faction Two
+Test Detachment Two (3 Detachment Points)
+Test Disposition Two
+Strike Force (100 Points)
+
+CHARACTERS
+
+Test Unit (50 Points)
+  • 1x Test Wargear
+"""
+
 
 class TestAllOfficialExamples:
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
@@ -90,9 +114,26 @@ class TestAllOfficialExamples:
             assert isinstance(unit.points, int)
             assert unit.sheet_type, f"{filename}: {unit.name} has no sheet type"
             assert unit.composition, f"{filename}: {unit.name} has no composition"
+            # A real 11th ed export produces none: decorations is an escape
+            # hatch for body lines that are neither "Nx wargear" nor a known
+            # keyword. If this ever fires, an Enhancements:/wargear match
+            # regressed rather than the fixture growing a legitimately odd line.
+            assert not unit.decorations, f"{filename}: {unit.name} has decorations"
             for model_set in unit.composition:
                 assert model_set.name, f"{filename}: {unit.name} model set unnamed"
+                assert model_set.num_models, (
+                    f"{filename}: {unit.name} model set has no num_models"
+                )
                 assert all(count > 0 for count in model_set.wargear.values())
+
+    @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
+    def test_parsed_list_is_json_serialisable(self, filename):
+        army_list = parse_example(filename)
+
+        # Every to_json test elsewhere builds objects with empty composition,
+        # so UnitComposition.to_json() never runs there. Exercising it here,
+        # over a fully parsed tree, proves the whole model is JSON-clean.
+        json.dumps(army_list.to_json())
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_unit_points_sum_to_the_list_total(self, filename):
@@ -183,3 +224,9 @@ class TestGroupAttachmentFold:
         assert unit.attachment.group == "Attached unit 1"
         assert unit.attachment.role == ""
         assert unit.attachment.role_detail == ""
+
+
+class TestDuplicateHeaderFold:
+    def test_second_header_block_raises_instead_of_overwriting_metadata(self):
+        with pytest.raises(ParseError):
+            parse_official_app(TWO_HEADER_BLOCKS)
