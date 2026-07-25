@@ -1,7 +1,8 @@
 import re
+
 from listgrok.army.army_list import ArmyList, Unit, UnitComposition
-from listgrok.parsers.parse_error import ParseError
 from listgrok.parsers.helpers import count_leading_spaces
+from listgrok.parsers.parse_error import ParseError
 
 FACTION_REGEX = r"^\+ FACTION KEYWORD: (?P<faction>.+)$"
 DETACHMENT_REGEX = r"^\+ DETACHMENT: (?P<detachment>.+)$"
@@ -24,7 +25,6 @@ def _handle_header(lines: list[str], army_list: ArmyList):
         # ("list_name", "")
         ("points", POINTS_REGEX, int),
         ("faction", FACTION_REGEX, str),
-        ("detachment", DETACHMENT_REGEX, str),
     ]
 
     for key, regex, type in matches:
@@ -32,6 +32,12 @@ def _handle_header(lines: list[str], army_list: ArmyList):
         if match is not None:
             val = type(match.group(key))
             setattr(army_list, key, val)
+
+    # Handled separately from the setattr loop: the export names one
+    # detachment, the model holds a list of them.
+    detachment = re.search(DETACHMENT_REGEX, header, flags=re.MULTILINE)
+    if detachment is not None:
+        army_list.detachments = [detachment.group("detachment")]
 
 
 def _handle_unit_line(line: str, unit: Unit, uc: UnitComposition):

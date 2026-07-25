@@ -1,9 +1,9 @@
 from listgrok.army.army_list import ArmyList, Unit, UnitComposition
 from listgrok.parsers.new_recruit_gw import (
-    _handle_header,
-    _handle_unit_line,
-    _handle_unit,
     NewRecruitGWParser,
+    _handle_header,
+    _handle_unit,
+    _handle_unit_line,
 )
 
 
@@ -26,7 +26,7 @@ class TestHandleHeader:
         army_list = ArmyList()
         _handle_header(header.split("\\n"), army_list)  # type: ignore
         assert army_list.faction == "Xenos - T'au Empire"
-        assert army_list.detachment == "Experimental Prototype Cadre"
+        assert army_list.detachments == ["Experimental Prototype Cadre"]
         assert army_list.points == 1985
 
     def test_missing_faction(self):
@@ -46,7 +46,7 @@ class TestHandleHeader:
         army_list = ArmyList()
         _handle_header(header.split("\\n"), army_list)  # type: ignore
         assert army_list.faction == ""
-        assert army_list.detachment == "Experimental Prototype Cadre"
+        assert army_list.detachments == ["Experimental Prototype Cadre"]
         assert army_list.points == 1985
 
     def test_missing_detachment(self):
@@ -66,7 +66,7 @@ class TestHandleHeader:
         army_list = ArmyList()
         _handle_header(header.split("\\n"), army_list)  # type: ignore
         assert army_list.faction == "Xenos - T'au Empire"
-        assert army_list.detachment == ""
+        assert army_list.detachments == []
         assert army_list.points == 1985
 
     def test_missing_army_size(self):
@@ -86,7 +86,7 @@ class TestHandleHeader:
         army_list = ArmyList()
         _handle_header(header.split("\\n"), army_list)  # type: ignore
         assert army_list.faction == "Xenos - T'au Empire"
-        assert army_list.detachment == "Experimental Prototype Cadre"
+        assert army_list.detachments == ["Experimental Prototype Cadre"]
         assert army_list.points is None
 
 
@@ -254,7 +254,7 @@ OTHER DATASHEETS
         parser = NewRecruitGWParser()
         army_list = parser.parse(list_text)
         assert army_list.faction == "Xenos - T'au Empire"
-        assert army_list.detachment == "Experimental Prototype Cadre"
+        assert army_list.detachments == ["Experimental Prototype Cadre"]
         assert army_list.points == 1985
         assert len(army_list.units) == 2
 
