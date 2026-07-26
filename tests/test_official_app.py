@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
+from listgrok import ParseError
 from listgrok.parsers.official_app import parse_official_app
-from listgrok.parsers.parse_error import ParseError
 
 EXAMPLES = Path(__file__).parents[1] / "examples" / "official_app"
 

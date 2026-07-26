@@ -1,4 +1,4 @@
-from listgrok.army.army_list import ArmyList, Attachment, Unit, UnitComposition
+from listgrok import ArmyList, Attachment, Unit, UnitComposition
 
 
 def test_repeated_wargear_sums():

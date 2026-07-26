@@ -1,11 +1,11 @@
 import pytest
 
+from listgrok import ParseError
 from listgrok.parsers.official_app.blocks import (
     BlockKind,
     classify_blocks,
     parse_points,
 )
-from listgrok.parsers.parse_error import ParseError
 
 # Trimmed from official_1.txt: one of each block kind.
 MINIMAL = """11th stuff (2,000 Points)

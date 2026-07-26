@@ -7,7 +7,8 @@ that line's child.
 
 from dataclasses import dataclass, field
 
-from listgrok.army.army_list import Attachment, Unit, UnitComposition
+from listgrok.exceptions import ParseError
+from listgrok.models import Attachment, Unit, UnitComposition
 from listgrok.parsers.official_app.blocks import (
     ATTACHED_AS_REGEX,
     BULLET_REGEX,
@@ -15,7 +16,6 @@ from listgrok.parsers.official_app.blocks import (
     POINTS_REGEX,
     parse_points,
 )
-from listgrok.parsers.parse_error import ParseError
 
 WARLORD_LINE = "Warlord"
 ENHANCEMENT_PREFIXES = ("Enhancements:", "Enhancement:")

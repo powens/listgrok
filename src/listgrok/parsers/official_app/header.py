@@ -4,13 +4,13 @@ The two labelled lines are found by pattern, not position, because the app has
 moved them between dialects before. What remains maps by order.
 """
 
-from listgrok.army.army_list import ArmyList
+from listgrok.exceptions import ParseError
+from listgrok.models import ArmyList
 from listgrok.parsers.official_app.blocks import (
     DETACHMENT_REGEX,
     POINTS_REGEX,
     parse_points,
 )
-from listgrok.parsers.parse_error import ParseError
 
 
 def split_detachments(text: str) -> list[str]:

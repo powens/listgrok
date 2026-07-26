@@ -4,7 +4,8 @@ The export is folded from a classified block stream into an ArmyList, carrying
 only the current sheet type and the current attachment group as state.
 """
 
-from listgrok.army.army_list import ArmyList, Attachment, Unit
+from listgrok.exceptions import ParseError
+from listgrok.models import ArmyList, Attachment, Unit
 from listgrok.parsers.official_app.blocks import (
     POINTS_REGEX,
     BlockKind,
@@ -13,7 +14,6 @@ from listgrok.parsers.official_app.blocks import (
 )
 from listgrok.parsers.official_app.header import parse_header
 from listgrok.parsers.official_app.units import parse_unit
-from listgrok.parsers.parse_error import ParseError
 
 __all__ = ["parse_official_app"]
 

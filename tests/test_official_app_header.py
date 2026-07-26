@@ -1,8 +1,7 @@
 import pytest
 
-from listgrok.army.army_list import ArmyList
+from listgrok import ArmyList, ParseError
 from listgrok.parsers.official_app.header import parse_header, split_detachments
-from listgrok.parsers.parse_error import ParseError
 
 
 def test_official_1_header_has_no_super_faction():

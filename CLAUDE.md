@@ -28,7 +28,7 @@ Tests live in `tests/` and import `listgrok` via `pythonpath = ["src"]` in `pypr
 
 **Entry point.** `parse_list(text)` (`src/listgrok/parse_list.py`) delegates straight to `parse_official_app`; the official app's 11th edition export is the only format currently supported, so unrecognised input raises `ParseError` rather than falling through to anything. Keep the rule that a parser raises `ParseError` (not a half-filled `ArmyList`) on input it does not understand: it is what makes a bad parse visible, and it is the precondition for restoring a fallback chain if a second format lands — detection would again be *by attempted parse*, not by sniffing.
 
-**Data model** (`src/listgrok/army/army_list.py`) — plain dataclasses, each with `to_json()`:
+**Data model** (`src/listgrok/models.py`) — plain dataclasses, each with `to_json()`. `ParseError` lives in `src/listgrok/exceptions.py`; both are re-exported from the package root:
 `ArmyList` (name, points, super_faction, faction, detachments, detachment_points, disposition, army_size, army_size_points, units) → `Unit` (name, sheet_type, is_warlord, enhancement, points, composition, decorations, attachment) → `UnitComposition` (a model set: name, num_models, wargear counts).
 
 A single-model unit still gets one `UnitComposition` named after the unit with `num_models = 1`. `decorations` is the escape hatch for body lines that are not `Nx <wargear>` and not a known keyword. `Unit.attachment` is an `Attachment` (group, role, role_detail) for units inside an `ATTACHED UNITS` group, and `None` otherwise — attached units stay in the flat `ArmyList.units` list in file order rather than nesting under their leader.

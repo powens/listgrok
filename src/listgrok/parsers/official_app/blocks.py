@@ -17,7 +17,7 @@ import re
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from listgrok.parsers.parse_error import ParseError
+from listgrok.exceptions import ParseError
 
 # re.DOTALL so a multi-line army name matches as a single name. Point totals may
 # carry thousands commas ("2,000 Points").

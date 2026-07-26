@@ -1,7 +1,7 @@
 import pytest
 
+from listgrok import ParseError
 from listgrok.parsers.official_app.units import build_tree, parse_unit
-from listgrok.parsers.parse_error import ParseError
 
 
 class TestBuildTree:

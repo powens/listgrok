@@ -2,8 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from listgrok import parse_list
-from listgrok.parsers.parse_error import ParseError
+from listgrok import ParseError, parse_list
 
 EXAMPLES = Path(__file__).parents[1] / "examples"
 
