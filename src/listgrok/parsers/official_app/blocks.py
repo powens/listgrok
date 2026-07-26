@@ -48,7 +48,7 @@ class BlockKind(Enum):
 @dataclass(frozen=True)
 class Block:
     kind: BlockKind
-    lines: list[str]
+    lines: tuple[str, ...]
 
 
 def parse_points(text: str) -> int:
@@ -76,11 +76,11 @@ def classify_blocks(text: str) -> list[Block]:
     for lines in split_blocks(text):
         kind = _classify(lines, seen_header)
         seen_header = seen_header or kind is BlockKind.HEADER
-        blocks.append(Block(kind=kind, lines=lines))
+        blocks.append(Block(kind=kind, lines=tuple(lines)))
 
     if not seen_header:
         # An excerpt, not the whole document: ParseError.__str__ renders the
-        # block after "on line", and the full text would make that unreadable.
+        # block after "in block", and the full text would make that unreadable.
         first_line = text.split("\n", 1)[0]
         raise ParseError("No header block found", first_line)
     return blocks

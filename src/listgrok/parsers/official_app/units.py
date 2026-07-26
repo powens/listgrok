@@ -5,6 +5,7 @@ count decides nesting, so a body line indented deeper than the line above it is
 that line's child.
 """
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 
 from listgrok.exceptions import ParseError
@@ -28,7 +29,7 @@ class Node:
     children: list["Node"] = field(default_factory=list)
 
 
-def build_tree(body_lines: list[str]) -> list[Node]:
+def build_tree(body_lines: Sequence[str]) -> list[Node]:
     """Build the indentation forest for a unit block's body (header excluded)."""
     roots: list[Node] = []
     stack: list[Node] = []
@@ -45,7 +46,7 @@ def build_tree(body_lines: list[str]) -> list[Node]:
     return roots
 
 
-def parse_unit(lines: list[str], sheet_type: str) -> Unit:
+def parse_unit(lines: Sequence[str], sheet_type: str) -> Unit:
     if not lines:
         raise ParseError("Empty unit block", lines)
 

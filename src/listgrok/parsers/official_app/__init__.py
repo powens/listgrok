@@ -4,6 +4,8 @@ The export is folded from a classified block stream into an ArmyList, carrying
 only the current sheet type and the current attachment group as state.
 """
 
+from collections.abc import Sequence
+
 from listgrok.exceptions import ParseError
 from listgrok.models import ArmyList, Attachment, Unit
 from listgrok.parsers.official_app.blocks import (
@@ -50,7 +52,7 @@ def parse_official_app(list_text: str) -> ArmyList:
     return army_list
 
 
-def _parse_army_name(lines: list[str], army_list: ArmyList) -> None:
+def _parse_army_name(lines: Sequence[str], army_list: ArmyList) -> None:
     match = POINTS_REGEX.match("\n".join(lines).strip())
     if match is None:
         # Unreachable in practice: classify_blocks only labels a block
@@ -61,7 +63,7 @@ def _parse_army_name(lines: list[str], army_list: ArmyList) -> None:
     army_list.points = parse_points(match.group("points"))
 
 
-def _parse_unit_in(lines: list[str], sheet_type: str, group: str) -> Unit:
+def _parse_unit_in(lines: Sequence[str], sheet_type: str, group: str) -> Unit:
     """Parse a unit block and stamp the enclosing attachment group onto it.
 
     A unit under a group heading is attached even if it carries no

@@ -4,6 +4,8 @@ The two labelled lines are found by pattern, not position, because the app has
 moved them between dialects before. What remains maps by order.
 """
 
+from collections.abc import Sequence
+
 from listgrok.exceptions import ParseError
 from listgrok.models import ArmyList
 from listgrok.parsers.official_app.blocks import (
@@ -36,7 +38,7 @@ def split_detachments(text: str) -> list[str]:
     return parts
 
 
-def parse_header(lines: list[str], army_list: ArmyList) -> None:
+def parse_header(lines: Sequence[str], army_list: ArmyList) -> None:
     """Assign the army's faction metadata from the header block, in place."""
     lines = [line.strip() for line in lines]
     # Filter on the iteration variable rather than a walrus in the `if` clause,

@@ -76,18 +76,18 @@ def test_group_heading_is_not_a_section_heading():
 def test_header_keeps_its_lines_verbatim():
     header = classify_blocks(MINIMAL)[1]
 
-    assert header.lines == [
+    assert header.lines == (
         "T’au Empire",
         "Retaliation Cadre (3 Detachment Points)",
         "Purge the Foe",
         "Strike Force (2,000 Points)",
-    ]
+    )
 
 
 def test_unit_block_keeps_its_indented_body():
     unit = classify_blocks(MINIMAL)[3]
 
-    assert unit.lines == ["Commander Farsight (70 Points)", "  • 1x Dawn Blade"]
+    assert unit.lines == ("Commander Farsight (70 Points)", "  • 1x Dawn Blade")
 
 
 def test_list_with_no_army_name_starts_at_the_header():
@@ -103,7 +103,7 @@ def test_multi_line_army_name_stays_one_block():
     blocks = classify_blocks(text)
 
     assert blocks[0].kind == BlockKind.ARMY_NAME
-    assert blocks[0].lines == ["Line one of the name", "and line two (2,000 Points)"]
+    assert blocks[0].lines == ("Line one of the name", "and line two (2,000 Points)")
 
 
 def test_text_with_no_header_raises():
