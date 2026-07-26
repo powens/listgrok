@@ -1,6 +1,6 @@
 [project]
 name = "listgrok"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Warhammer 40k 11th edition list parser"
 authors = [
     { name = "powens", email = "1919554+powens@users.noreply.github.com" }
@@ -52,6 +52,9 @@ lint = [
 pythonpath = [
     "src",
 ]
+
+[tool.hatch.version]
+path = "src/listgrok/__init__.py"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
