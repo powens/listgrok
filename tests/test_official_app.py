@@ -6,7 +6,7 @@ import pytest
 from listgrok.parsers.official_app import parse_official_app
 from listgrok.parsers.parse_error import ParseError
 
-EXAMPLES = Path(__file__).parents[2] / "examples" / "official_app"
+EXAMPLES = Path(__file__).parents[1] / "examples" / "official_app"
 
 OFFICIAL_EXAMPLES = {
     "official_1.txt": {

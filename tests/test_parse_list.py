@@ -5,7 +5,7 @@ import pytest
 from listgrok import parse_list
 from listgrok.parsers.parse_error import ParseError
 
-EXAMPLES = Path(__file__).parents[2] / "examples"
+EXAMPLES = Path(__file__).parents[1] / "examples"
 
 
 def test_official_app_export_routes_to_the_official_app_parser():

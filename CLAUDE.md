@@ -16,13 +16,13 @@ make typecheck   # uv run ty check src/
 make coverage    # coverage run + report
 make build       # uv build
 
-uv run pytest src/tests/test_official_app_units.py::TestBuildTree::test_flat_body_has_no_children  # single test
+uv run pytest tests/test_official_app_units.py::TestBuildTree::test_flat_body_has_no_children  # single test
 uv run python examples/examples.py   # manual smoke run over examples/ (must run from repo root)
 ```
 
 CI (`.github/workflows/on-main.yml`) runs lint, test, and coverage on Python 3.10–3.14. Keep the runtime dependency list empty and stick to 3.10-compatible syntax.
 
-Tests import `listgrok` via `pythonpath = ["src"]` in `pyproject.toml`, so no install step is needed. `--random-order` is on by default — tests must not depend on execution order.
+Tests live in `tests/` and import `listgrok` via `pythonpath = ["src"]` in `pyproject.toml`, so no install step is needed. `--random-order` is on by default — tests must not depend on execution order.
 
 ## Architecture
 
@@ -46,7 +46,7 @@ Section headings are recognised structurally (a lone ALL-CAPS line), not against
 
 ## Fixtures are the spec
 
-`examples/official_app/*.txt` are real exports and drive the tests. When adding a new export sample, add an entry to `OFFICIAL_EXAMPLES` in `src/tests/test_official_app.py` — the parametrized `TestAllOfficialExamples` checks faction metadata and unit count for every file listed there, asserts all units are well-formed, and asserts the units' points sum to the list total. Each entry must also carry an `attached_groups` key (the number of `Attached unit N` groups expected), which the attachment-grouping test reads directly — an entry missing it raises `KeyError`. Unit tests in `test_official_app_blocks.py`, `test_official_app_header.py` and `test_official_app_units.py` state which example file each case came from; keep that convention when adding cases.
+`examples/official_app/*.txt` are real exports and drive the tests. When adding a new export sample, add an entry to `OFFICIAL_EXAMPLES` in `tests/test_official_app.py` — the parametrized `TestAllOfficialExamples` checks faction metadata and unit count for every file listed there, asserts all units are well-formed, and asserts the units' points sum to the list total. Each entry must also carry an `attached_groups` key (the number of `Attached unit N` groups expected), which the attachment-grouping test reads directly — an entry missing it raises `KeyError`. Unit tests in `test_official_app_blocks.py`, `test_official_app_header.py` and `test_official_app_units.py` state which example file each case came from; keep that convention when adding cases.
 
 ## Agent skills
 
