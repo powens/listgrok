@@ -45,3 +45,9 @@ jobs:
         run: make test
       - name: Coverage
         run: make coverage
+      - name: Typecheck
+        run: make typecheck
+      - name: Build
+        run: make build
+      - name: Smoke test the built wheel
+        run: uv run --isolated --no-project --with dist/*.whl python -c "import listgrok, pathlib; print(listgrok.parse_list(pathlib.Path('examples/official_app/official_1.txt').read_text()).name)"
