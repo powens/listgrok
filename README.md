@@ -4,29 +4,27 @@
 
 ## Description
 
-listgrok is a library for parsing Warhammer 40k army lists.
+listgrok is a zero-dependency library that parses Warhammer 40k army lists into a common data model of plain dataclasses, ready for JSON via `to_dict()`.
 
 ## Supported formats
 
 - [x] Official GW 40k app (11th edition)
+
+Planned:
+
 - [ ] NewRecruit:
   - [ ] GW format
   - [ ] Markdown format
   - [ ] WTC
   - [ ] WTC-short
-
-## Features
-
-- Parse lists from:
-  - Official 40k app
-  - NewRecruit formats
-  - Battlescribe format
-- Output to a common json (or yaml?) format
+- [ ] Battlescribe
 
 ## Usage
 
+`parse_list` returns an `ArmyList`. Input it does not understand raises `ParseError` rather than returning a half-filled list.
+
 ```python
-from listgrok import parse_list
+from listgrok import ParseError, parse_list
 
 my_list_text = """
 11th stuff (2,000 Points)
@@ -50,7 +48,13 @@ Crisis Sunforge Battlesuits (125 Points)
      ◦ 1x Battlesuit fists
 """
 
-army_list = parse_list(my_list_text)
+try:
+    army_list = parse_list(my_list_text)
+except ParseError as err:
+    print(f"Not a recognised army list: {err}")
+else:
+    print(army_list.name)  # "11th stuff"
+    data = army_list.to_dict()  # JSON-ready dict with stable keys
 ```
 
 ## Contributing

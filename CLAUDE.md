@@ -17,7 +17,7 @@ make coverage    # coverage run + report
 make build       # uv build
 
 uv run pytest tests/test_official_app_units.py::TestBuildTree::test_flat_body_has_no_children  # single test
-uv run python examples/examples.py   # manual smoke run over examples/ (must run from repo root)
+uv run python examples/examples.py   # manual smoke run over examples/
 ```
 
 CI (`.github/workflows/on-main.yml`) runs lint, test, coverage, typecheck, build, and a built-wheel import smoke on Python 3.10–3.14. Keep the runtime dependency list empty and stick to 3.10-compatible syntax.
