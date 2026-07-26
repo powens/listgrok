@@ -1,4 +1,11 @@
-from dataclasses import dataclass, field
+"""The common data model that army-list parsers fill in.
+
+Each dataclass exposes `to_dict()` with stable keys: optional fields are always
+present, as `None`/`False`/`""`. `dataclasses.asdict` keeps that contract by
+construction — every field is emitted, recursing into nested dataclasses.
+"""
+
+from dataclasses import asdict, dataclass, field
 
 
 @dataclass
@@ -9,17 +16,13 @@ class Attachment:
     role: str = ""  # "Leader" | "Bodyguard"
     role_detail: str = ""  # "Character" | "Battleline" | "" — the parenthetical
 
-    def to_json(self) -> dict:
-        return {
-            "group": self.group,
-            "role": self.role,
-            "role_detail": self.role_detail,
-        }
+    def to_dict(self) -> dict:
+        return asdict(self)
 
 
 @dataclass
 class UnitComposition:
-    name: str = ""
+    name: str
     num_models: int | None = None
     wargear: dict[str, int] = field(default_factory=dict)
 
@@ -29,17 +32,13 @@ class UnitComposition:
         else:
             self.wargear[weapon] += count
 
-    def to_json(self) -> dict:
-        return {
-            "name": self.name,
-            "num_models": self.num_models,
-            "wargear": self.wargear,
-        }
+    def to_dict(self) -> dict:
+        return asdict(self)
 
 
 @dataclass
 class Unit:
-    name: str = ""
+    name: str
     sheet_type: str = ""
     is_warlord: bool = False
     enhancement: str = ""
@@ -51,24 +50,14 @@ class Unit:
     def add_model_set(self, model_set: UnitComposition):
         self.composition.append(model_set)
 
-    def to_json(self) -> dict:
-        o: dict = {
-            "name": self.name,
-            "sheet_type": self.sheet_type,
-            "enhancement": self.enhancement,
-            "points": self.points,
-            "composition": [model.to_json() for model in self.composition],
-            "decorations": self.decorations,
-        }
-        if self.is_warlord:
-            o["is_warlord"] = self.is_warlord
-        if self.attachment is not None:
-            o["attachment"] = self.attachment.to_json()
-        return o
+    def to_dict(self) -> dict:
+        return asdict(self)
 
 
 @dataclass
 class ArmyList:
+    # Everything defaults because the parser's fold builds the list
+    # incrementally, block by block.
     name: str = ""
     points: int | None = None
     super_faction: str = ""
@@ -83,19 +72,5 @@ class ArmyList:
     def add_unit(self, unit: Unit):
         self.units.append(unit)
 
-    def to_json(self) -> dict:
-        o: dict = {
-            "name": self.name,
-            "points": self.points,
-            "faction": self.faction,
-            "detachments": self.detachments,
-            "detachment_points": self.detachment_points,
-            "disposition": self.disposition,
-            "army_size": self.army_size,
-            "army_size_points": self.army_size_points,
-            "units": [unit.to_json() for unit in self.units],
-        }
-        if self.super_faction:
-            o["super_faction"] = self.super_faction
-
-        return o
+    def to_dict(self) -> dict:
+        return asdict(self)

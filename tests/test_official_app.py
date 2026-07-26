@@ -130,10 +130,10 @@ class TestAllOfficialExamples:
     def test_parsed_list_is_json_serialisable(self, filename):
         army_list = parse_example(filename)
 
-        # Every to_json test elsewhere builds objects with empty composition,
-        # so UnitComposition.to_json() never runs there. Exercising it here,
+        # Every to_dict test elsewhere builds objects with empty composition,
+        # so UnitComposition.to_dict() never runs there. Exercising it here,
         # over a fully parsed tree, proves the whole model is JSON-clean.
-        json.dumps(army_list.to_json())
+        json.dumps(army_list.to_dict())
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_unit_points_sum_to_the_list_total(self, filename):
