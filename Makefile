@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	uv run pytest --random-order
+	uv run pytest
 
 .PHONY: typecheck
 typecheck:
@@ -8,11 +8,11 @@ typecheck:
 
 .PHONY: lint
 lint:
-	uvx ruff check src
+	uv run --group lint ruff check .
 
 .PHONY: format
 format:
-	uvx ruff format
+	uv run --group lint ruff format .
 
 .PHONY: build
 build:
@@ -20,7 +20,7 @@ build:
 
 .PHONY: coverage
 coverage:
-	uv run coverage run -m pytest --random-order
+	uv run coverage run -m pytest
 	uv run coverage report
 
 .PHONY: coverage-html

@@ -9,9 +9,9 @@ listgrok is a zero-dependency library that parses Warhammer 40k 11th edition arm
 ## Commands
 
 ```sh
-make test        # uv run pytest --random-order
-make lint        # uvx ruff check src
-make format      # uvx ruff format
+make test        # uv run pytest
+make lint        # uv run --group lint ruff check .
+make format      # uv run --group lint ruff format .
 make typecheck   # uv run ty check src/
 make coverage    # coverage run + report
 make build       # uv build
@@ -22,7 +22,7 @@ uv run python examples/examples.py   # manual smoke run over examples/
 
 CI (`.github/workflows/on-main.yml`) runs lint, test, coverage, typecheck, build, and a built-wheel import smoke on Python 3.10–3.14. Keep the runtime dependency list empty and stick to 3.10-compatible syntax.
 
-Tests live in `tests/` and import `listgrok` via `pythonpath = ["src"]` in `pyproject.toml`, so no install step is needed. `--random-order` is on by default — tests must not depend on execution order. The version is single-sourced from `__version__` in `src/listgrok/__init__.py` via `[tool.hatch.version]`.
+Tests live in `tests/` and import `listgrok` via `pythonpath = ["src"]` in `pyproject.toml`, so no install step is needed. `--random-order` is on by default (via `addopts`) — tests must not depend on execution order. The version is single-sourced from `__version__` in `src/listgrok/__init__.py` via `[tool.hatch.version]`.
 
 ## Architecture
 
