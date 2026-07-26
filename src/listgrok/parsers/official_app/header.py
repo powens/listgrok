@@ -14,6 +14,8 @@ from listgrok.parsers.official_app.blocks import (
     parse_points,
 )
 
+DISPOSITION_LABEL = "Force Dispositions:"
+
 
 def split_detachments(text: str) -> list[str]:
     """Split a detachment line into individual detachment names.
@@ -66,6 +68,23 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> None:
 
     consumed = {size.group(0), detachment.group(0)}
     rest = [line for line in lines if line not in consumed]
+
+    # The newer dialect labels the disposition line ("Force Dispositions: X"),
+    # making it the third pattern-found line; the classic dialect leaves it
+    # unlabelled and it maps by order below.
+    labelled = [line for line in rest if line.startswith(DISPOSITION_LABEL)]
+    if labelled:
+        if len(labelled) > 1:
+            raise ParseError("Expected at most one disposition line", lines)
+        army_list.disposition = labelled[0].removeprefix(DISPOSITION_LABEL).strip()
+        rest = [line for line in rest if line not in labelled]
+        if len(rest) == 2:
+            army_list.super_faction, army_list.faction = rest
+        elif len(rest) == 1:
+            army_list.faction = rest[0]
+        else:
+            raise ParseError(f"Expected 1 or 2 faction lines, found {len(rest)}", lines)
+        return
 
     if len(rest) == 3:
         army_list.super_faction, army_list.faction, army_list.disposition = rest

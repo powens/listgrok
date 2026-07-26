@@ -29,10 +29,13 @@ DETACHMENT_REGEX = re.compile(
 )
 NUM_REGEX = re.compile(r"^(?P<num>\d+)x\s(?P<name>.+)$")
 ATTACHED_AS_REGEX = re.compile(
-    r"^Attached as:\s*(?P<role>[^(]+?)\s*\((?P<detail>[^)]*)\)$"
+    r"^Attached as:\s*(?P<role>[^(]+?)\s*(?:\((?P<detail>[^)]*)\))?$"
 )
 BULLET_REGEX = re.compile(r"^[•◦]\s*")
-GROUP_REGEX = re.compile(r"^Attached unit\b")
+# IGNORECASE: the classic dialect writes "Attached unit 1", the newer one
+# "Attached Unit 1". The \b keeps the plural section heading ("Attached
+# Units") from matching.
+GROUP_REGEX = re.compile(r"^Attached unit\b", re.IGNORECASE)
 TRAILER_PREFIX = "Exported with App Version:"
 
 
@@ -74,9 +77,9 @@ def classify_blocks(text: str) -> list[Block]:
     blocks: list[Block] = []
     seen_header = False
     for lines in split_blocks(text):
-        kind = _classify(lines, seen_header)
-        seen_header = seen_header or kind is BlockKind.HEADER
-        blocks.append(Block(kind=kind, lines=tuple(lines)))
+        for block in _classify_block(lines, seen_header):
+            seen_header = seen_header or block.kind is BlockKind.HEADER
+            blocks.append(block)
 
     if not seen_header:
         # An excerpt, not the whole document: ParseError.__str__ renders the
@@ -84,6 +87,33 @@ def classify_blocks(text: str) -> list[Block]:
         first_line = text.split("\n", 1)[0]
         raise ParseError("No header block found", first_line)
     return blocks
+
+
+def _classify_block(lines: list[str], seen_header: bool) -> list[Block]:
+    """Classify one physical block, splitting a fused section+group pair."""
+    if seen_header and _is_fused_section_group(lines):
+        return [
+            Block(kind=BlockKind.SECTION, lines=(lines[0],)),
+            Block(kind=BlockKind.GROUP, lines=(lines[1],)),
+        ]
+    return [Block(kind=_classify(lines, seen_header), lines=tuple(lines))]
+
+
+def _is_fused_section_group(lines: list[str]) -> bool:
+    """The newer dialect writes no blank line between the attached-units
+    heading and the first group heading ("Attached Units" / "Attached Unit 1").
+    The group line is the marker; the single line above it is a section heading
+    (title-case here, so the ALL-CAPS rule cannot spot it on its own).
+    """
+    if len(lines) != 2:
+        return False
+    heading, group = (line.strip() for line in lines)
+    return (
+        GROUP_REGEX.match(group) is not None
+        and GROUP_REGEX.match(heading) is None
+        and POINTS_REGEX.match(heading) is None
+        and any(char.isalpha() for char in heading)
+    )
 
 
 def _classify(lines: list[str], seen_header: bool) -> BlockKind:

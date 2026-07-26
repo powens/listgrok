@@ -54,6 +54,30 @@ def test_official_2_header_has_a_super_faction_and_three_detachments():
     assert army_list.army_size_points == 2000
 
 
+def test_official_3_header_reads_the_labelled_disposition_line():
+    # The newer dialect labels the disposition ("Force Dispositions: X") and
+    # reorders the block; the labelled lines are all found by pattern, so only
+    # the faction is left to map by order.
+    army_list = ArmyList()
+    parse_header(
+        [
+            "Orks",
+            "Strike Force (2000 points)",
+            "Kult of Speed and More Dakka! (3 Detachment Points)",
+            "Force Dispositions: Disruption",
+        ],
+        army_list,
+    )
+
+    assert army_list.super_faction == ""
+    assert army_list.faction == "Orks"
+    assert army_list.detachments == ["Kult of Speed and More Dakka!"]
+    assert army_list.detachment_points == 3
+    assert army_list.disposition == "Disruption"
+    assert army_list.army_size == "Strike Force"
+    assert army_list.army_size_points == 2000
+
+
 def test_faction_only_header_leaves_disposition_empty():
     army_list = ArmyList()
     parse_header(

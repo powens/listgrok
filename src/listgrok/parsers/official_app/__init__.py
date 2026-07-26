@@ -35,7 +35,10 @@ def parse_official_app(list_text: str) -> ArmyList:
             parse_header(block.lines, army_list)
             seen_header = True
         elif block.kind is BlockKind.SECTION:
-            sheet_type = block.lines[0].strip()
+            # Upper-cased so the newer dialect's title-case fused heading
+            # ("Attached Units") reads the same as the classic "ATTACHED
+            # UNITS"; classic headings are already all-caps.
+            sheet_type = block.lines[0].strip().upper()
             group = ""
         elif block.kind is BlockKind.GROUP:
             group = block.lines[0].strip()

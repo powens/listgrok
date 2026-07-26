@@ -1,8 +1,10 @@
 """Parse a unit block of an 11th edition official-app export.
 
-Indentation is authoritative. Bullet glyphs are stripped and the leading-space
-count decides nesting, so a body line indented deeper than the line above it is
-that line's child.
+The body comes in two dialects, told apart by whether any line is indented.
+The classic export indents: bullet glyphs are stripped and the leading-space
+count decides nesting, so a body line indented deeper than the line above it
+is that line's child. The newer compact export writes every line at column
+zero and encodes nesting with bullet runs instead — see _run_tree.
 """
 
 from collections.abc import Sequence
@@ -30,7 +32,13 @@ class Node:
 
 
 def build_tree(body_lines: Sequence[str]) -> list[Node]:
-    """Build the indentation forest for a unit block's body (header excluded)."""
+    """Build the forest for a unit block's body (header excluded)."""
+    if any(len(raw) - len(raw.lstrip()) for raw in body_lines):
+        return _indent_tree(body_lines)
+    return _run_tree(body_lines)
+
+
+def _indent_tree(body_lines: Sequence[str]) -> list[Node]:
     roots: list[Node] = []
     stack: list[Node] = []
 
@@ -42,6 +50,35 @@ def build_tree(body_lines: Sequence[str]) -> list[Node]:
             stack.pop()
         (stack[-1].children if stack else roots).append(node)
         stack.append(node)
+
+    return roots
+
+
+def _run_tree(body_lines: Sequence[str]) -> list[Node]:
+    """Build the forest for the newer dialect's unindented bullet-run body.
+
+    A bulleted line followed by another bulleted line is a root. Everything
+    else is a run member: a bulleted line starting a plain run, or a plain
+    line continuing one. A run holds the wargear of the root above it — but
+    only when that root is "Nx"-shaped; after a keyword root ("Warlord",
+    "Attached as: …") the run stays at the top level, which is also where
+    single-model bodies and Wartrakk-style bare wargear names end up, exactly
+    mirroring the classic dialect's flat body.
+    """
+    lines = [line.strip() for line in body_lines]
+    bulleted = [BULLET_REGEX.match(line) is not None for line in lines]
+    roots: list[Node] = []
+    parent: Node | None = None
+
+    for i, line in enumerate(lines):
+        node = Node(text=BULLET_REGEX.sub("", line), indent=0)
+        if bulleted[i] and i + 1 < len(lines) and bulleted[i + 1]:
+            roots.append(node)
+            parent = node if NUM_REGEX.match(node.text) else None
+        elif parent is not None:
+            parent.children.append(node)
+        else:
+            roots.append(node)
 
     return roots
 
@@ -73,7 +110,8 @@ def _populate(unit: Unit, roots: list[Node]) -> None:
         elif (match := ATTACHED_AS_REGEX.match(node.text)) is not None:
             unit.attachment = Attachment(
                 role=match.group("role").strip(),
-                role_detail=match.group("detail").strip(),
+                # The newer dialect may omit the parenthetical entirely.
+                role_detail=(match.group("detail") or "").strip(),
             )
         else:
             models.append(node)

@@ -22,6 +22,49 @@ class TestBuildTree:
         ]
         assert all(node.children == [] for node in roots)
 
+    def test_bullet_run_body_nests_runs_under_the_last_counted_root(self):
+        # official_3 Gretchin: the newer dialect writes every line at column
+        # zero; a bulleted line followed by another bulleted line is a root,
+        # and a bullet-then-plain run holds the wargear of the root above it.
+        roots = build_tree(
+            [
+                "• 10x Gretchin",
+                "• 10x Close combat weapon",
+                "10x Grot blasta",
+                "• 1x Runtherd",
+                "• 1x Runtherd tools",
+                "1x Slugga",
+            ]
+        )
+
+        assert [node.text for node in roots] == ["10x Gretchin", "1x Runtherd"]
+        assert [child.text for child in roots[0].children] == [
+            "10x Close combat weapon",
+            "10x Grot blasta",
+        ]
+        assert [child.text for child in roots[1].children] == [
+            "1x Runtherd tools",
+            "1x Slugga",
+        ]
+
+    def test_bullet_run_after_a_keyword_root_stays_flat(self):
+        # official_3 Wazdakka Gutsmek: "Warlord" is a root, but the wargear
+        # run after it must not nest beneath it — the unit is a single model.
+        roots = build_tree(
+            [
+                "• Warlord",
+                "• 1x Fixit’s wrench",
+                "1x Grabba dragga",
+            ]
+        )
+
+        assert [node.text for node in roots] == [
+            "Warlord",
+            "1x Fixit’s wrench",
+            "1x Grabba dragga",
+        ]
+        assert all(node.children == [] for node in roots)
+
     def test_deeper_indent_nests(self):
         # official_1 Vespid Stingwings
         roots = build_tree(
@@ -148,6 +191,66 @@ class TestParseUnit:
         assert unit.attachment.role == "Bodyguard"
         assert unit.attachment.role_detail == ""
         assert len(unit.composition) == 2
+
+    def test_bullet_run_unit_gets_one_model_set_per_root(self):
+        # official_3 Flash Gitz: a childless bulleted root (Ammo Runt) is
+        # still a model set, and the enhancement is lifted from the runs.
+        unit = parse_unit(
+            [
+                "Flash Gitz (165 points)",
+                "• 1x Ammo Runt",
+                "• Enhancement: Dead Shiny Shootas (Upgrade)",
+                "• 1x Kaptin",
+                "• 1x Choppa",
+                "1x Snazzgun",
+                "• 9x Flash Git",
+                "• 9x Choppa",
+                "9x Snazzgun",
+            ],
+            "OTHER DATASHEETS",
+        )
+
+        assert unit.enhancement == "Dead Shiny Shootas (Upgrade)"
+        assert [(ms.name, ms.num_models, ms.wargear) for ms in unit.composition] == [
+            ("Ammo Runt", 1, {}),
+            ("Kaptin", 1, {"Choppa": 1, "Snazzgun": 1}),
+            ("Flash Git", 9, {"Choppa": 9, "Snazzgun": 9}),
+        ]
+
+    def test_attached_as_without_parenthetical(self):
+        # official_3 Gretchin: the newer dialect writes "Attached as:
+        # Bodyguard" with no parenthetical at all.
+        unit = parse_unit(
+            [
+                "Gretchin (45 points)",
+                "• Attached as: Bodyguard",
+                "• 10x Gretchin",
+                "• 10x Grot blasta",
+            ],
+            "ATTACHED UNITS",
+        )
+
+        assert unit.attachment is not None
+        assert unit.attachment.role == "Bodyguard"
+        assert unit.attachment.role_detail == ""
+
+    def test_count_less_body_lines_become_decorations(self):
+        # official_3 Wartrakk: bare wargear names, no bullets and no "Nx".
+        # They are kept as decorations rather than given fabricated counts.
+        unit = parse_unit(
+            [
+                "Wartrakk (60 points)",
+                "Choppas",
+                "Kustom Shoota",
+                "Rokkits",
+            ],
+            "OTHER DATASHEETS",
+        )
+
+        assert unit.decorations == ["Choppas", "Kustom Shoota", "Rokkits"]
+        assert [(ms.name, ms.num_models, ms.wargear) for ms in unit.composition] == [
+            ("Wartrakk", 1, {})
+        ]
 
     def test_enhancement_keeps_its_parenthetical(self):
         # official_2 Captain in Terminator Armour

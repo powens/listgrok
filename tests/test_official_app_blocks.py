@@ -51,6 +51,29 @@ Commander Farsight (70 Points)
   • 1x Dawn Blade
 """
 
+# Trimmed from official_3.txt: the newer dialect writes no blank line between
+# the attached-units heading and the first group heading, fusing them into one
+# block, and capitalises "Unit" in group headings.
+FUSED_ATTACHED = """Orks
+Strike Force (2000 points)
+Kult of Speed and More Dakka! (3 Detachment Points)
+Force Dispositions: Disruption
+
+Attached Units
+Attached Unit 1
+
+Zodgrod Wortsnagga (80 points)
+• Attached as: Leader (Character)
+• 1x Da Grabzappa
+1x Squigstoppa
+
+Attached Unit 2
+
+Big Mek with Shokk Attack Gun (70 points)
+• Attached as: Leader (Character)
+• 1x Close combat weapon
+"""
+
 
 def test_classifies_one_of_each_block_kind():
     assert [block.kind for block in classify_blocks(MINIMAL)] == [
@@ -104,6 +127,26 @@ def test_multi_line_army_name_stays_one_block():
 
     assert blocks[0].kind == BlockKind.ARMY_NAME
     assert blocks[0].lines == ("Line one of the name", "and line two (2,000 Points)")
+
+
+def test_fused_section_and_group_block_splits_into_two_blocks():
+    blocks = classify_blocks(FUSED_ATTACHED)
+
+    assert [block.kind for block in blocks] == [
+        BlockKind.HEADER,
+        BlockKind.SECTION,
+        BlockKind.GROUP,
+        BlockKind.UNIT,
+        BlockKind.GROUP,
+        BlockKind.UNIT,
+    ]
+    assert blocks[1].lines == ("Attached Units",)
+    assert blocks[2].lines == ("Attached Unit 1",)
+
+
+def test_capitalised_lone_group_heading_is_a_group():
+    # official_3.txt: "Attached Unit 2" — the newer dialect capitalises "Unit".
+    assert classify_blocks(FUSED_ATTACHED)[4].lines == ("Attached Unit 2",)
 
 
 def test_text_with_no_header_raises():
