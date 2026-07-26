@@ -24,7 +24,6 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Operating System :: OS Independent",
-    "License :: OSI Approved :: MIT License",
     "Typing :: Typed",
 ]
 
@@ -74,5 +73,6 @@ include = [
     "tests",
     "examples",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE",
 ]

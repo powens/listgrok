@@ -16,6 +16,20 @@ Please note we have a code of conduct, please follow it in all your interactions
 4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you 
    do not have permission to do that, you may request the second reviewer to merge it for you.
 
+## Releasing
+
+The version is single-sourced from `__version__` in `src/listgrok/__init__.py`.
+To cut a release:
+
+1. Bump `__version__` to the new version (following [SemVer](http://semver.org/)).
+2. Move the relevant entries in `CHANGELOG.md` from `[Unreleased]` into a new
+   dated section for the version, and update the link references at the bottom.
+3. Commit, then tag the commit `v<version>` (e.g. `v0.1.0`) and push the tag.
+
+Pushing the tag triggers `.github/workflows/release.yml`, which asserts the tag
+matches `__version__`, builds the package, smoke-tests the wheel, and publishes
+to PyPI via trusted publishing.
+
 ## Code of Conduct
 
 ### Our Pledge

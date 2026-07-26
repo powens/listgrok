@@ -20,7 +20,7 @@ uv run pytest tests/test_official_app_units.py::TestBuildTree::test_flat_body_ha
 uv run python examples/examples.py   # manual smoke run over examples/
 ```
 
-CI (`.github/workflows/on-main.yml`) runs lint, test, coverage, typecheck, build, and a built-wheel import smoke on Python 3.10–3.14. Keep the runtime dependency list empty and stick to 3.10-compatible syntax.
+CI (`.github/workflows/on-main.yml`) runs lint, test, coverage, typecheck, build, and a built-wheel import smoke on Python 3.10–3.14. Keep the runtime dependency list empty and stick to 3.10-compatible syntax. Pushing a `v*` tag triggers `.github/workflows/release.yml`, which asserts the tag matches `__version__`, rebuilds, and publishes to PyPI via trusted publishing; the release steps are documented in CONTRIBUTING.md.
 
 Tests live in `tests/` and import `listgrok` via `pythonpath = ["src"]` in `pyproject.toml`, so no install step is needed. `--random-order` is on by default (via `addopts`) — tests must not depend on execution order. The version is single-sourced from `__version__` in `src/listgrok/__init__.py` via `[tool.hatch.version]`.
 
