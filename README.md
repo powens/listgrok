@@ -8,9 +8,9 @@ listgrok is a library for parsing Warhammer 40k army lists.
 
 ## Supported formats
 
-- [x] Official GW 40k app
+- [x] Official GW 40k app (11th edition)
 - [ ] NewRecruit:
-  - [x] GW format
+  - [ ] GW format
   - [ ] Markdown format
   - [ ] WTC
   - [ ] WTC-short
@@ -29,22 +29,28 @@ listgrok is a library for parsing Warhammer 40k army lists.
 from listgrok import parse_list
 
 my_list_text = """
-Boop (1985 Points)
+11th stuff (2,000 Points)
 
-Space Marines
-Space Wolves
-Stormlance Task Force
-Strike Force (2000 Points)
+T’au Empire
+Retaliation Cadre (3 Detachment Points)
+Purge the Foe
+Strike Force (2,000 Points)
 
-CHARACTERS
+ATTACHED UNITS
 
-Bjorn the Fell-Handed (190 Points)
-  • 1x Heavy flamer
-  • 1x Helfrost cannon
-  • 1x Trueclaw
+Attached unit 1
+
+Commander Farsight (70 Points)
+  • Attached as: Leader (Character)
+  • 1x Dawn Blade
+
+Crisis Sunforge Battlesuits (125 Points)
+  • Attached as: Bodyguard ()
+  • 1x Crisis Sunforge Shas’vre
+     ◦ 1x Battlesuit fists
 """
 
-list = parse_list(my_list_text)
+army_list = parse_list(my_list_text)
 ```
 
 ## Contributing

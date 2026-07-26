@@ -1,115 +1,218 @@
-Boop (1985 Points)
+11th stuff (2,000 Points)
 
-Space Marines
-Space Wolves
-Stormlance Task Force
-Strike Force (2000 Points)
+T’au Empire
+Retaliation Cadre (3 Detachment Points)
+Purge the Foe
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Commander in Enforcer Battlesuit (80 Points)
+  • Attached as: Leader (Character)
+  • Warlord
+  • 1x Battlesuit fists
+  • 1x Missile pod
+  • 3x Missile pod
+  • 2x Shield Drone
+
+Crisis Fireknife Battlesuits (130 Points)
+  • Attached as: Bodyguard ()
+  • 1x Crisis Fireknife Shas’vre
+     ◦ 1x Battlesuit fists
+     ◦ 1x Gun Drone
+     ◦ 2x Missile pod
+     ◦ 1x Shield Drone
+  • 2x Crisis Fireknife Shas’ui
+     ◦ 2x Battlesuit fists
+     ◦ 2x Gun Drone
+     ◦ 4x Missile pod
+     ◦ 2x Shield Drone
+
+Attached unit 2
+
+Commander in Coldstar Battlesuit (110 Points)
+  • Attached as: Leader (Character)
+  • 1x Battlesuit fists
+  • 2x Burst cannon
+  • 1x Cyclic ion blaster
+  • 2x Gun Drone
+  • 1x High-output burst cannon
+  • Enhancements: Prototype Weapon System
+
+Crisis Starscythe Battlesuits (90 Points)
+  • Attached as: Bodyguard ()
+  • 1x Crisis Starscythe Shas’vre
+     ◦ 1x Battlesuit fists
+     ◦ 2x Burst cannon
+     ◦ 1x Marker Drone
+     ◦ 1x Shield Drone
+  • 2x Crisis Starscythe Shas’ui
+     ◦ 2x Battlesuit fists
+     ◦ 4x Burst cannon
+     ◦ 2x Gun Drone
+     ◦ 2x Shield Drone
+
+Attached unit 3
+
+Commander Farsight (70 Points)
+  • Attached as: Leader (Character)
+  • 1x Dawn Blade
+  • 1x High-intensity plasma rifle
+
+Crisis Sunforge Battlesuits (125 Points)
+  • Attached as: Bodyguard ()
+  • 1x Crisis Sunforge Shas’vre
+     ◦ 1x Battlesuit fists
+     ◦ 2x Fusion blaster
+     ◦ 1x Gun Drone
+     ◦ 1x Shield Drone
+  • 2x Crisis Sunforge Shas’ui
+     ◦ 2x Battlesuit fists
+     ◦ 4x Fusion blaster
+     ◦ 2x Gun Drone
+     ◦ 2x Shield Drone
+
+Attached unit 4
+
+Commander in Coldstar Battlesuit (95 Points)
+  • Attached as: Leader (Character)
+  • 1x Battlesuit fists
+  • 1x Fusion blaster
+  • 3x Fusion blaster
+  • 2x Shield Drone
+
+Crisis Sunforge Battlesuits (125 Points)
+  • Attached as: Bodyguard ()
+  • 1x Crisis Sunforge Shas’vre
+     ◦ 1x Battlesuit fists
+     ◦ 2x Fusion blaster
+     ◦ 1x Gun Drone
+     ◦ 1x Shield Drone
+  • 2x Crisis Sunforge Shas’ui
+     ◦ 2x Battlesuit fists
+     ◦ 4x Fusion blaster
+     ◦ 2x Gun Drone
+     ◦ 2x Shield Drone
 
 CHARACTERS
 
-Bjorn the Fell-Handed (190 Points)
-  • 1x Heavy flamer
-  • 1x Helfrost cannon
-  • 1x Trueclaw
-
-Harald Deathwolf (85 Points)
-  • 1x Bolt Pistol
-  • 1x Crushing teeth and claws
-  • 1x Glacius
-
-Lieutenant with Combi-weapon (70 Points)
-  • 1x Combi-weapon
-  • 1x Paired combat blades
-
-Logan Grimnar on Stormrider (180 Points)
-  • Warlord
-  • 1x Flurry of teeth and claws
-  • 1x Storm bolter
-  • 1x The Axe Morkai
-
-Wolf Guard Battle Leader on Thunderwolf (80 Points)
-  • 1x Close combat weapon
-  • 1x Crushing teeth and claws
-  • 1x Power fist
-  • 1x Storm Shield
-
-Wolf Guard Battle Leader on Thunderwolf (95 Points)
-  • 1x Close combat weapon
-  • 1x Crushing teeth and claws
-  • 1x Power fist
-  • 1x Storm Shield
-  • Enhancements: Portents of Wisdom
-
-Wolf Lord on Thunderwolf (125 Points)
-  • 1x Crushing teeth and claws
-  • 1x Twin lightning claws
-  • Enhancements: Fury of the Storm
+The Twin Lance (220 Points)
+  • 1x Ri’Lantar
+     ◦ 1x Fusion eliminator
+     ◦ 1x MV15 Gun Drone
+     ◦ 1x Shardstorm burst system
+     ◦ 1x XV pulse pistol
+  • 1x Ri’Locai
+     ◦ 1x Ion scattercannon
+     ◦ 1x MV15 Gun Drone
+     ◦ 1x Shardstorm burst system
+     ◦ 1x XV pulse pistol
 
 OTHER DATASHEETS
 
-Gladiator Lancer (160 Points)
-  • 1x Armoured hull
-  • 1x Icarus rocket pod
-  • 1x Ironhail heavy stubber
-  • 1x Lancer laser destroyer
-  • 2x Storm bolter
+Broadside Battlesuits (150 Points)
+  • 1x Broadside Shas’vre
+     ◦ 1x Crushing bulk
+     ◦ 1x Heavy rail rifle
+     ◦ 2x Missile Drone
+     ◦ 1x Seeker missile
+     ◦ 1x Weapon Support System
+  • 1x Broadside Shas’ui
+     ◦ 1x Crushing bulk
+     ◦ 1x Heavy rail rifle
+     ◦ 2x Missile Drone
+     ◦ 1x Seeker missile
+     ◦ 1x Weapon Support System
 
-Infiltrator Squad (100 Points)
-  • 1x Infiltrator Sergeant
-     ◦ 1x Bolt pistol
+Crisis Starscythe Battlesuits (120 Points)
+  • 1x Crisis Starscythe Shas’vre
+     ◦ 1x Battlesuit fists
+     ◦ 1x Marker Drone
+     ◦ 1x Shield Drone
+     ◦ 2x T’au flamer
+  • 2x Crisis Starscythe Shas’ui
+     ◦ 2x Battlesuit fists
+     ◦ 2x Gun Drone
+     ◦ 2x Shield Drone
+     ◦ 4x T’au flamer
+
+Ghostkeel Battlesuit (150 Points)
+  • 1x Battlesuit Support System
+  • 1x Fusion collider
+  • 1x Ghostkeel fists
+  • 1x Twin fusion blaster
+
+Kroot Carnivores (65 Points)
+  • 1x Long-quill
      ◦ 1x Close combat weapon
-     ◦ 1x Marksman bolt carbine
-  • 4x Infiltrator
-     ◦ 4x Bolt pistol
-     ◦ 4x Close combat weapon
-     ◦ 4x Marksman bolt carbine
+     ◦ 1x Kroot pistol
+     ◦ 1x Kroot rifle
+  • 9x Kroot Carnivore
+     ◦ 9x Close combat weapon
+     ◦ 9x Kroot rifle
 
-Scout Squad (70 Points)
-  • 1x Scout Sergeant
-     ◦ 1x Bolt pistol
-     ◦ 1x Boltgun
+Pathfinder Team (100 Points)
+  • 1x Pathfinder Shas’ui
      ◦ 1x Close combat weapon
-  • 4x Scout
-     ◦ 4x Bolt pistol
-     ◦ 4x Boltgun
-     ◦ 4x Close combat weapon
+     ◦ 2x Gun Drone
+     ◦ 1x Pulse carbine
+     ◦ 1x Pulse pistol
+     ◦ 1x Recon Drone
+     ◦ 1x Semi-automatic grenade launcher
+  • 9x Pathfinder
+     ◦ 9x Close combat weapon
+     ◦ 3x Ion rifle
+     ◦ 6x Pulse carbine
+     ◦ 9x Pulse pistol
 
-Thunderwolf Cavalry (240 Points)
-  • 1x Thunderwolf Cavalry Pack Leader
-     ◦ 1x Crushing teeth and claws
-     ◦ 1x Heirloom weapon
-     ◦ 1x Storm Shield
-  • 5x Thunderwolf Cavalry
-     ◦ 5x Crushing teeth and claws
-     ◦ 5x Heirloom weapon
-     ◦ 5x Storm Shield
+Pathfinder Team (100 Points)
+  • 1x Pathfinder Shas’ui
+     ◦ 1x Close combat weapon
+     ◦ 1x Grav-inhibitor Drone
+     ◦ 1x Pulse carbine
+     ◦ 1x Pulse pistol
+     ◦ 1x Semi-automatic grenade launcher
+     ◦ 2x Shield Drone
+  • 9x Pathfinder
+     ◦ 9x Close combat weapon
+     ◦ 3x Ion rifle
+     ◦ 6x Pulse carbine
+     ◦ 9x Pulse pistol
 
-Thunderwolf Cavalry (240 Points)
-  • 1x Thunderwolf Cavalry Pack Leader
-     ◦ 1x Crushing teeth and claws
-     ◦ 1x Heirloom weapon
-     ◦ 1x Storm Shield
-  • 5x Thunderwolf Cavalry
-     ◦ 5x Crushing teeth and claws
-     ◦ 5x Heirloom weapon
-     ◦ 5x Storm Shield
+Stealth Battlesuits (100 Points)
+  • 1x Stealth Shas’vre
+     ◦ 1x Battlesuit fists
+     ◦ 1x Fusion blaster
+     ◦ 1x Gun Drone
+     ◦ 1x Marker Drone
+     ◦ 1x Pulse pistol
+  • 4x Stealth Shas’ui
+     ◦ 4x Battlesuit fists
+     ◦ 3x Burst cannon
+     ◦ 1x Fusion blaster
+     ◦ 1x Homing Beacon
 
-Thunderwolf Cavalry (240 Points)
-  • 1x Thunderwolf Cavalry Pack Leader
-     ◦ 1x Crushing teeth and claws
-     ◦ 1x Heirloom weapon
-     ◦ 1x Storm Shield
-  • 5x Thunderwolf Cavalry
-     ◦ 5x Crushing teeth and claws
-     ◦ 5x Heirloom weapon
-     ◦ 5x Storm Shield
+Stealth Battlesuits (100 Points)
+  • 1x Stealth Shas’vre
+     ◦ 1x Battlesuit fists
+     ◦ 1x Fusion blaster
+     ◦ 1x Gun Drone
+     ◦ 1x Marker Drone
+     ◦ 1x Pulse pistol
+  • 4x Stealth Shas’ui
+     ◦ 4x Battlesuit fists
+     ◦ 3x Burst cannon
+     ◦ 1x Fusion blaster
+     ◦ 1x Homing Beacon
 
-Vanguard Veteran Squad with Jump Packs (110 Points)
-  • 1x Vanguard Veteran Sergeant with Jump Pack
-     ◦ 1x Storm Shield
-     ◦ 1x Vanguard Veteran weapon
-  • 4x Vanguard Veteran with Jump Pack
-     ◦ 4x Storm Shield
-     ◦ 4x Vanguard Veteran weapon
+Vespid Stingwings (70 Points)
+  • 1x Vespid Strain Leader
+     ◦ 1x Neutron blaster
+     ◦ 1x Stingwing claws
+  • 4x Vespid Stingwing
+     ◦ 4x Neutron blaster
+     ◦ 4x Stingwing claws
 
-Exported with App Version: v1.29.0 (2), Data Version: v579
+Exported with App Version: v2.3.0 (1), Data Version: v912
