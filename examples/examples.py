@@ -16,19 +16,8 @@ def official_app():
         print("\n\n")
 
 
-def new_recruit():
-    from listgrok.parsers.new_recruit_gw import NewRecruitGWParser
-
-    with open(Path("examples/nr/nr1_gw.txt"), "r") as f:
-        list_text = f.read()
-    army_list = NewRecruitGWParser().parse(list_text)
-    print(army_list.name)
-    print(army_list)
-
-
 if __name__ == "__main__":
     official_app()
-    # new_recruit()
 
     # parser = argparse.ArgumentParser(description="Parse army lists from a file or stdin.")
     # parser.add_argument(

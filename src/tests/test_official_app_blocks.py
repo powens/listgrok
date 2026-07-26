@@ -107,7 +107,7 @@ def test_multi_line_army_name_stays_one_block():
 
 
 def test_text_with_no_header_raises():
-    # A NewRecruit export: no "(N Detachment Points)" line anywhere.
+    # Some other app's export: no "(N Detachment Points)" line anywhere.
     with pytest.raises(ParseError):
         classify_blocks("+ FACTION KEYWORD: Xenos - T’au Empire\n")
 

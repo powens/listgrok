@@ -26,9 +26,9 @@ Tests import `listgrok` via `pythonpath = ["src"]` in `pyproject.toml`, so no in
 
 ## Architecture
 
-**Entry point.** `parse_list(text)` (`src/listgrok/parse_list.py`) tries `parse_official_app` first and falls back to `NewRecruitGWParser().parse` when it raises `ParseError`. Format detection is *by attempted parse*, not by sniffing — so a parser must raise `ParseError` (not return a half-filled `ArmyList`) when it encounters input it does not understand, or the fallback chain silently produces garbage.
+**Entry point.** `parse_list(text)` (`src/listgrok/parse_list.py`) delegates straight to `parse_official_app`; the official app's 11th edition export is the only format currently supported, so unrecognised input raises `ParseError` rather than falling through to anything. Keep the rule that a parser raises `ParseError` (not a half-filled `ArmyList`) on input it does not understand: it is what makes a bad parse visible, and it is the precondition for restoring a fallback chain if a second format lands — detection would again be *by attempted parse*, not by sniffing.
 
-**Data model** (`src/listgrok/army/army_list.py`) — plain dataclasses, shared by all parsers, each with `to_json()`:
+**Data model** (`src/listgrok/army/army_list.py`) — plain dataclasses, each with `to_json()`:
 `ArmyList` (name, points, super_faction, faction, detachments, detachment_points, disposition, army_size, army_size_points, units) → `Unit` (name, sheet_type, is_warlord, enhancement, points, composition, decorations, attachment) → `UnitComposition` (a model set: name, num_models, wargear counts).
 
 A single-model unit still gets one `UnitComposition` named after the unit with `num_models = 1`. `decorations` is the escape hatch for body lines that are not `Nx <wargear>` and not a known keyword. `Unit.attachment` is an `Attachment` (group, role, role_detail) for units inside an `ATTACHED UNITS` group, and `None` otherwise — attached units stay in the flat `ArmyList.units` list in file order rather than nesting under their leader.
@@ -44,13 +44,9 @@ Structured as **classify, then fold**, in four small modules:
 
 Section headings are recognised structurally (a lone ALL-CAPS line), not against an allow-list, so a new GW section heading lands in `sheet_type` without a code change. `ParseError` is reserved for a malformed header block, an unparseable unit header, and an unclassifiable block.
 
-### new_recruit_gw.py (NewRecruit "GW" export)
-
-Older-style parser, still class-based with string states, and driven by `count_leading_spaces` rather than a tree. It keeps its own `UNIT_TYPES` list — do not merge it into the official-app patterns; the formats genuinely differ. Only the GW flavour is implemented; Markdown/WTC/WTC-short are not.
-
 ## Fixtures are the spec
 
-`examples/official_app/*.txt` and `examples/nr/*.txt` are real exports and drive the tests. When adding a new export sample, add an entry to `OFFICIAL_EXAMPLES` in `src/tests/test_official_app.py` — the parametrized `TestAllOfficialExamples` checks faction metadata and unit count for every file listed there, asserts all units are well-formed, and asserts the units' points sum to the list total. Each entry must also carry an `attached_groups` key (the number of `Attached unit N` groups expected), which the attachment-grouping test reads directly — an entry missing it raises `KeyError`. Unit tests in `test_official_app_blocks.py`, `test_official_app_header.py` and `test_official_app_units.py` state which example file each case came from; keep that convention when adding cases.
+`examples/official_app/*.txt` are real exports and drive the tests. When adding a new export sample, add an entry to `OFFICIAL_EXAMPLES` in `src/tests/test_official_app.py` — the parametrized `TestAllOfficialExamples` checks faction metadata and unit count for every file listed there, asserts all units are well-formed, and asserts the units' points sum to the list total. Each entry must also carry an `attached_groups` key (the number of `Attached unit N` groups expected), which the attachment-grouping test reads directly — an entry missing it raises `KeyError`. Unit tests in `test_official_app_blocks.py`, `test_official_app_header.py` and `test_official_app_units.py` state which example file each case came from; keep that convention when adding cases.
 
 ## Agent skills
 

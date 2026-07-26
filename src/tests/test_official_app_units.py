@@ -177,8 +177,8 @@ class TestParseUnit:
         assert unit.enhancement == "Thirst for Glory"
 
     def test_unrecognised_body_line_becomes_a_decoration(self):
-        # Synthetic: no 11th fixture has one yet, but 10th ed exports carried
-        # lines like this and the model keeps an escape hatch for them.
+        # Synthetic: no fixture has one yet, but the model keeps an escape
+        # hatch for body lines that are neither wargear nor a known keyword.
         unit = parse_unit(
             [
                 "Ghostkeel Battlesuit (150 Points)",
