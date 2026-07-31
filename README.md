@@ -6,6 +6,14 @@
 
 listgrok is a zero-dependency library that parses Warhammer 40k army lists into a common data model of plain dataclasses, ready for JSON via `to_dict()`.
 
+## Installation
+
+```sh
+pip install listgrok
+```
+
+listgrok has no runtime dependencies and supports Python 3.10 and newer.
+
 ## Supported formats
 
 - [x] Official GW 40k app (11th edition)
@@ -59,8 +67,8 @@ else:
 
 ## Contributing
 
-Contributions are welcome! If you would like to contribute to this project, please follow the guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).
+Contributions are welcome! If you would like to contribute to this project, please follow the guidelines in [CONTRIBUTING.md](https://github.com/powens/listgrok/blob/main/CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](https://github.com/powens/listgrok/blob/main/LICENSE).
