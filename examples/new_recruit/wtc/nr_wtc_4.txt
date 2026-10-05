@@ -1,0 +1,28 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Imperium - Imperial Knights
++ DETACHMENT: Throne‑bonded Outriders, Valourstrike Lance (Driven From Their Lairs)
++ FORCE DISPOSITION: Purge the Foe
++ TOTAL ARMY POINTS: 2000pts
++
++ WARLORD: Char1: Cerastus Knight Lancer
++ ENHANCEMENT: Bearer of the Lancer's Sigil (on Char1: Cerastus Knight Lancer)
+& Bearer of the Judicant's Helm (on Char3: Knight Destrier)
+& Bearer of the Iron Chalice (on Char4: Knight Destrier)
++ NUMBER OF UNITS: 8
++ SECONDARY: - Bring It Down: (4x2) + (2x4) + (2x6) - Assassination: 4 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Cerastus Knight Lancer (440 pts): Warlord, Cerastus shock lance
+Enhancement: Bearer of the Lancer's Sigil (+25 pts)
+Char2: 1x Knight Castellan (425 pts): Plasma decimator, Titanic feet, 2x Twin meltagun, Volcano lance, 2x Shieldbreaker missile launcher, Twin siegebreaker cannon
+Char3: 1x Knight Destrier (290 pts): Questoris heavy stubber, Titanic feet, Chastiser gatling cannon, Frag bombard
+Enhancement: Bearer of the Judicant's Helm (+25 pts)
+Char4: 1x Knight Destrier (285 pts): Questoris heavy stubber, Titanic feet, Bellatus reaper chainsword, Thundershock spear
+Enhancement: Bearer of the Iron Chalice (+20 pts)
+
+1x Armiger Helverin (140 pts): 2x Armiger autocannon, Armoured feet, Questoris heavy stubber
+1x Armiger Helverin (140 pts): 2x Armiger autocannon, Armoured feet, Questoris heavy stubber
+1x Armiger Warglaive (140 pts): Reaper chain-cleaver, Thermal spear, Questoris heavy stubber
+1x Armiger Warglaive (140 pts): Reaper chain-cleaver, Thermal spear, Questoris heavy stubber
+
+Created with newrecruit.eu v35.82
