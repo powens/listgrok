@@ -172,9 +172,35 @@ def test_unclassifiable_block_after_the_header_raises():
         classify_blocks(NO_ARMY_NAME + "\nstray line one\nstray line two\n")
 
 
-def test_unclassifiable_block_before_the_header_raises():
-    with pytest.raises(ParseError):
-        classify_blocks("stray line\n\n" + NO_ARMY_NAME)
+def test_notes_with_no_army_name_before_the_header_are_dropped():
+    # official_21.txt: song lyrics above the header, and no "(N Points)" name.
+    text = "Listen on! Listen on!\nTwo men enter, one man leaves\n\n" + NO_ARMY_NAME
+    blocks = classify_blocks(text)
+
+    assert blocks[0].kind == BlockKind.HEADER
+
+
+def test_notes_after_the_army_name_block_are_dropped():
+    # official_13.txt: a separate block of notes between name and header.
+    text = (
+        "Snorting lines (2,000 Points)\n\nDan this is whimsy I promise\n\n"
+        "**THING YOU SHOULD KNOW***\n- fight on death 4+ Strat\n\n" + NO_ARMY_NAME
+    )
+    blocks = classify_blocks(text)
+
+    assert blocks[0].kind == BlockKind.ARMY_NAME
+    assert blocks[0].lines == ("Snorting lines (2,000 Points)",)
+    assert blocks[1].kind == BlockKind.HEADER
+
+
+def test_lines_after_the_points_line_in_the_name_block_are_dropped():
+    # official_16.txt: the name block runs on past its "(N Points)" line.
+    text = "Palworld2 (2,000 Points)\nA Player\nMaking Saves\n\n" + NO_ARMY_NAME
+    blocks = classify_blocks(text)
+
+    assert blocks[0].kind == BlockKind.ARMY_NAME
+    assert blocks[0].lines == ("Palworld2 (2,000 Points)",)
+    assert blocks[1].kind == BlockKind.HEADER
 
 
 def test_title_case_lone_line_after_the_header_raises():
@@ -204,16 +230,17 @@ def test_army_name_with_a_long_whitespace_run_classifies_in_linear_time():
     assert blocks[0].kind is BlockKind.ARMY_NAME
 
 
-@pytest.mark.parametrize(
-    "text",
-    [
-        # Crafted input, not an export: digit runs past Python's 4300-digit
-        # int() limit used to escape as ValueError rather than ParseError.
-        "Army (" + "9" * 5000 + " Points)\n\n" + NO_ARMY_NAME,
-        NO_ARMY_NAME.replace("(3 Detachment", "(" + "9" * 5000 + " Detachment"),
-    ],
-    ids=["army-points", "detachment-points"],
-)
-def test_oversized_point_total_raises_parse_error(text):
+def test_oversized_detachment_points_raises_parse_error():
+    # Crafted input, not an export: digit runs past Python's 4300-digit int()
+    # limit used to escape as ValueError rather than ParseError.
+    text = NO_ARMY_NAME.replace("(3 Detachment", "(" + "9" * 5000 + " Detachment")
     with pytest.raises(ParseError):
         classify_blocks(text)
+
+
+def test_oversized_army_points_line_is_dropped_as_notes():
+    # Crafted input, not an export: the digit run is too long to be a
+    # "(N Points)" suffix, so the line is not a name, just notes.
+    blocks = classify_blocks("Army (" + "9" * 5000 + " Points)\n\n" + NO_ARMY_NAME)
+
+    assert blocks[0].kind is BlockKind.HEADER
