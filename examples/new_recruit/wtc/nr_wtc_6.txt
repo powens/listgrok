@@ -1,0 +1,53 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Xenos - Tyranids
++ DETACHMENT: Assimilation Swarm, Warrior Bioform Onslaught (Feed the Swarm)
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 1995pts
++
++ WARLORD: Char1: The Swarmlord
++ ENHANCEMENT: Parasitic Biomorphology (on Char2: Broodlord)
+& Regenerating Monstrosity (on Char3: Tyranid Prime with Lash Whip)
+& Ocular Adaptation (on Char4: Tyranid Prime with Lash Whip)
+& Elevated Might (on Char5: Tyranid Prime with Lash Whip)
++ NUMBER OF UNITS: 18
++ SECONDARY: - Bring It Down: (3x2) + (1x4) - Assassination: 6 Characters - Cull The Horde: 2x5 (before leaders attached)
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char2: 1x Broodlord (105 pts): Broodlord Claws and Talons
+Enhancement: Parasitic Biomorphology (+25 pts)
+Char1: 1x The Swarmlord (210 pts): Warlord, Bone Sabres, Synaptic Pulse
+Char3: 1x Tyranid Prime with Lash Whip (95 pts): Lash whip, Rending claw, Scything talons
+Enhancement: Regenerating Monstrosity (+20 pts)
+Leading Hormagaunts[1]
+Char4: 1x Tyranid Prime with Lash Whip (95 pts): Lash whip, Rending claw, Scything talons
+Enhancement: Ocular Adaptation (+20 pts)
+Leading Hormagaunts[2]
+Char5: 1x Tyranid Prime with Lash Whip (105 pts): Lash whip, Rending claw, Scything talons
+Enhancement: Elevated Might (+30 pts)
+Leading Tyranid Warriors with Melee Bio-Weapons[1]
+Char6: 1x Winged Tyranid Prime (65 pts): Prime talons
+Leading Tyranid Warriors with Melee Bio-Weapons[2]
+
+20x Hormagaunts (120 pts): 20 with Hormagaunt talons
+  Attached to Tyranid Prime with Lash Whip[1]
+20x Hormagaunts (120 pts): 20 with Hormagaunt talons
+  Attached to Tyranid Prime with Lash Whip[2]
+6x Tyranid Warriors with Melee Bio-Weapons (150 pts)
+• 1x Tyranid Prime: Tyranid Warrior claws and talons
+• 5x Tyranid Warrior: 5 with Tyranid Warrior claws and talons
+  Attached to Tyranid Prime with Lash Whip[3]
+6x Tyranid Warriors with Melee Bio-Weapons (150 pts)
+• 1x Tyranid Prime: Tyranid Warrior claws and talons
+• 5x Tyranid Warrior: 5 with Tyranid Warrior claws and talons
+  Attached to Winged Tyranid Prime
+
+1x Biovores (60 pts): Chitin-barbed limbs, Spore mine launcher
+10x Genestealers (140 pts): 10 with Genestealers claws and talons
+1x Lictor (60 pts): Lictor claws and talons
+1x Psychophage (110 pts): Psychoclastic torrent, Talons and betentacled maw
+1x Psychophage (110 pts): Psychoclastic torrent, Talons and betentacled maw
+2x Pyrovores (70 pts): 2 with Chitin-barbed limbs, Flamespurt
+1x Pyrovores (40 pts): Chitin-barbed limbs, Flamespurt
+1x Tyrannofex (190 pts): Powerful limbs, Stinger salvoes, Rupture cannon
+
+Created with newrecruit.eu v35.82
