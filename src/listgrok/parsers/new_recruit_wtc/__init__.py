@@ -17,6 +17,7 @@ from listgrok.parsers.new_recruit_wtc.units import UnitLinks, is_unit_header, pa
 __all__ = ["parse_new_recruit_wtc"]
 
 _FOOTER_PREFIX = "Created with newrecruit.eu"
+_FENCE = "```"  # a markdown code fence closing a Reddit/Discord paste
 _REFERENCE_REGEX = re.compile(r"^(?P<name>.+?)(?:\[(?P<index>\d+)\])?$")
 
 
@@ -48,9 +49,19 @@ def _frame(lines: Sequence[str]) -> tuple[list[str], list[str]]:
     opening, closing = rules[0], rules[1]
 
     body = []
+    seen_unit = after_blank = False
     for line in lines[closing + 1 :]:
-        if line.strip().startswith(_FOOTER_PREFIX):
+        text = line.strip()
+        if text.startswith((_FOOTER_PREFIX, _FENCE)):
             break
+        # A paste cropped above the footer runs straight into commentary. A
+        # unit body never resumes after a blank line (nr_wtc_8 has one after
+        # every unit, always followed by a unit header), so a non-header line
+        # there ends the export rather than becoming the last unit's wargear.
+        if text and after_blank and seen_unit and not is_unit_header(line):
+            break
+        seen_unit = seen_unit or is_unit_header(line)
+        after_blank = not text
         body.append(line)
     return list(lines[opening + 1 : closing]), body
 

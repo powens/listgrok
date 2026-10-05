@@ -50,7 +50,7 @@ newrecruit.eu's "WTC" text export: a `+`-ruled header (`+ FACTION KEYWORD:`, `+ 
 
 - `header.py` maps `+ KEY: value` lines by key. `FACTION KEYWORD` splits on ` - ` (first → super_faction, last → faction); `DETACHMENT` drops its trailing `(rule)` and splits on commas only; U+00A0 no-break spaces in values become plain spaces. `&` lines continue an `ENHANCEMENT` and are skipped; `WARLORD`/`ENHANCEMENT`/`SECONDARY` are not stored (each unit body repeats them). Returns `NUMBER OF UNITS`, which `__init__.py` checks against the parsed count — the guard against truncated pastes.
 - `units.py` classifies body lines after stripping indentation: `• Kx Model` starts a model set, `K with A, B` adds wargear × K, `Enhancement: X (+N pts)`, `Leading X[n]` and `Attached to Y[n]`; anything else is a decoration, as is a count-less numeric item like `2 Storm Bolters`. Units without bullets get one model set named after the unit.
-- `__init__.py` frames the export, groups lines under unit headers, and pairs attachments: `Name[n]` is the nth unit of that name in file order. Groups are synthesised as `Attached unit N` (numbered by bodyguard file order) so they look like the official app's; `sheet_type` is always `""` because WTC has no section headings.
+- `__init__.py` frames the export (the body ends at the footer, a code fence, or a non-unit line after a blank line — so commentary under a footer-less paste is dropped, not read as wargear), groups lines under unit headers, and pairs attachments: `Name[n]` is the nth unit of that name in file order. Groups are synthesised as `Attached unit N` (numbered by bodyguard file order) so they look like the official app's; `sheet_type` is always `""` because WTC has no section headings.
 
 ## Fixtures are the spec
 
