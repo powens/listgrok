@@ -63,6 +63,78 @@ OFFICIAL_EXAMPLES = {
         "attached_groups": 2,
         "decorations": {"Wartrakk": ["Choppas", "Kustom Shoota", "Rokkits"]},
     },
+    # App v2.6.0 (144): classic headings but lower-case "points", the fused
+    # "Attached Units" / "Attached Unit 1" heading, "• Attached as:" one level
+    # out from the rest of the body, and unbulleted continuation lines. The
+    # detachment line is the comma-free limitation again.
+    "official_4.txt": {
+        "name": "csm Terminators",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Space Marines",
+        "detachments": ["Cabal of Chaos and Warpstrike Champions"],
+        "detachment_points": 3,
+        "disposition": "Disruption",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 14,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {
+            "Heretic Astartes Daemon Prince with Wings": [
+                "Daemonic Allegiance: Tzeentch"
+            ]
+        },
+    },
+    # The export writes two spaces before "(2,000 Points)"; the name must not
+    # keep the extra one.
+    "official_5.txt": {
+        "name": "I choose violence.",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Daemons",
+        "detachments": ["Cavalcade of Chaos and Shadow Legion"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 9,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
+    # official_6 and official_7 have army names containing a blank line; the
+    # name is kept verbatim, blank line included.
+    "official_6.txt": {
+        "name": "https://youtu.be/nkpFuUWOjPY?si=djM6wbdZhwjA8GsG\n\nThey did the mash",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Drukhari",
+        "detachments": ["Kabalite Cartel and Tools of Torment"],
+        "detachment_points": 3,
+        "disposition": "Disruption",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 18,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "official_7.txt": {
+        "name": "Round 2 list\n\nQFP",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Imperial Knights",
+        "detachments": ["Gate Warden Lance and Questor Forgepact"],
+        "detachment_points": 3,
+        "disposition": "Take and Hold",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 12,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
 }
 
 
@@ -344,6 +416,43 @@ class TestOfficial3Details:
         assert gretchin.attachment.role == "Bodyguard"
         assert gretchin.attachment.role_detail == ""
         assert gretchin.attachment.group == "Attached Unit 1"
+
+
+class TestOfficial4Details:
+    # official_4.txt is app v2.6.0 (144); these tests pin its body layout.
+
+    def test_attached_as_line_does_not_swallow_the_body(self):
+        # "• Attached as:" sits one level out from "  • Warlord" and the
+        # wargear; they must not nest beneath it.
+        army_list = parse_example("official_4.txt")
+
+        kravek = next(u for u in army_list.units if u.name == "Kravek Morne")
+        assert kravek.is_warlord
+        assert kravek.attachment is not None
+        assert kravek.attachment.role == "Leader"
+        assert [(ms.name, ms.num_models, ms.wargear) for ms in kravek.composition] == [
+            (
+                "Kravek Morne",
+                1,
+                {
+                    "Baleflamer": 1,
+                    "Combi-bolter": 1,
+                    "Last Argument and power fist": 1,
+                    "Servo-harness": 1,
+                },
+            )
+        ]
+
+    def test_unbulleted_continuation_lines_are_wargear_of_the_model_set(self):
+        army_list = parse_example("official_4.txt")
+
+        cultists = next(u for u in army_list.units if u.name == "Cultist Mob")
+        assert [
+            (ms.name, ms.num_models, ms.wargear) for ms in cultists.composition
+        ] == [
+            ("Cultist Champion", 1, {"Autopistol": 1, "Brutal assault weapon": 1}),
+            ("Chaos Cultist", 9, {"Autopistol": 9, "Brutal assault weapon": 9}),
+        ]
 
 
 class TestGroupAttachmentFold:

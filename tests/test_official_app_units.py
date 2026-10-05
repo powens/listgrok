@@ -86,6 +86,37 @@ class TestBuildTree:
         assert roots[1].text == "4x Vespid Stingwing"
         assert [child.text for child in roots[1].children] == ["4x Neutron blaster"]
 
+    def test_unbulleted_continuation_line_is_a_sibling(self):
+        # official_4 Chaos Terminator Squad: app v2.6.0 (144) continues a
+        # bulleted list with plain lines aligned under the first one's text.
+        roots = build_tree(
+            [
+                "• Attached as: Bodyguard",
+                "  • 1x Terminator Champion",
+                "    • 1x Accursed weapon",
+                "      1x Combi-bolter",
+                "  • 9x Chaos Terminator",
+                "    • 9x Accursed weapon",
+                "      9x Combi-bolter",
+            ]
+        )
+
+        # The out-dented "Attached as:" line takes no children.
+        assert [node.text for node in roots] == [
+            "Attached as: Bodyguard",
+            "1x Terminator Champion",
+            "9x Chaos Terminator",
+        ]
+        assert roots[0].children == []
+        assert [child.text for child in roots[1].children] == [
+            "1x Accursed weapon",
+            "1x Combi-bolter",
+        ]
+        assert [child.text for child in roots[2].children] == [
+            "9x Accursed weapon",
+            "9x Combi-bolter",
+        ]
+
 
 class TestParseUnit:
     def test_single_model_unit_gets_one_implicit_model_set(self):

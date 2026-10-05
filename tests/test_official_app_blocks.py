@@ -129,6 +129,16 @@ def test_multi_line_army_name_stays_one_block():
     assert blocks[0].lines == ("Line one of the name", "and line two (2,000 Points)")
 
 
+def test_army_name_containing_a_blank_line_is_one_block():
+    # official_7.txt: the name is "Round 2 list", blank line, "QFP".
+    text = "Round 2 list\n\nQFP (2,000 Points)\n\n" + NO_ARMY_NAME
+    blocks = classify_blocks(text)
+
+    assert blocks[0].kind == BlockKind.ARMY_NAME
+    assert blocks[0].lines == ("Round 2 list", "", "QFP (2,000 Points)")
+    assert blocks[1].kind == BlockKind.HEADER
+
+
 def test_fused_section_and_group_block_splits_into_two_blocks():
     blocks = classify_blocks(FUSED_ATTACHED)
 
