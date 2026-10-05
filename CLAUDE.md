@@ -26,7 +26,7 @@ Tests live in `tests/` and import `listgrok` via `pythonpath = ["src"]` in `pypr
 
 ## Architecture
 
-**Entry point.** `parse_list(text)` (`src/listgrok/parse_list.py`) delegates straight to `parse_official_app`; the official app's 11th edition export is the only format currently supported, so unrecognised input raises `ParseError` rather than falling through to anything. Keep the rule that a parser raises `ParseError` (not a half-filled `ArmyList`) on input it does not understand: it is what makes a bad parse visible, and it is the precondition for restoring a fallback chain if a second format lands — detection would again be *by attempted parse*, not by sniffing.
+**Entry point.** `parse_list(text)` (`src/listgrok/parse_list.py`) tries each parser in `_PARSERS` in turn — `parse_official_app`, then `parse_new_recruit_wtc` — and returns the first result that does not raise; if all raise, it raises one `ParseError` naming each parser's reason. Keep the rule that a parser raises `ParseError` (not a half-filled `ArmyList`) on input it does not understand: it is what makes a bad parse visible, and it is what makes the fallback chain work — detection is *by attempted parse*, not by sniffing, so a parser that half-accepts foreign input would shadow the ones after it.
 
 **Data model** (`src/listgrok/models.py`) — plain dataclasses, each with `to_dict()` (stable keys: optional fields are always present, as `None`/`False`/`""`; implemented via `dataclasses.asdict`). `ParseError` lives in `src/listgrok/exceptions.py`; both are re-exported from the package root:
 `ArmyList` (name, points, super_faction, faction, detachments, detachment_points, disposition, army_size, army_size_points, units) → `Unit` (name, sheet_type, is_warlord, enhancement, points, composition, decorations, attachment) → `UnitComposition` (a model set: name, num_models, wargear counts).
@@ -44,9 +44,19 @@ The app has two export dialects and the parser handles both: the *classic* one (
 
 Section headings are recognised structurally (a lone ALL-CAPS line, or the line above a fused group heading), not against an allow-list, so a new GW section heading lands in `sheet_type` without a code change. `ParseError` is reserved for a malformed header block, an unparseable unit header, and an unclassifiable block.
 
+### new_recruit_wtc/ (New Recruit's WTC export)
+
+newrecruit.eu's "WTC" text export: a `+`-ruled header (`+ FACTION KEYWORD:`, `+ DETACHMENT:` …) then one line per unit (`[CharN: ]Nx Name (N pts)[: wargear]`) with body lines under it, ending `Created with newrecruit.eu vNN.NN`. Line-oriented, because blank lines carry no meaning here and indentation is unreliable:
+
+- `header.py` maps `+ KEY: value` lines by key. `FACTION KEYWORD` splits on ` - ` (first → super_faction, last → faction); `DETACHMENT` drops its trailing `(rule)` and splits on commas only; U+00A0 no-break spaces in values become plain spaces. `&` lines continue an `ENHANCEMENT` and are skipped; `WARLORD`/`ENHANCEMENT`/`SECONDARY` are not stored (each unit body repeats them). Returns `NUMBER OF UNITS`, which `__init__.py` checks against the parsed count — the guard against truncated pastes.
+- `units.py` classifies body lines after stripping indentation: `• Kx Model` starts a model set, `K with A, B` adds wargear × K, `Enhancement: X (+N pts)`, `Leading X[n]` and `Attached to Y[n]`; anything else is a decoration, as is a count-less numeric item like `2 Storm Bolters`. Units without bullets get one model set named after the unit.
+- `__init__.py` frames the export, groups lines under unit headers, and pairs attachments: `Name[n]` is the nth unit of that name in file order. Groups are synthesised as `Attached unit N` (numbered by bodyguard file order) so they look like the official app's; `sheet_type` is always `""` because WTC has no section headings.
+
 ## Fixtures are the spec
 
 `examples/official_app/*.txt` are real exports and drive the tests. When adding a new export sample, add an entry to `OFFICIAL_EXAMPLES` in `tests/test_official_app.py` — the parametrized `TestAllOfficialExamples` checks faction metadata and unit count for every file listed there, asserts all units are well-formed, and asserts the units' points sum to the expected total. Each entry must also carry an `attached_groups` key (the number of attached-unit groups expected), a `unit_points_total` key (the tabulated sum — the compact dialect has no list-points line to read it from), and a `decorations` key (unit name → expected decoration lines, `{}` normally; `official_3.txt`'s Wartrakk shows the compact dialect writing count-less wargear names, which land there). The tests read these keys directly — an entry missing one raises `KeyError`. Unit tests in `test_official_app_blocks.py`, `test_official_app_header.py` and `test_official_app_units.py` state which example file each case came from; keep that convention when adding cases.
+
+`examples/new_recruit/wtc/*.txt` drive `tests/test_new_recruit_wtc.py` the same way: every file must have a `WTC_EXAMPLES` entry (a test enforces it) with `points`, `super_faction`, `faction`, `detachments`, `disposition`, `unit_count`, `attached_groups`, `warlord` and `decorations`. WTC unit points always sum to `TOTAL ARMY POINTS`, so that check reads `army_list.points` rather than a tabulated total. Reddit-sourced fixtures were de-escaped mechanically (backslash escapes and trailing hard-break spaces removed) and kept only if their indentation survived.
 
 ## Agent skills
 
