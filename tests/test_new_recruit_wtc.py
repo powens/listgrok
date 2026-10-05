@@ -318,6 +318,19 @@ class TestFraming:
 
         assert len(army_list.units) == 10
 
+    @pytest.mark.parametrize(
+        "trailer",
+        ["\nThanks, what do you think?\n", "```\n", "\n```\nThoughts?\n"],
+    )
+    def test_trailing_text_without_a_footer_is_ignored(self, trailer):
+        # A cropped paste loses the "Created with" footer; the commentary or
+        # closing code fence after it must not become the last unit's wargear.
+        text = (EXAMPLES / "nr_wtc_1.txt").read_text()
+        cropped = text[: text.index("Created with newrecruit.eu")].rstrip("\n")
+        army_list = parse_new_recruit_wtc(cropped + "\n" + trailer)
+
+        assert army_list.to_dict() == parse_example("nr_wtc_1.txt").to_dict()
+
     def test_crlf_and_trailing_whitespace_parse(self):
         # Pastes from Windows and Reddit's editor ("  " hard breaks).
         text = (EXAMPLES / "nr_wtc_6.txt").read_text()
