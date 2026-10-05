@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Official-app exports with notes around the army name — before it, after
+  it, or with no army name at all — now parse; the notes are dropped instead
+  of raising `ParseError`.
+- Official-app exports that nest wargear under column-zero `◦` sub-bullets
+  (some app v2.6.0 (3) exports) no longer read each weapon as its own model
+  set.
+- An `Enhancement:` line ending a compact-dialect unit body is now read as
+  the unit's enhancement instead of a decoration.
+
 ## [0.1.0] - 2026-07-31
 
 ### Added

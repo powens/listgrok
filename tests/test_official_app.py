@@ -63,6 +63,262 @@ OFFICIAL_EXAMPLES = {
         "attached_groups": 2,
         "decorations": {"Wartrakk": ["Choppas", "Kustom Shoota", "Rokkits"]},
     },
+    # App v2.6.0 (144): classic headings but lower-case "points", the fused
+    # "Attached Units" / "Attached Unit 1" heading, "• Attached as:" one level
+    # out from the rest of the body, and unbulleted continuation lines. The
+    # detachment line is the comma-free limitation again.
+    "official_4.txt": {
+        "name": "csm Terminators",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Space Marines",
+        "detachments": ["Cabal of Chaos and Warpstrike Champions"],
+        "detachment_points": 3,
+        "disposition": "Disruption",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 14,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {
+            "Heretic Astartes Daemon Prince with Wings": [
+                "Daemonic Allegiance: Tzeentch"
+            ]
+        },
+    },
+    # The export writes two spaces before "(2,000 Points)"; the name must not
+    # keep the extra one.
+    "official_5.txt": {
+        "name": "I choose violence.",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Daemons",
+        "detachments": ["Cavalcade of Chaos and Shadow Legion"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 9,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
+    # official_6 and official_7 have army names containing a blank line; the
+    # name is kept verbatim, blank line included.
+    "official_6.txt": {
+        "name": "https://youtu.be/nkpFuUWOjPY?si=djM6wbdZhwjA8GsG\n\nThey did the mash",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Drukhari",
+        "detachments": ["Kabalite Cartel and Tools of Torment"],
+        "detachment_points": 3,
+        "disposition": "Disruption",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 18,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "official_7.txt": {
+        "name": "Round 2 list\n\nQFP",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Imperial Knights",
+        "detachments": ["Gate Warden Lance and Questor Forgepact"],
+        "detachment_points": 3,
+        "disposition": "Take and Hold",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 12,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
+    "official_8.txt": {
+        "name": "Maybe this year I'll have fun in Vegas",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Adeptus Mechanicus",
+        "detachments": ["Cohort Cybernetica and Lords of the Forge"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 15,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
+    "official_9.txt": {
+        "name": "10th ed is dead, long live 10th ed",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Aeldari",
+        "detachments": ["Aspect Host"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 16,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "official_10.txt": {
+        "name": "LVO Huntem",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Knights",
+        "detachments": ["Houndpack Lance and Hunting Warpack"],
+        "detachment_points": 3,
+        "disposition": "Reconnaissance",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 14,
+        "unit_points_total": 2000,
+        "attached_groups": 0,
+        "decorations": {
+            "War Dog Brigand": ["Houndpack Lance Keyword: Character"],
+            "War Dog Executioner": ["Houndpack Lance Keyword: Character"],
+            "War Dog Karnivore": ["Houndpack Lance Keyword: Character"],
+        },
+    },
+    "official_11.txt": {
+        "name": "Snorting lines and rolling nines",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Space Marines",
+        "detachments": ["Creations of Bile"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 13,
+        "unit_points_total": 2000,
+        "attached_groups": 2,
+        "decorations": {},
+    },
+    "official_12.txt": {
+        "name": "My first ever army",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Dark Angels",
+        "detachments": ["Company of Hunters and Darkflight Pursuit"],
+        "detachment_points": 3,
+        "disposition": "Reconnaissance",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 16,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
+    "official_13.txt": {
+        "name": "Tome to go LVO",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Deathwatch",
+        "detachments": ["Black Spear Task Force"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 11,
+        "unit_points_total": 2000,
+        "attached_groups": 2,
+        "decorations": {},
+    },
+    "official_14.txt": {
+        "name": "Palworld2",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Grey Knights",
+        "detachments": ["Argent Assault and Banishers"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 11,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "official_15.txt": {
+        "name": "1 Valourstrike Castellan",
+        "points": 1995,
+        "super_faction": "",
+        "faction": "Imperial Knights",
+        "detachments": ["Dominus Foebreakers and Valourstrike Lance"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 7,
+        "unit_points_total": 1995,
+        "attached_groups": 0,
+        "decorations": {},
+    },
+    "official_16.txt": {
+        "name": "Meta",
+        "points": 1995,
+        "super_faction": "",
+        "faction": "Orks",
+        "detachments": ["Blitz Brigade", "Runt Swarm", "Wreckas"],
+        "detachment_points": 3,
+        "disposition": "Take and Hold",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 16,
+        "unit_points_total": 1995,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "official_17.txt": {
+        "name": "Technically not 30 Wolf Guard Terminators",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Space Wolves",
+        "detachments": ["Legends of Saga and Song and Saga of the Great Wolf"],
+        "detachment_points": 3,
+        "disposition": "Take and Hold",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 11,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "official_18.txt": {
+        "name": "LVO Emotional Support Hammerheads",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "T’au Empire",
+        "detachments": ["Retaliation Cadre"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 18,
+        "unit_points_total": 2000,
+        "attached_groups": 4,
+        "decorations": {},
+    },
+    "official_19.txt": {
+        "name": "",
+        "points": None,
+        "super_faction": "",
+        "faction": "World Eaters",
+        "detachments": ["Khorne Daemonkin and Vessels of Wrath"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 16,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
 }
 
 
@@ -146,7 +402,10 @@ class TestAllOfficialExamples:
             # tabulates them per unit name, and anything else appearing means
             # an Enhancements:/wargear match regressed rather than the fixture
             # growing a legitimately odd line.
-            assert unit.decorations == expected_decorations.get(unit.name, []), (
+            # Keyed by name, so a same-named unit without the odd line is
+            # allowed: official_10 has one War Dog Brigand carrying the
+            # Houndpack Lance keyword line and three without it.
+            assert unit.decorations in ([], expected_decorations.get(unit.name, [])), (
                 f"{filename}: {unit.name} has unexpected decorations"
             )
             for model_set in unit.composition:
@@ -176,7 +435,7 @@ class TestAllOfficialExamples:
         assert sum(unit.points or 0 for unit in army_list.units) == expected_total
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
-    def test_attached_units_pair_a_leader_with_a_bodyguard(self, filename):
+    def test_attached_units_join_characters_to_a_bodyguard(self, filename):
         army_list = parse_example(filename)
 
         groups: dict[str, list[str]] = {}
@@ -191,7 +450,13 @@ class TestAllOfficialExamples:
             # Case-insensitive: the classic dialect writes "Attached unit 1",
             # the newer one "Attached Unit 1"; both are kept verbatim.
             assert group.lower().startswith("attached unit "), group
-            assert sorted(roles) == ["Bodyguard", "Leader"]
+            # One bodyguard, joined by Leader and/or Support characters:
+            # official_8 has a Support character with no Leader, official_16
+            # a Leader and a Support character together.
+            assert roles.count("Bodyguard") == 1, (group, roles)
+            others = [role for role in roles if role != "Bodyguard"]
+            assert others, (group, roles)
+            assert set(others) <= {"Leader", "Support"}, (group, roles)
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_unattached_units_have_no_attachment(self, filename):
@@ -344,6 +609,43 @@ class TestOfficial3Details:
         assert gretchin.attachment.role == "Bodyguard"
         assert gretchin.attachment.role_detail == ""
         assert gretchin.attachment.group == "Attached Unit 1"
+
+
+class TestOfficial4Details:
+    # official_4.txt is app v2.6.0 (144); these tests pin its body layout.
+
+    def test_attached_as_line_does_not_swallow_the_body(self):
+        # "• Attached as:" sits one level out from "  • Warlord" and the
+        # wargear; they must not nest beneath it.
+        army_list = parse_example("official_4.txt")
+
+        kravek = next(u for u in army_list.units if u.name == "Kravek Morne")
+        assert kravek.is_warlord
+        assert kravek.attachment is not None
+        assert kravek.attachment.role == "Leader"
+        assert [(ms.name, ms.num_models, ms.wargear) for ms in kravek.composition] == [
+            (
+                "Kravek Morne",
+                1,
+                {
+                    "Baleflamer": 1,
+                    "Combi-bolter": 1,
+                    "Last Argument and power fist": 1,
+                    "Servo-harness": 1,
+                },
+            )
+        ]
+
+    def test_unbulleted_continuation_lines_are_wargear_of_the_model_set(self):
+        army_list = parse_example("official_4.txt")
+
+        cultists = next(u for u in army_list.units if u.name == "Cultist Mob")
+        assert [
+            (ms.name, ms.num_models, ms.wargear) for ms in cultists.composition
+        ] == [
+            ("Cultist Champion", 1, {"Autopistol": 1, "Brutal assault weapon": 1}),
+            ("Chaos Cultist", 9, {"Autopistol": 9, "Brutal assault weapon": 9}),
+        ]
 
 
 class TestGroupAttachmentFold:

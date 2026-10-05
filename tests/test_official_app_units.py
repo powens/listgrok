@@ -86,6 +86,109 @@ class TestBuildTree:
         assert roots[1].text == "4x Vespid Stingwing"
         assert [child.text for child in roots[1].children] == ["4x Neutron blaster"]
 
+    def test_unbulleted_continuation_line_is_a_sibling(self):
+        # official_4 Chaos Terminator Squad: app v2.6.0 (144) continues a
+        # bulleted list with plain lines aligned under the first one's text.
+        roots = build_tree(
+            [
+                "• Attached as: Bodyguard",
+                "  • 1x Terminator Champion",
+                "    • 1x Accursed weapon",
+                "      1x Combi-bolter",
+                "  • 9x Chaos Terminator",
+                "    • 9x Accursed weapon",
+                "      9x Combi-bolter",
+            ]
+        )
+
+        # The out-dented "Attached as:" line takes no children.
+        assert [node.text for node in roots] == [
+            "Attached as: Bodyguard",
+            "1x Terminator Champion",
+            "9x Chaos Terminator",
+        ]
+        assert roots[0].children == []
+        assert [child.text for child in roots[1].children] == [
+            "1x Accursed weapon",
+            "1x Combi-bolter",
+        ]
+        assert [child.text for child in roots[2].children] == [
+            "9x Accursed weapon",
+            "9x Combi-bolter",
+        ]
+
+    def test_sub_bullets_nest_under_the_bullet_above(self):
+        # official_12 Ravenwing Command Squad: some v2.6.0 (3) exports write
+        # every line at column zero and mark wargear with a "◦" sub-bullet.
+        roots = build_tree(
+            [
+                "• Attached as: Support (Character)",
+                "• 1x Ravenwing Champion",
+                "◦ 1x Bolt pistol",
+                "◦ Enhancements: Recon Hunter",
+                "• 1x Ravenwing Apothecary",
+                "◦ 1x Plasma talon",
+            ],
+            sub_bullets=True,
+        )
+
+        assert [(node.text, [c.text for c in node.children]) for node in roots] == [
+            ("Attached as: Support (Character)", []),
+            ("1x Ravenwing Champion", ["1x Bolt pistol", "Enhancements: Recon Hunter"]),
+            ("1x Ravenwing Apothecary", ["1x Plasma talon"]),
+        ]
+
+    def test_sub_bullets_skip_a_keyword_line_to_reach_their_model(self):
+        # official_11 Fabius Bile: "• Warlord" sits between the model and its
+        # "◦" wargear.
+        roots = build_tree(
+            [
+                "• 1x Fabius Bile",
+                "• Warlord",
+                "◦ 1x Chirurgeon",
+                "◦ 1x Rod of Torment",
+            ],
+            sub_bullets=True,
+        )
+
+        assert [(node.text, [c.text for c in node.children]) for node in roots] == [
+            ("1x Fabius Bile", ["1x Chirurgeon", "1x Rod of Torment"]),
+            ("Warlord", []),
+        ]
+
+    def test_sub_bullet_export_flat_body_has_no_children(self):
+        # official_12 Sammael: in a sub-bullet export a body without "◦"
+        # lines is flat, last line included.
+        roots = build_tree(
+            [
+                "• Attached as: Leader (Character)",
+                "• 1x Bolt Pistol",
+                "• 1x The Raven Sword",
+            ],
+            sub_bullets=True,
+        )
+
+        assert all(node.children == [] for node in roots)
+
+    def test_keyword_line_ending_a_bullet_run_body_is_a_root(self):
+        # official_16 Gretchin: the enhancement follows a bullet run and must
+        # not be read as that run's wargear.
+        roots = build_tree(
+            [
+                "• Attached as: Bodyguard (Battleline)",
+                "• 20x Gretchin",
+                "• 20x Grot Blasta",
+                "20x Scavenged Shivs",
+                "• Enhancement: Extra Sneaky (Upgrade)",
+            ]
+        )
+
+        assert [node.text for node in roots] == [
+            "Attached as: Bodyguard (Battleline)",
+            "20x Gretchin",
+            "Enhancement: Extra Sneaky (Upgrade)",
+        ]
+
 
 class TestParseUnit:
     def test_single_model_unit_gets_one_implicit_model_set(self):
@@ -331,3 +434,25 @@ class TestParseUnit:
     def test_empty_block_raises(self):
         with pytest.raises(ParseError):
             parse_unit([], "CHARACTERS")
+
+    def test_enhancement_under_a_model_set_is_lifted(self):
+        # official_12 Ravenwing Command Squad
+        unit = parse_unit(
+            [
+                "Ravenwing Command Squad (135 Points)",
+                "• 1x Ravenwing Champion",
+                "◦ 1x Bolt pistol",
+                "◦ Enhancements: Recon Hunter",
+                "• 1x Ravenwing Apothecary",
+                "◦ 1x Plasma talon",
+            ],
+            "ATTACHED UNITS",
+            sub_bullets=True,
+        )
+
+        assert unit.enhancement == "Recon Hunter"
+        assert unit.decorations == []
+        assert [(ms.name, ms.num_models, ms.wargear) for ms in unit.composition] == [
+            ("Ravenwing Champion", 1, {"Bolt pistol": 1}),
+            ("Ravenwing Apothecary", 1, {"Plasma talon": 1}),
+        ]

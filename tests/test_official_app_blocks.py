@@ -129,6 +129,16 @@ def test_multi_line_army_name_stays_one_block():
     assert blocks[0].lines == ("Line one of the name", "and line two (2,000 Points)")
 
 
+def test_army_name_containing_a_blank_line_is_one_block():
+    # official_7.txt: the name is "Round 2 list", blank line, "QFP".
+    text = "Round 2 list\n\nQFP (2,000 Points)\n\n" + NO_ARMY_NAME
+    blocks = classify_blocks(text)
+
+    assert blocks[0].kind == BlockKind.ARMY_NAME
+    assert blocks[0].lines == ("Round 2 list", "", "QFP (2,000 Points)")
+    assert blocks[1].kind == BlockKind.HEADER
+
+
 def test_fused_section_and_group_block_splits_into_two_blocks():
     blocks = classify_blocks(FUSED_ATTACHED)
 
@@ -160,9 +170,35 @@ def test_unclassifiable_block_after_the_header_raises():
         classify_blocks(NO_ARMY_NAME + "\nstray line one\nstray line two\n")
 
 
-def test_unclassifiable_block_before_the_header_raises():
-    with pytest.raises(ParseError):
-        classify_blocks("stray line\n\n" + NO_ARMY_NAME)
+def test_notes_with_no_army_name_before_the_header_are_dropped():
+    # official_19.txt: song lyrics above the header, and no "(N Points)" name.
+    text = "Listen on! Listen on!\nTwo men enter, one man leaves\n\n" + NO_ARMY_NAME
+    blocks = classify_blocks(text)
+
+    assert blocks[0].kind == BlockKind.HEADER
+
+
+def test_notes_after_the_army_name_block_are_dropped():
+    # official_11.txt: a separate block of notes between name and header.
+    text = (
+        "Snorting lines (2,000 Points)\n\nDan this is whimsy I promise\n\n"
+        "**THING YOU SHOULD KNOW***\n- fight on death 4+ Strat\n\n" + NO_ARMY_NAME
+    )
+    blocks = classify_blocks(text)
+
+    assert blocks[0].kind == BlockKind.ARMY_NAME
+    assert blocks[0].lines == ("Snorting lines (2,000 Points)",)
+    assert blocks[1].kind == BlockKind.HEADER
+
+
+def test_lines_after_the_points_line_in_the_name_block_are_dropped():
+    # official_14.txt: the name block runs on past its "(N Points)" line.
+    text = "Palworld2 (2,000 Points)\nA Player\nMaking Saves\n\n" + NO_ARMY_NAME
+    blocks = classify_blocks(text)
+
+    assert blocks[0].kind == BlockKind.ARMY_NAME
+    assert blocks[0].lines == ("Palworld2 (2,000 Points)",)
+    assert blocks[1].kind == BlockKind.HEADER
 
 
 def test_title_case_lone_line_after_the_header_raises():
