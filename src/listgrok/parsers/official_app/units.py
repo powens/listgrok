@@ -1,10 +1,13 @@
 """Parse a unit block of an 11th edition official-app export.
 
-The body comes in two dialects, told apart by whether any line is indented.
-The classic export indents: bullet glyphs are stripped and the column the
-text starts at decides nesting, so a body line indented deeper than the line
-above it is that line's child. The newer compact export writes every line at column
-zero and encodes nesting with bullet runs instead — see _run_tree.
+The body comes in three dialects. The classic export indents: bullet glyphs
+are stripped and the column the text starts at decides nesting, so a body line
+indented deeper than the line above it is that line's child. The newer compact
+export writes every line at column zero and encodes nesting with bullet runs
+instead — see _run_tree. Some v2.6.0 (3) exports also write every line at
+column zero but nest wargear under a "◦" sub-bullet — see _sub_bullet_tree.
+That last dialect is told apart per list, not per unit: a single-model unit in
+it has no "◦" line and would otherwise read as a bullet run.
 """
 
 from collections.abc import Sequence
@@ -22,6 +25,7 @@ from listgrok.parsers.official_app.blocks import (
 
 WARLORD_LINE = "Warlord"
 ENHANCEMENT_PREFIXES = ("Enhancements:", "Enhancement:")
+SUB_BULLET = "◦"
 
 
 @dataclass
@@ -31,11 +35,38 @@ class Node:
     children: list["Node"] = field(default_factory=list)
 
 
-def build_tree(body_lines: Sequence[str]) -> list[Node]:
-    """Build the forest for a unit block's body (header excluded)."""
+def build_tree(body_lines: Sequence[str], sub_bullets: bool = False) -> list[Node]:
+    """Build the forest for a unit block's body (header excluded).
+
+    sub_bullets says the export nests wargear under column-zero "◦" lines.
+    """
     if any(len(raw) - len(raw.lstrip()) for raw in body_lines):
         return _indent_tree(body_lines)
+    if sub_bullets:
+        return _sub_bullet_tree(body_lines)
     return _run_tree(body_lines)
+
+
+def has_sub_bullets(text: str) -> bool:
+    """Whether an export uses the column-zero "◦" sub-bullet dialect."""
+    return any(line.startswith(SUB_BULLET) for line in text.split("\n"))
+
+
+def _sub_bullet_tree(body_lines: Sequence[str]) -> list[Node]:
+    roots: list[Node] = []
+    # A keyword line can sit between a model and its "◦" wargear
+    # (official_11's "• Warlord"), so sub-bullets go to the last model line.
+    model: Node | None = None
+    for raw in body_lines:
+        line = raw.strip()
+        node = Node(text=BULLET_REGEX.sub("", line), indent=0)
+        if line.startswith(SUB_BULLET) and model is not None:
+            model.children.append(node)
+        else:
+            roots.append(node)
+            if not _is_keyword(node.text):
+                model = node
+    return roots
 
 
 def _indent_tree(body_lines: Sequence[str]) -> list[Node]:
@@ -80,7 +111,11 @@ def _run_tree(body_lines: Sequence[str]) -> list[Node]:
 
     for i, line in enumerate(lines):
         node = Node(text=BULLET_REGEX.sub("", line), indent=0)
-        if bulleted[i] and i + 1 < len(lines) and bulleted[i + 1]:
+        # A keyword line is never wargear, even when it ends the body right
+        # after a run (official_16's Gretchin close on "• Enhancement: …").
+        if _is_keyword(node.text) or (
+            bulleted[i] and i + 1 < len(lines) and bulleted[i + 1]
+        ):
             roots.append(node)
             parent = node if NUM_REGEX.match(node.text) else None
         elif parent is not None:
@@ -91,7 +126,9 @@ def _run_tree(body_lines: Sequence[str]) -> list[Node]:
     return roots
 
 
-def parse_unit(lines: Sequence[str], sheet_type: str) -> Unit:
+def parse_unit(
+    lines: Sequence[str], sheet_type: str, sub_bullets: bool = False
+) -> Unit:
     if not lines:
         raise ParseError("Empty unit block", lines)
 
@@ -104,25 +141,12 @@ def parse_unit(lines: Sequence[str], sheet_type: str) -> Unit:
         points=parse_points(header.group("points")),
         sheet_type=sheet_type,
     )
-    _populate(unit, build_tree(lines[1:]))
+    _populate(unit, build_tree(lines[1:], sub_bullets))
     return unit
 
 
 def _populate(unit: Unit, roots: list[Node]) -> None:
-    models: list[Node] = []
-    for node in roots:
-        if node.text == WARLORD_LINE:
-            unit.is_warlord = True
-        elif node.text.startswith(ENHANCEMENT_PREFIXES):
-            unit.enhancement = node.text.split(":", 1)[1].strip()
-        elif (match := ATTACHED_AS_REGEX.match(node.text)) is not None:
-            unit.attachment = Attachment(
-                role=match.group("role").strip(),
-                # The newer dialect may omit the parenthetical entirely.
-                role_detail=(match.group("detail") or "").strip(),
-            )
-        else:
-            models.append(node)
+    models = [node for node in roots if not _lift_keyword(unit, node.text)]
 
     # Nested children mean each root is a model set with its wargear beneath.
     # A flat body means one implicit model set holding all of the wargear.
@@ -143,12 +167,40 @@ def _populate(unit: Unit, roots: list[Node]) -> None:
             # child.children). No 11th ed fixture nests a third level, but if
             # one ever does, it would be silently dropped rather than raising.
             for child in node.children:
-                _add_wargear(unit, model_set, child.text)
+                # The sub-bullet dialect files an enhancement under the model
+                # that carries it ("◦ Enhancements: Recon Hunter").
+                if not _lift_keyword(unit, child.text):
+                    _add_wargear(unit, model_set, child.text)
     else:
         model_set = UnitComposition(name=unit.name, num_models=1)
         unit.add_model_set(model_set)
         for node in models:
             _add_wargear(unit, model_set, node.text)
+
+
+def _is_keyword(text: str) -> bool:
+    return (
+        text == WARLORD_LINE
+        or text.startswith(ENHANCEMENT_PREFIXES)
+        or ATTACHED_AS_REGEX.match(text) is not None
+    )
+
+
+def _lift_keyword(unit: Unit, text: str) -> bool:
+    """Apply a keyword line to the unit; False if the line is not one."""
+    if text == WARLORD_LINE:
+        unit.is_warlord = True
+    elif text.startswith(ENHANCEMENT_PREFIXES):
+        unit.enhancement = text.split(":", 1)[1].strip()
+    elif (match := ATTACHED_AS_REGEX.match(text)) is not None:
+        unit.attachment = Attachment(
+            role=match.group("role").strip(),
+            # The newer dialect may omit the parenthetical entirely.
+            role_detail=(match.group("detail") or "").strip(),
+        )
+    else:
+        return False
+    return True
 
 
 def _add_wargear(unit: Unit, model_set: UnitComposition, text: str) -> None:

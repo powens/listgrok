@@ -15,7 +15,7 @@ from listgrok.parsers.official_app.blocks import (
     parse_points,
 )
 from listgrok.parsers.official_app.header import parse_header
-from listgrok.parsers.official_app.units import parse_unit
+from listgrok.parsers.official_app.units import has_sub_bullets, parse_unit
 
 __all__ = ["parse_official_app"]
 
@@ -25,6 +25,7 @@ def parse_official_app(list_text: str) -> ArmyList:
     sheet_type = ""
     group = ""
     seen_header = False
+    sub_bullets = has_sub_bullets(list_text)
 
     for block in classify_blocks(list_text):
         if block.kind is BlockKind.ARMY_NAME:
@@ -43,7 +44,9 @@ def parse_official_app(list_text: str) -> ArmyList:
         elif block.kind is BlockKind.GROUP:
             group = block.lines[0].strip()
         elif block.kind is BlockKind.UNIT:
-            army_list.add_unit(_parse_unit_in(block.lines, sheet_type, group))
+            army_list.add_unit(
+                _parse_unit_in(block.lines, sheet_type, group, sub_bullets)
+            )
         elif block.kind is BlockKind.TRAILER:
             pass
         else:
@@ -66,13 +69,15 @@ def _parse_army_name(lines: Sequence[str], army_list: ArmyList) -> None:
     army_list.points = parse_points(match.group("points"))
 
 
-def _parse_unit_in(lines: Sequence[str], sheet_type: str, group: str) -> Unit:
+def _parse_unit_in(
+    lines: Sequence[str], sheet_type: str, group: str, sub_bullets: bool
+) -> Unit:
     """Parse a unit block and stamp the enclosing attachment group onto it.
 
     A unit under a group heading is attached even if it carries no
     "Attached as:" line; a unit outside one keeps attachment = None.
     """
-    unit = parse_unit(lines, sheet_type)
+    unit = parse_unit(lines, sheet_type, sub_bullets)
     if group:
         if unit.attachment is None:
             unit.attachment = Attachment()
