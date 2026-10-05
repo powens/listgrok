@@ -1,0 +1,73 @@
+I choose violence.  (2,000 Points)
+
+Chaos Daemons
+Cavalcade of Chaos and Shadow Legion (3 Detachment Points)
+Purge the Foe
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Skullmaster (110 Points)
+  • Attached as: Leader (Character)
+  • 1x Blade of blood
+  • 1x Juggernaut’s bladed horn
+  • Enhancements: Malice Made Manifest
+
+Bloodcrushers (200 Points)
+  • Attached as: Bodyguard
+  • 1x Bloodhunter
+     ◦ 1x Hellblade
+     ◦ 1x Juggernaut’s bladed horn
+  • 5x Bloodcrusher
+     ◦ 1x Daemonic Icon
+     ◦ 5x Hellblade
+     ◦ 1x Instrument of Chaos
+     ◦ 5x Juggernaut’s bladed horn
+
+CHARACTERS
+
+Be’lakor (390 Points)
+  • Warlord
+  • 1x Betraying Shades
+  • 1x The Blade of Shadows
+
+Bloodthirster (350 Points)
+  • 1x Great axe of Khorne
+  • 1x Hellfire breath
+  • Enhancements: Fade to Darkness
+
+Lord of Change (345 Points)
+  • 1x Bolt of Change
+  • 1x Rod of sorcery
+  • 1x Staff of Tzeentch
+  • Enhancements: Leaping Shadows
+
+OTHER DATASHEETS
+
+Bloodcrushers (200 Points)
+  • 1x Bloodhunter
+     ◦ 1x Hellblade
+     ◦ 1x Juggernaut’s bladed horn
+  • 5x Bloodcrusher
+     ◦ 1x Daemonic Icon
+     ◦ 5x Hellblade
+     ◦ 1x Instrument of Chaos
+     ◦ 5x Juggernaut’s bladed horn
+
+Screamers (160 Points)
+  • 6x Screamer
+     ◦ 6x Lamprey bite
+
+Screamers (160 Points)
+  • 6x Screamer
+     ◦ 6x Lamprey bite
+
+ALLIED UNITS
+
+Chaos Lord in Terminator Armour (85 Points)
+  • 1x Combi-weapon
+  • 1x Power fist
+
+Exported with App Version: v2.6.0 (3), Data Version: v946

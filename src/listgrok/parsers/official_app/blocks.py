@@ -20,9 +20,10 @@ from enum import Enum, auto
 from listgrok.exceptions import ParseError
 
 # re.DOTALL so a multi-line army name matches as a single name. Point totals may
-# carry thousands commas ("2,000 Points").
+# carry thousands commas ("2,000 Points"), and \s+ keeps a doubled space before
+# the parenthetical ("I choose violence.  (2,000 Points)") off the name.
 POINTS_REGEX = re.compile(
-    r"^(?P<name>.+?)\s\((?P<points>[\d,]+)\s[Pp]oints\)$", re.DOTALL
+    r"^(?P<name>.+?)\s+\((?P<points>[\d,]+)\s[Pp]oints\)$", re.DOTALL
 )
 DETACHMENT_REGEX = re.compile(
     r"^(?P<name>.+?)\s\((?P<points>\d+)\sDetachment\s[Pp]oints?\)$"
@@ -76,7 +77,22 @@ def split_blocks(text: str) -> list[list[str]]:
 def classify_blocks(text: str) -> list[Block]:
     blocks: list[Block] = []
     seen_header = False
+    name_fragments: list[str] = []
     for lines in split_blocks(text):
+        if not seen_header and not _is_header(lines):
+            if not POINTS_REGEX.match("\n".join(lines).strip()):
+                # An army name may itself contain blank lines ("Round 2 list",
+                # blank, "QFP (2,000 Points)"), so a pre-header block without
+                # the points suffix is held as the start of the name. The
+                # blank separators are kept so the name reads back verbatim.
+                name_fragments += [*lines, ""]
+                continue
+            lines = [*name_fragments, *lines]
+            name_fragments = []
+        if name_fragments:
+            # The header arrived while a name was still open: those blocks
+            # were never closed by a "(N Points)" line, so they are not a name.
+            raise ParseError("Unrecognised block before the header", name_fragments)
         for block in _classify_block(lines, seen_header):
             seen_header = seen_header or block.kind is BlockKind.HEADER
             blocks.append(block)
@@ -120,7 +136,7 @@ def _classify(lines: list[str], seen_header: bool) -> BlockKind:
     if lines[0].startswith(TRAILER_PREFIX):
         return BlockKind.TRAILER
 
-    if any(DETACHMENT_REGEX.match(line.strip()) for line in lines):
+    if _is_header(lines):
         return BlockKind.HEADER
 
     if not seen_header:
@@ -140,6 +156,10 @@ def _classify(lines: list[str], seen_header: bool) -> BlockKind:
         raise ParseError("Unrecognised lone line", lines)
 
     raise ParseError("Unrecognised block", lines)
+
+
+def _is_header(lines: list[str]) -> bool:
+    return any(DETACHMENT_REGEX.match(line.strip()) for line in lines)
 
 
 def _is_section_heading(line: str) -> bool:

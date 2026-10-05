@@ -1,9 +1,9 @@
 """Parse a unit block of an 11th edition official-app export.
 
 The body comes in two dialects, told apart by whether any line is indented.
-The classic export indents: bullet glyphs are stripped and the leading-space
-count decides nesting, so a body line indented deeper than the line above it
-is that line's child. The newer compact export writes every line at column
+The classic export indents: bullet glyphs are stripped and the column the
+text starts at decides nesting, so a body line indented deeper than the line
+above it is that line's child. The newer compact export writes every line at column
 zero and encodes nesting with bullet runs instead — see _run_tree.
 """
 
@@ -43,13 +43,21 @@ def _indent_tree(body_lines: Sequence[str]) -> list[Node]:
     stack: list[Node] = []
 
     for raw in body_lines:
-        indent = len(raw) - len(raw.lstrip())
-        node = Node(text=BULLET_REGEX.sub("", raw.strip()), indent=indent)
+        text = BULLET_REGEX.sub("", raw.strip())
+        # Nesting is measured at the text, not the bullet: the v2.6.0 (144)
+        # export continues a bulleted list with unbulleted lines aligned under
+        # the first one's text ("  • 1x Baleflamer" / "    1x Combi-bolter"),
+        # and those are siblings, not children.
+        indent = len(raw.rstrip()) - len(text)
+        node = Node(text=text, indent=indent)
 
         while stack and stack[-1].indent >= indent:
             stack.pop()
         (stack[-1].children if stack else roots).append(node)
-        stack.append(node)
+        # The same export puts "• Attached as: …" one level out from the rest
+        # of the body; it is a keyword line and never holds children.
+        if not ATTACHED_AS_REGEX.match(text):
+            stack.append(node)
 
     return roots
 
