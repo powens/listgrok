@@ -1,0 +1,26 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Imperium - Imperial Knights
++ DETACHMENT: Freeblade Company (Knights of Legend)
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 2000pts
++
++ WARLORD: Char1: Knight Castellan
++ ENHANCEMENT: Hunter's Eye (on Char1: Knight Castellan)
+& Mysterious Guardian (on Char4: Knight Paladin)
++ NUMBER OF UNITS: 8
++ SECONDARY: - Bring It Down: (3x2) + (1x4) + (3x6) - Assassination: 5 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Knight Castellan (450 pts): Warlord, Plasma decimator, Titanic feet, 2x Twin meltagun, Volcano lance, 2x Shieldbreaker missile launcher, Twin siegebreaker cannon
+Enhancement: Hunter's Eye (+25 pts)
+Char2: 1x Knight Destrier (265 pts): Questoris heavy stubber, Titanic feet, Thundershock spear, Frag bombard
+Char3: 1x Knight Errant (355 pts): Thermal cannon, Ironstorm missile pod, Meltagun, Reaper chainsword
+Char4: 1x Knight Paladin (410 pts): Questoris heavy stubber, Rapid-fire battle cannon, Twin Icarus autocannon, Meltagun, Reaper chainsword
+Enhancement: Mysterious Guardian (+35 pts)
+
+1x Armiger Helverin (140 pts): 2x Armiger autocannon, Armoured feet, Meltagun
+1x Armiger Helverin (140 pts): 2x Armiger autocannon, Armoured feet, Meltagun
+1x Armiger Warglaive (140 pts): Reaper chain-cleaver, Thermal spear, Meltagun
+Char5: 1x Callidus Assassin (100 pts): Neural shredder, Phase sword and poison blades
+
+Created with newrecruit.eu v35.82

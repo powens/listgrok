@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `parse_list()` also parses New Recruit's WTC-format export, falling back to
+  it when the official-app parser rejects the input. Leader/bodyguard pairs
+  become `Attachment` groups named `Attached unit N`.
+
+### Changed
+
+- When no parser understands the input, the `ParseError` message names each
+  parser's reason.
+
 ## [0.1.0] - 2026-07-31
 
 ### Added
