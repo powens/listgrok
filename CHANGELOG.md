@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `parse_list()` also parses New Recruit's WTC-format export, falling back to
   it when the official-app parser rejects the input. Leader/bodyguard pairs
-  become `Attachment` groups named `Attached unit N`.
+  become `Attachment` groups named `Attached unit N`. `super_faction` holds
+  the parent faction (`Adeptus Astartes` for Black Templars), as in the
+  official-app parser, not the Imperium/Chaos/Xenos alliance.
 
 ### Changed
 

@@ -87,12 +87,11 @@ def _implicit_model_set(unit: Unit, header: re.Match[str]) -> UnitComposition:
 
 def _split_items(text: str) -> list[str]:
     """Split a wargear list on commas — but a `K with A, B` item owns the rest."""
-    text = text.strip()
-    if not text:
-        return []
-    if _WITH_REGEX.match(text):
-        return [text]
-    return [item.strip() for item in text.split(",") if item.strip()]
+    items = [item.strip() for item in text.split(",") if item.strip()]
+    for i, item in enumerate(items):
+        if _WITH_REGEX.match(item):
+            return [*items[:i], ", ".join(items[i:])]
+    return items
 
 
 def _add_items(unit: Unit, model_set: UnitComposition, items: Sequence[str]) -> None:
