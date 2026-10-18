@@ -1,0 +1,29 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Xenos - Orks
++ DETACHMENT: Dread Mob, Green Tide (Try Dat Button!)
++ FORCE DISPOSITION: Purge the Foe
++ TOTAL ARMY POINTS: 995pts
++
++ WARLORD: Char2: Warboss in Mega Armour
++ NUMBER OF UNITS: 10
++ SECONDARY: - Bring It Down: (4x2) + (2x4) - Assassination: 2 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Big Mek Dakkarig (135 pts): Blitzkannon, Multi-busta Launcha, Stompy Feet
+Char2: 1x Warboss in Mega Armour (125 pts): Warlord, ’Uge Choppa, Big Shoota
+
+10x Boyz (90 pts)
+• 1x Nob: Kombi-rokkit, Power Klaw
+• 9x Boy: 9 with Choppa, Shoota, Slugga
+10x Boyz (90 pts)
+• 1x Nob: Kombi-rokkit, Power Klaw
+• 9x Boy: 9 with Choppa, Shoota, Slugga
+
+1x Deff Dread (130 pts): Dread Klaws, Extra Klaw, Skorcha
+10x Gretchin (45 pts): 10 with Grot Blasta, Scavenged Shivs
+3x Killa Kans (130 pts): 3 with Kan Blasta, Kan Klaw
+3x Killa Kans (130 pts): 3 with Kan Blasta, Kan Klaw
+1x Trukk (60 pts): Spiked Ram, Rokkit Launcha
+1x Trukk (60 pts): Spiked Ram, Rokkit Launcha
+
+Created with newrecruit.eu v35.82

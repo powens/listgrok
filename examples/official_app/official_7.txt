@@ -1,0 +1,94 @@
+Round 2 list
+
+QFP (2,000 Points)
+
+Imperial Knights
+Gate Warden Lance and Questor Forgepact (3 Detachment Points)
+Take and Hold
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Tech-Priest Dominus (60 Points)
+  • Attached as: Leader (Character)
+  • 1x Macrostubber
+  • 1x Omnissian axe
+  • 1x Volkite blaster
+
+Skitarii Vanguard (85 Points)
+  • Attached as: Bodyguard (Battleline)
+  • 1x Skitarii Vanguard Alpha
+     ◦ 1x Close combat weapon
+     ◦ 1x Radium carbine
+  • 9x Skitarii Vanguard
+     ◦ 9x Close combat weapon
+     ◦ 9x Radium carbine
+
+CHARACTERS
+
+Cerastus Knight Atrapos (405 Points)
+  • 1x Atrapos lascutter
+  • 1x Graviton singularity cannon
+
+Knight Castellan (445 Points)
+  • Warlord
+  • 1x Plasma decimator
+  • 2x Shieldbreaker missile launcher
+  • 1x Titanic feet
+  • 2x Twin meltagun
+  • 1x Twin siegebreaker cannon
+  • 1x Volcano lance
+  • Enhancements: Augury Halo
+
+Knight Destrier (265 Points)
+  • 1x Chastiser gatling cannon
+  • 1x Frag bombard
+  • 1x Questoris heavy stubber
+  • 1x Titanic feet
+
+OTHER DATASHEETS
+
+Armiger Helverin (140 Points)
+  • 2x Armiger autocannon
+  • 1x Armoured feet
+  • 1x Questoris heavy stubber
+
+Armiger Warglaive (140 Points)
+  • 1x Questoris heavy stubber
+  • 1x Reaper chain-cleaver
+  • 1x Thermal spear
+
+Armiger Warglaive (140 Points)
+  • 1x Questoris heavy stubber
+  • 1x Reaper chain-cleaver
+  • 1x Thermal spear
+
+ALLIED UNITS
+
+Navigator (75 Points)
+  • 1x Force-orb cane
+  • 1x Laspistol
+
+Navigator (75 Points)
+  • 1x Force-orb cane
+  • 1x Laspistol
+
+Skitarii Rangers (85 Points)
+  • 1x Skitarii Ranger Alpha
+     ◦ 1x Close combat weapon
+     ◦ 1x Galvanic rifle
+  • 9x Skitarii Ranger
+     ◦ 9x Close combat weapon
+     ◦ 9x Galvanic rifle
+
+Skitarii Rangers (85 Points)
+  • 1x Skitarii Ranger Alpha
+     ◦ 1x Close combat weapon
+     ◦ 1x Galvanic rifle
+  • 9x Skitarii Ranger
+     ◦ 9x Close combat weapon
+     ◦ 9x Galvanic rifle
+
+Exported with App Version: v2.6.0 (3), Data Version: v946

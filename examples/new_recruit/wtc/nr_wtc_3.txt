@@ -1,0 +1,52 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Chaos - Emperor's Children
++ DETACHMENT: Court of the Phoenician, Spectacle of Slaughter (Sensational Performance)
++ FORCE DISPOSITION: Purge the Foe
++ TOTAL ARMY POINTS: 1990pts
++
++ WARLORD: Char1: Lucius the Eternal
++ ENHANCEMENT: Beguiling Grotesquerie (on Infa4: Flawless Blades)
++ NUMBER OF UNITS: 15
++ SECONDARY: - Bring It Down: (5x2) + (1x4) - Assassination: 4 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char2: 1x Daemon Prince of Slaanesh (170 pts): Hellforged weapons, Infernal cannon
+Char3: 1x Lord Exultant (90 pts): Bolt pistol, Close combat weapon, Phoenix power spear, Rapture lash
+Char4: 1x Lord Kakophonist (70 pts): Screamer pistol, Close combat weapon, Screamer pistol
+Char1: 1x Lucius the Eternal (120 pts): Warlord, Blade of the Laer, Lash of Torment
+
+10x Infractors (160 pts)
+• 9x Infractor
+    8 with Bolt pistol, Duelling sabre
+    1 with Icon of Excess, Bolt pistol, Duelling sabre
+• 1x Obsessionist: Rapture lash, Plasma pistol
+5x Tormentors (80 pts)
+• 4x Tormentor
+    1 with Boltgun, Close combat weapon
+    1 with Icon of Excess, Boltgun, Close combat weapon
+    1 with Close combat weapon, Meltagun
+    1 with Close combat weapon, Plasma gun
+• 1x Obsessionist: Bolt pistol, Power sword
+
+1x Chaos Rhino (70 pts): Armoured tracks, Combi-bolter, Havoc launcher, Combi-weapon
+1x Chaos Rhino (70 pts): Armoured tracks, Combi-bolter, Havoc launcher, Combi-weapon
+5x Chaos Terminators (145 pts)
+• 4x Chaos Terminator
+    1 with Paired accursed weapons
+    3 with Combi-bolter, Power fist
+• 1x Terminator Champion: Chainfist, Combi-weapon
+1x Defiler (330 pts): Ectoplasma destructor, 2x Excruciator cannon, Heavy reaper autocannon, Heavy reaper autocannon, Shearing claws
+6x Flawless Blades (205 pts)
+  Enhancement: Beguiling Grotesquerie (+15 pts)
+  6 with Blissblade, Bolt pistol
+3x Flawless Blades (95 pts): 3 with Blissblade, Bolt pistol
+1x Maulerfiend (120 pts): Maulerfiend fists, 2x Magma cutter
+1x Maulerfiend (120 pts): Maulerfiend fists, 2x Magma cutter
+6x Noise Marines (145 pts)
+• 5x Noise Marine
+    2 with Blastmaster, Close combat weapon
+    3 with Close combat weapon, Sonic blaster
+• 1x Disharmonist: Close combat weapon, Sonic blaster
+
+Created with newrecruit.eu v35.79
+

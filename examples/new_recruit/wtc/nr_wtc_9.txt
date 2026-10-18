@@ -1,0 +1,36 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Imperium - Adeptus Astartes - Black Templars
++ DETACHMENT: Gladius Task Force (Combat Doctrines)
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 990pts
++
++ WARLORD: Char1: Chaplain Grimaldus
++ NUMBER OF UNITS: 8
++ SECONDARY: - Bring It Down: (1x2) + (1x4) - Assassination: 2 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 4x Chaplain Grimaldus (100 pts): Warlord
+• 3x Cenobyte Servitor
+• 1x Chaplain Grimaldus
+  Leading Crusader Squad
+Char2: 1x Emperor's Champion (90 pts)
+Leading Sword Brethren Squad
+
+10x Crusader Squad (150 pts)
+• 1x Sword Brother: Heavy Bolt Pistol
+• 5x Initiate
+• 4x Neophyte
+  Attached to Chaplain Grimaldus
+
+5x Assault Intercessors with Jump Packs (85 pts)
+• 1x Assault Intercessor Sergeant with Jump Pack: Heavy Bolt Pistol, Astartes Chainsword
+• 4x Assault Intercessors with Jump Pack
+1x Gladiator Lancer (160 pts): 2 Storm Bolters
+5x Infernus Squad (85 pts)
+• 4x Infernus Marines
+• 1x Infernus Sergeant
+1x Land Raider (220 pts)
+4x Sword Brethren Squad (100 pts): 4 with Astartes Chainsword, Heavy Bolt Pistol
+  Attached to Emperor's Champion
+
+Created with newrecruit.eu v35.82
