@@ -28,14 +28,15 @@ class TestParseHeader:
         )
 
         assert declared == 13
-        assert army_list.super_faction == "Chaos"
+        assert army_list.super_faction == ""
         assert army_list.faction == "World Eaters"
         assert army_list.detachments == ["Possessed Slaughterband", "Vessels of Wrath"]
         assert army_list.disposition == "Purge the Foe"
         assert army_list.points == 2000
 
-    def test_three_part_faction_keeps_first_and_last(self):
-        # nr_wtc_9: the Adeptus Astartes middle part is dropped.
+    def test_three_part_faction_keeps_parent_and_faction(self):
+        # nr_wtc_9: the Imperium alliance is dropped; the parent faction is
+        # super_faction, as the official app's Space Wolves -> Space Marines.
         army_list = ArmyList()
         parse_header(
             header(
@@ -45,7 +46,7 @@ class TestParseHeader:
             army_list,
         )
 
-        assert army_list.super_faction == "Imperium"
+        assert army_list.super_faction == "Adeptus Astartes"
         assert army_list.faction == "Black Templars"
 
     def test_single_part_faction_leaves_super_faction_empty(self):
@@ -157,3 +158,12 @@ class TestSplitDetachments:
         assert split_detachments("Kult of Speed and More Dakka (Waaagh!)") == [
             "Kult of Speed and More Dakka"
         ]
+
+    def test_comma_inside_a_known_name_is_not_split(self):
+        # Not in a fixture: the one detachment name with a comma in it.
+        assert split_detachments(
+            "Ordo Xenos, Alien Hunters, Lions of the Emperor (Rule)"
+        ) == ["Ordo Xenos, Alien Hunters", "Lions of the Emperor"]
+        assert split_detachments(
+            "Lions of the Emperor, Ordo Xenos, Alien Hunters (Rule)"
+        ) == ["Lions of the Emperor", "Ordo Xenos, Alien Hunters"]

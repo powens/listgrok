@@ -74,6 +74,14 @@ class TestParseUnit:
             )
         ]
 
+    def test_with_item_after_other_items_owns_the_rest(self):
+        # Not in a fixture (from review): a `with` clause after a leading item
+        # still covers every weapon after it.
+        unit, _ = parse_unit("Char1: 2x Foo (100 pts): Warlord, 2 with A, B", [])
+
+        assert unit.is_warlord
+        assert model_sets(unit) == [("Foo", 2, {"A": 2, "B": 2})]
+
     def test_counted_and_repeated_inline_items(self):
         # nr_wtc_3 Defiler: "2x" counts, and a repeated name sums.
         unit, _ = parse_unit(

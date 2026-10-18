@@ -12,7 +12,7 @@ EXAMPLES = Path(__file__).parents[1] / "examples" / "new_recruit" / "wtc"
 WTC_EXAMPLES = {
     "nr_wtc_0.txt": {
         "points": 1990,
-        "super_faction": "Imperium",
+        "super_faction": "",
         "faction": "Adeptus Custodes",
         "detachments": ["Lions of the Emperor"],
         "disposition": "Take and Hold",
@@ -23,7 +23,7 @@ WTC_EXAMPLES = {
     },
     "nr_wtc_1.txt": {
         "points": 2000,
-        "super_faction": "Chaos",
+        "super_faction": "",
         "faction": "World Eaters",
         "detachments": ["Berzerker Warband"],
         "disposition": "Purge the Foe",
@@ -34,7 +34,7 @@ WTC_EXAMPLES = {
     },
     "nr_wtc_2.txt": {
         "points": 2000,
-        "super_faction": "Chaos",
+        "super_faction": "",
         "faction": "World Eaters",
         "detachments": ["Possessed Slaughterband", "Vessels of Wrath"],
         "disposition": "Purge the Foe",
@@ -45,7 +45,7 @@ WTC_EXAMPLES = {
     },
     "nr_wtc_3.txt": {
         "points": 1990,
-        "super_faction": "Chaos",
+        "super_faction": "",
         "faction": "Emperor's Children",
         "detachments": ["Court of the Phoenician", "Spectacle of Slaughter"],
         "disposition": "Purge the Foe",
@@ -58,7 +58,7 @@ WTC_EXAMPLES = {
     # part of the name, unlike the U+00A0 spaces, which are normalised.
     "nr_wtc_4.txt": {
         "points": 2000,
-        "super_faction": "Imperium",
+        "super_faction": "",
         "faction": "Imperial Knights",
         "detachments": ["Throne‑bonded Outriders", "Valourstrike Lance"],
         "disposition": "Purge the Foe",
@@ -69,7 +69,7 @@ WTC_EXAMPLES = {
     },
     "nr_wtc_5.txt": {
         "points": 995,
-        "super_faction": "Xenos",
+        "super_faction": "",
         "faction": "Orks",
         "detachments": ["Dread Mob", "Green Tide"],
         "disposition": "Purge the Foe",
@@ -80,7 +80,7 @@ WTC_EXAMPLES = {
     },
     "nr_wtc_6.txt": {
         "points": 1995,
-        "super_faction": "Xenos",
+        "super_faction": "",
         "faction": "Tyranids",
         "detachments": ["Assimilation Swarm", "Warrior Bioform Onslaught"],
         "disposition": "Priority Assets",
@@ -91,7 +91,7 @@ WTC_EXAMPLES = {
     },
     "nr_wtc_7.txt": {
         "points": 2000,
-        "super_faction": "Imperium",
+        "super_faction": "",
         "faction": "Imperial Knights",
         "detachments": ["Freeblade Company"],
         "disposition": "Priority Assets",
@@ -103,7 +103,7 @@ WTC_EXAMPLES = {
     # A blank line after every unit: WTC blank lines carry no meaning.
     "nr_wtc_8.txt": {
         "points": 2000,
-        "super_faction": "Imperium",
+        "super_faction": "",
         "faction": "Imperial Knights",
         "detachments": ["Freeblade Company"],
         "disposition": "Priority Assets",
@@ -114,7 +114,7 @@ WTC_EXAMPLES = {
     },
     "nr_wtc_9.txt": {
         "points": 990,
-        "super_faction": "Imperium",
+        "super_faction": "Adeptus Astartes",
         "faction": "Black Templars",
         "detachments": ["Gladius Task Force"],
         "disposition": "Priority Assets",

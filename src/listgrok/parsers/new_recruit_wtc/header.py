@@ -10,6 +10,13 @@ RULE_REGEX = re.compile(r"^\+{10,}$")
 _KEY_REGEX = re.compile(r"^\+ (?P<key>[A-Z][A-Z ]*): ?(?P<value>.*)$")
 _POINTS_REGEX = re.compile(r"^(?P<points>\d+)\s*pts$")
 _RULE_SUFFIX_REGEX = re.compile(r"\s*\([^()]*\)$")
+# Detachment names that themselves contain a comma — the only one among 222
+# distinct names across the 649 LVO 2026 lists. A new one splits wrongly until
+# it is added here.
+NAMES_WITH_COMMAS = ("Ordo Xenos, Alien Hunters",)
+_DETACHMENT_NAME_REGEX = re.compile(
+    r"\s*(?:" + "|".join(map(re.escape, NAMES_WITH_COMMAS)) + r"|[^,]+)"
+)
 
 
 def parse_header(lines: Sequence[str], army_list: ArmyList) -> int | None:
@@ -22,9 +29,13 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> int | None:
     if "FACTION KEYWORD" not in values:
         raise ParseError("Header has no FACTION KEYWORD line", lines)
     parts = [part.strip() for part in values["FACTION KEYWORD"].split(" - ")]
+    # `Alliance - [Parent - ]Faction`: the leading alliance (Imperium, Chaos,
+    # Xenos) has no counterpart in the official app's export, so only a parent
+    # faction fills super_faction — matching that parser's Space Wolves ->
+    # Space Marines.
     army_list.faction = parts[-1]
-    if len(parts) > 1:
-        army_list.super_faction = parts[0]
+    if len(parts) > 2:
+        army_list.super_faction = parts[-2]
 
     if "TOTAL ARMY POINTS" not in values:
         raise ParseError("Header has no TOTAL ARMY POINTS line", lines)
@@ -46,9 +57,12 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> int | None:
 
 
 def split_detachments(value: str) -> list[str]:
-    """`A, B (Rule)` -> `["A", "B"]`: drop the trailing rule, split on commas."""
-    names = _RULE_SUFFIX_REGEX.sub("", value)
-    return [name.strip() for name in names.split(",") if name.strip()]
+    """`A, B (Rule)` -> `["A", "B"]`: drop the trailing rule, split on commas.
+
+    A name from NAMES_WITH_COMMAS is matched whole before any comma splits it.
+    """
+    names = _DETACHMENT_NAME_REGEX.findall(_RULE_SUFFIX_REGEX.sub("", value))
+    return [name.strip() for name in names if name.strip()]
 
 
 def _header_values(lines: Sequence[str]) -> dict[str, str]:
