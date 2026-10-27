@@ -1,0 +1,111 @@
+csm Terminators 1.1 (1985 points)
+
+Chaos Space Marines
+Cabal of Chaos and Warpstrike Champions (3 Detachment Points)
+Disruption
+Strike Force (2000 points)
+
+Attached Units
+Attached Unit 1
+
+Kravek Morne (130 points)
+• Attached as: Leader (Character)
+  • Warlord
+  • 1x Baleflamer
+    1x Combi-bolter
+    1x Last Argument and power fist
+    1x Servo-harness
+
+Mutilators (165 points)
+• Attached as: Bodyguard
+  • 3x Mutilator
+    • 3x Fleshmetal weapons
+
+Attached Unit 2
+
+Sorcerer in Terminator Armour (85 points)
+• Attached as: Leader (Character)
+  • 1x Combi-bolter
+    1x Force weapon
+    1x Infernal Gaze
+
+Chaos Terminator Squad (370 points)
+• Attached as: Bodyguard
+  • 1x Terminator Champion
+    • 1x Accursed weapon
+      1x Combi-bolter
+  • 9x Chaos Terminator
+    • 9x Accursed weapon
+      9x Combi-bolter
+
+Attached Unit 3
+
+Sorcerer in Terminator Armour (85 points)
+• Attached as: Leader (Character)
+  • 1x Combi-bolter
+    1x Force weapon
+    1x Infernal Gaze
+
+Chaos Terminator Squad (370 points)
+• Attached as: Bodyguard
+  • 1x Terminator Champion
+    • 1x Accursed weapon
+      1x Combi-bolter
+  • 9x Chaos Terminator
+    • 9x Accursed weapon
+      9x Combi-bolter
+
+
+CHARACTERS
+
+Cypher (95 points)
+  • 1x Cypher’s bolt pistol
+    1x Cypher’s plasma pistol
+
+Heretic Astartes Daemon Prince with Wings (195 points)
+  • Daemonic Allegiance: Tzeentch
+  • 1x Hellforged weapons
+    1x Infernal cannon
+  • Enhancement: Tzagulla
+
+
+BATTLELINE
+
+Cultist Mob (50 points)
+  • 1x Cultist Champion
+    • 1x Autopistol
+      1x Brutal assault weapon
+  • 9x Chaos Cultist
+    • 9x Autopistol
+      9x Brutal assault weapon
+
+
+OTHER DATASHEETS
+
+Fellgor Beastmen (60 points)
+  • 1x Fellgor Champion
+    • 1x Bolt pistol
+      1x Chainsword
+  • 9x Fellgor Beastmen
+    • 9x Autopistol
+      9x Close combat weapon
+
+Fellgor Beastmen (60 points)
+  • 1x Fellgor Champion
+    • 1x Bolt pistol
+      1x Chainsword
+  • 9x Fellgor Beastmen
+    • 9x Autopistol
+      9x Close combat weapon
+
+Obliterators (160 points)
+  • 2x Obliterator
+    • 2x Crushing fists
+      2x Fleshmetal guns
+
+Obliterators (160 points)
+  • 2x Obliterator
+    • 2x Crushing fists
+      2x Fleshmetal guns
+
+Exported with App Version: v2.7.1 (146), Data Version: v972

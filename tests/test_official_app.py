@@ -53,7 +53,7 @@ OFFICIAL_EXAMPLES = {
         "points": None,
         "super_faction": "",
         "faction": "Orks",
-        "detachments": ["Kult of Speed and More Dakka!"],
+        "detachments": ["Kult of Speed", "More Dakka!"],
         "detachment_points": 3,
         "disposition": "Disruption",
         "army_size": "Strike Force",
@@ -72,7 +72,7 @@ OFFICIAL_EXAMPLES = {
         "points": 2000,
         "super_faction": "",
         "faction": "Chaos Space Marines",
-        "detachments": ["Cabal of Chaos and Warpstrike Champions"],
+        "detachments": ["Cabal of Chaos", "Warpstrike Champions"],
         "detachment_points": 3,
         "disposition": "Disruption",
         "army_size": "Strike Force",
@@ -93,7 +93,7 @@ OFFICIAL_EXAMPLES = {
         "points": 2000,
         "super_faction": "",
         "faction": "Chaos Daemons",
-        "detachments": ["Cavalcade of Chaos and Shadow Legion"],
+        "detachments": ["Cavalcade of Chaos", "Shadow Legion"],
         "detachment_points": 3,
         "disposition": "Purge the Foe",
         "army_size": "Strike Force",
@@ -110,7 +110,7 @@ OFFICIAL_EXAMPLES = {
         "points": 2000,
         "super_faction": "",
         "faction": "Drukhari",
-        "detachments": ["Kabalite Cartel and Tools of Torment"],
+        "detachments": ["Kabalite Cartel", "Tools of Torment"],
         "detachment_points": 3,
         "disposition": "Disruption",
         "army_size": "Strike Force",
@@ -125,7 +125,7 @@ OFFICIAL_EXAMPLES = {
         "points": 2000,
         "super_faction": "",
         "faction": "Imperial Knights",
-        "detachments": ["Gate Warden Lance and Questor Forgepact"],
+        "detachments": ["Gate Warden Lance", "Questor Forgepact"],
         "detachment_points": 3,
         "disposition": "Take and Hold",
         "army_size": "Strike Force",
@@ -134,6 +134,27 @@ OFFICIAL_EXAMPLES = {
         "unit_points_total": 2000,
         "attached_groups": 1,
         "decorations": {},
+    },
+    # official_8 is official_4 re-exported from app v2.7.1, which title-cases
+    # the attached-units heading and fuses it with the first group line.
+    "official_8.txt": {
+        "name": "csm Terminators 1.1",
+        "points": 1985,
+        "super_faction": "",
+        "faction": "Chaos Space Marines",
+        "detachments": ["Cabal of Chaos", "Warpstrike Champions"],
+        "detachment_points": 3,
+        "disposition": "Disruption",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 13,
+        "unit_points_total": 1985,
+        "attached_groups": 3,
+        "decorations": {
+            "Heretic Astartes Daemon Prince with Wings": [
+                "Daemonic Allegiance: Tzeentch"
+            ],
+        },
     },
 }
 
