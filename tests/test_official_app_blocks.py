@@ -1,3 +1,5 @@
+import time
+
 import pytest
 
 from listgrok import ParseError
@@ -188,3 +190,30 @@ def test_title_case_lone_line_after_the_header_raises():
 )
 def test_parse_points_strips_thousands_commas(text, expected):
     assert parse_points(text) == expected
+
+
+def test_army_name_with_a_long_whitespace_run_classifies_in_linear_time():
+    # Crafted input, not an export: the name's lazy ".+?" and the "\s+" before
+    # the parenthetical both matched spaces, which took ~10s on this run.
+    name = "a" + " " * 100_000 + "b"
+
+    start = time.perf_counter()
+    blocks = classify_blocks(f"{name} (2,000 Points)\n\n" + NO_ARMY_NAME)
+
+    assert time.perf_counter() - start < 1
+    assert blocks[0].kind is BlockKind.ARMY_NAME
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        # Crafted input, not an export: digit runs past Python's 4300-digit
+        # int() limit used to escape as ValueError rather than ParseError.
+        "Army (" + "9" * 5000 + " Points)\n\n" + NO_ARMY_NAME,
+        NO_ARMY_NAME.replace("(3 Detachment", "(" + "9" * 5000 + " Detachment"),
+    ],
+    ids=["army-points", "detachment-points"],
+)
+def test_oversized_point_total_raises_parse_error(text):
+    with pytest.raises(ParseError):
+        classify_blocks(text)

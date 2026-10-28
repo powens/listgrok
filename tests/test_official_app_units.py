@@ -1,3 +1,5 @@
+import time
+
 import pytest
 
 from listgrok import ParseError
@@ -407,3 +409,29 @@ class TestParseUnit:
     def test_empty_block_raises(self):
         with pytest.raises(ParseError):
             parse_unit([], "CHARACTERS")
+
+    def test_attached_as_with_a_long_whitespace_run_parses_in_linear_time(self):
+        # Crafted input, not an export: the role and the "\s*" after it both
+        # matched spaces, so a line that fails to match (the unclosed "(")
+        # took ~10s to reject.
+        line = "Attached as: Leader" + " " * 20_000 + "Character("
+
+        start = time.perf_counter()
+        unit = parse_unit(["Captain (80 Points)", "  • " + line], "CHARACTERS")
+
+        assert time.perf_counter() - start < 1
+        assert unit.attachment is None
+        assert unit.decorations == [line]
+
+    def test_oversized_wargear_count_is_a_decoration(self):
+        # Crafted input, not an export: a count past Python's 4300-digit int()
+        # limit used to escape as ValueError; it is not "Nx" wargear.
+        line = "9" * 5000 + "x Bolt pistol"
+
+        unit = parse_unit(["Captain (80 Points)", "  • " + line], "CHARACTERS")
+
+        assert unit.decorations == [line]
+
+    def test_oversized_unit_points_raises(self):
+        with pytest.raises(ParseError):
+            parse_unit(["Captain (" + "9" * 5000 + " Points)"], "CHARACTERS")
