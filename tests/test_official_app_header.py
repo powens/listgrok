@@ -71,7 +71,7 @@ def test_official_3_header_reads_the_labelled_disposition_line():
 
     assert army_list.super_faction == ""
     assert army_list.faction == "Orks"
-    assert army_list.detachments == ["Kult of Speed and More Dakka!"]
+    assert army_list.detachments == ["Kult of Speed", "More Dakka!"]
     assert army_list.detachment_points == 3
     assert army_list.disposition == "Disruption"
     assert army_list.army_size == "Strike Force"
@@ -97,8 +97,18 @@ def test_faction_only_header_leaves_disposition_empty():
     "line,expected",
     [
         ("Retaliation Cadre", ["Retaliation Cadre"]),
-        # A single detachment whose own name contains "and" is never split.
+        # official_4/8: two detachments joined by a bare " and ".
+        (
+            "Cabal of Chaos and Warpstrike Champions",
+            ["Cabal of Chaos", "Warpstrike Champions"],
+        ),
+        # A known detachment whose own name contains a joiner stays whole.
         ("Legends of Saga and Song", ["Legends of Saga and Song"]),
+        ("Ordo Xenos, Alien Hunters", ["Ordo Xenos, Alien Hunters"]),
+        (
+            "Ordo Xenos, Alien Hunters and Inquisitor’s Hand",
+            ["Ordo Xenos, Alien Hunters", "Inquisitor’s Hand"],
+        ),
         (
             "Champions of Fenris, Legends of Saga and Song and Veterans of the Fang",
             [

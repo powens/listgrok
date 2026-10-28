@@ -4,6 +4,7 @@ The two labelled lines are found by pattern, not position, because the app has
 moved them between dialects before. What remains maps by order.
 """
 
+import re
 from collections.abc import Sequence
 
 from listgrok.exceptions import ParseError
@@ -13,31 +14,39 @@ from listgrok.parsers.official_app.blocks import (
     POINTS_REGEX,
     parse_points,
 )
+from listgrok.parsers.official_app.detachment_names import COMPOUND_DETACHMENTS
 
 DISPOSITION_LABEL = "Force Dispositions:"
+JOINER_REGEX = re.compile(r"(, | and )")
 
 
 def split_detachments(text: str) -> list[str]:
     """Split a detachment line into individual detachment names.
 
-    Several detachments are written as a serial list: "A, B and C". Names
-    themselves contain "and" ("Legends of Saga and Song"), so only the final
-    comma-separated segment is split, on its last " and ". A line with no comma
-    is never split, which means a two-detachment line written without one
-    ("A and B") comes back as a single detachment — the export carries no signal
-    that would let us tell that apart from one detachment named "A and B".
+    Several detachments are written as a serial list: "A and B", "A, B and C".
+    A few names themselves contain a joiner ("Legends of Saga and Song",
+    "Ordo Xenos, Alien Hunters"), and the export carries no signal telling such
+    a name apart from two detachments, so those are looked up in
+    `COMPOUND_DETACHMENTS`: at each position the longest run of pieces that
+    spells a known compound name is kept whole, and every other joiner splits.
+    Known limitation: a new compound name not yet in that set is split apart.
     """
-    parts = [part.strip() for part in text.split(",")]
-    if len(parts) == 1:
-        return parts
-
-    tail = parts.pop()
-    head, separator, last = tail.rpartition(" and ")
-    if separator:
-        parts.extend([head.strip(), last.strip()])
-    else:
-        parts.append(tail)
-    return parts
+    # The capture group keeps the joiners: pieces alternate name, joiner, name.
+    pieces = JOINER_REGEX.split(text)
+    names = []
+    start = 0
+    while start < len(pieces):
+        end = next(
+            (
+                end
+                for end in range(len(pieces) - 1, start, -2)
+                if "".join(pieces[start : end + 1]) in COMPOUND_DETACHMENTS
+            ),
+            start,
+        )
+        names.append("".join(pieces[start : end + 1]).strip())
+        start = end + 2
+    return names
 
 
 def parse_header(lines: Sequence[str], army_list: ArmyList) -> None:
