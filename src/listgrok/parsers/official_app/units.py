@@ -4,7 +4,9 @@ The body comes in two dialects, told apart by whether any line is indented.
 The classic export indents: bullet glyphs are stripped and the column the
 text starts at decides nesting, so a body line indented deeper than the line
 above it is that line's child. The newer compact export writes every line at column
-zero and encodes nesting with bullet runs instead — see _run_tree.
+zero and encodes nesting with bullet runs instead — see _run_tree. A classic
+body that has lost its indentation (e.g. in copy/paste) still bullets every
+line, so "•" versus "◦" decides nesting — see _glyph_tree.
 """
 
 from collections.abc import Sequence
@@ -20,6 +22,7 @@ from listgrok.parsers.official_app.blocks import (
     parse_points,
 )
 
+HOLLOW_BULLET = "◦"
 WARLORD_LINE = "Warlord"
 ENHANCEMENT_PREFIXES = ("Enhancements:", "Enhancement:")
 
@@ -35,6 +38,8 @@ def build_tree(body_lines: Sequence[str]) -> list[Node]:
     """Build the forest for a unit block's body (header excluded)."""
     if any(len(raw) - len(raw.lstrip()) for raw in body_lines):
         return _indent_tree(body_lines)
+    if all(BULLET_REGEX.match(raw) for raw in body_lines):
+        return _glyph_tree(body_lines)
     return _run_tree(body_lines)
 
 
@@ -59,6 +64,23 @@ def _indent_tree(body_lines: Sequence[str]) -> list[Node]:
         if not ATTACHED_AS_REGEX.match(text):
             stack.append(node)
 
+    return roots
+
+
+def _glyph_tree(body_lines: Sequence[str]) -> list[Node]:
+    """Build the forest for an unindented body where every line is bulleted.
+
+    A "◦" line is wargear of the nearest "•" line above it; every "•" line is
+    a root. A body with no "◦" line therefore stays flat, like a single-model
+    unit in the classic dialect.
+    """
+    roots: list[Node] = []
+    for raw in body_lines:
+        node = Node(text=BULLET_REGEX.sub("", raw), indent=0)
+        if raw.startswith(HOLLOW_BULLET) and roots:
+            roots[-1].children.append(node)
+        else:
+            roots.append(node)
     return roots
 
 

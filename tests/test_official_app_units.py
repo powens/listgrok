@@ -65,6 +65,51 @@ class TestBuildTree:
         ]
         assert all(node.children == [] for node in roots)
 
+    def test_unindented_hollow_bullets_nest_under_the_solid_bullet_above(self):
+        # official_9 Allarus Custodians: the body has lost its indentation
+        # but keeps the glyphs — "•" for a model set, "◦" for its
+        # wargear — so the glyph, not a bullet run, decides nesting.
+        roots = build_tree(
+            [
+                "• Attached as: Bodyguard",
+                "• 3x Allarus Custodians",
+                "◦ 3x Balistus Grenade Launcher",
+                "◦ 3x Guardian Spear",
+                "◦ 1x Vexilla",
+            ]
+        )
+
+        assert [node.text for node in roots] == [
+            "Attached as: Bodyguard",
+            "3x Allarus Custodians",
+        ]
+        assert roots[0].children == []
+        assert [child.text for child in roots[1].children] == [
+            "3x Balistus Grenade Launcher",
+            "3x Guardian Spear",
+            "1x Vexilla",
+        ]
+
+    def test_unindented_solid_bullets_alone_stay_flat(self):
+        # official_9 Trajann Valoris: a single-model body with no "◦" line is
+        # flat wargear, not a bullet run of model sets.
+        roots = build_tree(
+            [
+                "• Attached as: Leader (Character)",
+                "• Warlord",
+                "• 1x Eagle’s Scream",
+                "• 1x Watcher’s Axe",
+            ]
+        )
+
+        assert [node.text for node in roots] == [
+            "Attached as: Leader (Character)",
+            "Warlord",
+            "1x Eagle’s Scream",
+            "1x Watcher’s Axe",
+        ]
+        assert all(node.children == [] for node in roots)
+
     def test_deeper_indent_nests(self):
         # official_1 Vespid Stingwings
         roots = build_tree(

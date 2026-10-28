@@ -156,6 +156,39 @@ OFFICIAL_EXAMPLES = {
             ],
         },
     },
+    # Classic headings, but the unit bodies have lost their indentation (e.g.
+    # in copy/paste); every line is still bulleted — "•" for a model set, "◦" for its wargear.
+    "official_9.txt": {
+        "name": "Suck my Guard",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Adeptus Custodes",
+        "detachments": ["Dread Host", "Honoured Companions", "Lions of the Emperor"],
+        "detachment_points": 3,
+        "disposition": "Take and Hold",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 10,
+        "unit_points_total": 2000,
+        "attached_groups": 2,
+        "decorations": {},
+    },
+    # official_10 is official_5 re-exported from app v2.8.1 (1).
+    "official_10.txt": {
+        "name": "I choose violence.",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Daemons",
+        "detachments": ["Cavalcade of Chaos", "Shadow Legion"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 9,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
 }
 
 
@@ -473,6 +506,189 @@ class TestOfficial4Details:
         ] == [
             ("Cultist Champion", 1, {"Autopistol": 1, "Brutal assault weapon": 1}),
             ("Chaos Cultist", 9, {"Autopistol": 9, "Brutal assault weapon": 9}),
+        ]
+
+
+def compositions(army_list):
+    return [
+        (
+            unit.name,
+            unit.enhancement,
+            [(ms.name, ms.num_models, ms.wargear) for ms in unit.composition],
+        )
+        for unit in army_list.units
+    ]
+
+
+class TestOfficial9Details:
+    # official_9.txt's unit bodies are unindented but fully bulleted.
+
+    def test_warlord_is_trajann(self):
+        army_list = parse_example("official_9.txt")
+
+        warlords = [unit.name for unit in army_list.units if unit.is_warlord]
+        assert warlords == ["Trajann Valoris"]
+
+    def test_every_unit_has_its_wargear_under_its_model_sets(self):
+        army_list = parse_example("official_9.txt")
+
+        guard = [("Custodian Guard", 3, {"Guardian Spear": 3, "Vexilla": 1})]
+        sentinels = [
+            (
+                "Custodian Guard",
+                3,
+                {"Praesidium Shield": 3, "Sentinel Blade": 3, "Vexilla": 1},
+            )
+        ]
+        assert compositions(army_list) == [
+            (
+                "Trajann Valoris",
+                "",
+                [
+                    (
+                        "Trajann Valoris",
+                        1,
+                        {"Eagle’s Scream": 1, "Watcher’s Axe": 1},
+                    )
+                ],
+            ),
+            (
+                "Allarus Custodians",
+                "",
+                [
+                    (
+                        "Allarus Custodians",
+                        3,
+                        {
+                            "Balistus Grenade Launcher": 3,
+                            "Guardian Spear": 3,
+                            "Vexilla": 1,
+                        },
+                    )
+                ],
+            ),
+            # The export writes a non-breaking hyphen (U+2011); it is kept.
+            (
+                "Shield‑Captain",
+                "",
+                [
+                    (
+                        "Shield‑Captain",
+                        1,
+                        {"Eternity-pattern Paragon Blade": 1, "Praesidium Shield": 1},
+                    )
+                ],
+            ),
+            (
+                "Custodian Wardens",
+                "",
+                [("Custodian Wardens", 2, {"Guardian Spear": 2, "Vexilla": 1})],
+            ),
+            ("Custodian Guard Sodality", "", guard),
+            ("Custodian Guard Sodality", "", guard),
+            ("Sentinel Guard Sodality", "", sentinels),
+            ("Sentinel Guard Sodality", "", sentinels),
+            (
+                "Prosecutor Squad",
+                "",
+                [("Prosecutors", 4, {"Boltgun": 4, "Gun Stock": 4})],
+            ),
+            (
+                "Witchseeker Squad",
+                "",
+                [("Witchseekers", 4, {"Flamer": 4, "Gun Stock": 4})],
+            ),
+        ]
+
+
+class TestOfficial10Details:
+    def test_warlord_is_belakor(self):
+        army_list = parse_example("official_10.txt")
+
+        warlords = [unit.name for unit in army_list.units if unit.is_warlord]
+        assert warlords == ["Be’lakor"]
+
+    def test_every_unit_has_its_wargear_and_enhancement(self):
+        army_list = parse_example("official_10.txt")
+
+        bloodcrushers = [
+            ("Bloodhunter", 1, {"Hellblade": 1, "Juggernaut’s bladed horn": 1}),
+            (
+                "Bloodcrusher",
+                5,
+                {
+                    "Daemonic Icon": 1,
+                    "Hellblade": 5,
+                    "Instrument of Chaos": 1,
+                    "Juggernaut’s bladed horn": 5,
+                },
+            ),
+        ]
+        screamers = [("Screamer", 6, {"Lamprey bite": 6})]
+        assert compositions(army_list) == [
+            (
+                "Skullmaster",
+                "Malice Made Manifest",
+                [
+                    (
+                        "Skullmaster",
+                        1,
+                        {"Blade of blood": 1, "Juggernaut’s bladed horn": 1},
+                    )
+                ],
+            ),
+            ("Bloodcrushers", "", bloodcrushers),
+            (
+                "Be’lakor",
+                "",
+                [
+                    (
+                        "Be’lakor",
+                        1,
+                        {"Betraying Shades": 1, "The Blade of Shadows": 1},
+                    )
+                ],
+            ),
+            (
+                "Bloodthirster",
+                "Fade to Darkness",
+                [
+                    (
+                        "Bloodthirster",
+                        1,
+                        {"Great axe of Khorne": 1, "Hellfire breath": 1},
+                    )
+                ],
+            ),
+            (
+                "Lord of Change",
+                "",
+                [
+                    (
+                        "Lord of Change",
+                        1,
+                        {
+                            "Bolt of Change": 1,
+                            "Rod of sorcery": 1,
+                            "Staff of Tzeentch": 1,
+                        },
+                    )
+                ],
+            ),
+            ("Bloodcrushers", "", bloodcrushers),
+            ("Screamers", "", screamers),
+            ("Screamers", "", screamers),
+            (
+                "Chaos Lord in Terminator Armour",
+                "",
+                [
+                    (
+                        "Chaos Lord in Terminator Armour",
+                        1,
+                        {"Combi-weapon": 1, "Power fist": 1},
+                    )
+                ],
+            ),
         ]
 
 
