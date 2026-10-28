@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-10-28
+
+### Security
+
+- Crafted exports can no longer stall `parse_list`: a detachment line with
+  thousands of joiners, or a long run of whitespace in an army name, unit
+  header or `Attached as:` line, used to take seconds to minutes and now
+  parses in linear time.
+- Point totals and `Nx` counts too long for `int()` (over 4300 digits) no
+  longer escape as `ValueError`. An oversized point total raises `ParseError`;
+  an oversized `Nx` line lands in `decorations`.
+
 ## [0.1.1] - 2026-10-28
 
 ### Fixed
@@ -36,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fully typed package (`py.typed`), zero runtime dependencies,
   Python 3.10–3.14.
 
-[Unreleased]: https://github.com/powens/listgrok/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/powens/listgrok/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/powens/listgrok/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/powens/listgrok/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/powens/listgrok/releases/tag/v0.1.0
