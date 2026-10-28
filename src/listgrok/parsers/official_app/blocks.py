@@ -19,18 +19,25 @@ from enum import Enum, auto
 
 from listgrok.exceptions import ParseError
 
+# The patterns below run on untrusted text, so they avoid two hazards. Adjacent
+# quantifiers that can both match whitespace backtrack quadratically on a long
+# whitespace run, so a name or role always ends in a non-space character.
+# Unbounded digit runs reach int(), which raises ValueError past 4300 digits,
+# so counts are capped and an oversized one simply fails to match.
+
 # re.DOTALL so a multi-line army name matches as a single name. Point totals may
 # carry thousands commas ("2,000 Points"), and \s+ keeps a doubled space before
 # the parenthetical ("I choose violence.  (2,000 Points)") off the name.
 POINTS_REGEX = re.compile(
-    r"^(?P<name>.+?)\s+\((?P<points>[\d,]+)\s[Pp]oints\)$", re.DOTALL
+    r"^(?P<name>.*?\S)\s+\((?P<points>[\d,]{1,9})\s[Pp]oints\)$", re.DOTALL
 )
 DETACHMENT_REGEX = re.compile(
-    r"^(?P<name>.+?)\s\((?P<points>\d+)\sDetachment\s[Pp]oints?\)$"
+    r"^(?P<name>.+?)\s\((?P<points>\d{1,6})\sDetachment\s[Pp]oints?\)$"
 )
-NUM_REGEX = re.compile(r"^(?P<num>\d+)x\s(?P<name>.+)$")
+NUM_REGEX = re.compile(r"^(?P<num>\d{1,6})x\s(?P<name>.+)$")
 ATTACHED_AS_REGEX = re.compile(
-    r"^Attached as:\s*(?P<role>[^(]+?)\s*(?:\((?P<detail>[^)]*)\))?$"
+    r"^Attached as:\s*(?P<role>[^(\s](?:[^(]*[^(\s])?)\s*"
+    r"(?:\((?P<detail>[^)]*)\))?$"
 )
 BULLET_REGEX = re.compile(r"^[•◦]\s*")
 # IGNORECASE: the classic dialect writes "Attached unit 1", the newer one

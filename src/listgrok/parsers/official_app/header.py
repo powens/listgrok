@@ -18,6 +18,12 @@ from listgrok.parsers.official_app.detachment_names import COMPOUND_DETACHMENTS
 
 DISPOSITION_LABEL = "Force Dispositions:"
 JOINER_REGEX = re.compile(r"(, | and )")
+# The most joiners any compound name contains. Bounding the lookahead by it
+# keeps the split linear: an unbounded scan of every longer run is cubic in the
+# number of joiners, which a crafted detachment line can make arbitrarily large.
+_MAX_COMPOUND_JOINERS = max(
+    len(JOINER_REGEX.findall(name)) for name in COMPOUND_DETACHMENTS
+)
 
 
 def split_detachments(text: str) -> list[str]:
@@ -36,10 +42,11 @@ def split_detachments(text: str) -> list[str]:
     names = []
     start = 0
     while start < len(pieces):
+        last = min(len(pieces) - 1, start + 2 * _MAX_COMPOUND_JOINERS)
         end = next(
             (
                 end
-                for end in range(len(pieces) - 1, start, -2)
+                for end in range(last, start, -2)
                 if "".join(pieces[start : end + 1]) in COMPOUND_DETACHMENTS
             ),
             start,

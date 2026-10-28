@@ -1,3 +1,5 @@
+import time
+
 import pytest
 
 from listgrok import ArmyList, ParseError
@@ -160,3 +162,15 @@ def test_too_many_faction_lines_raises():
             ],
             ArmyList(),
         )
+
+
+def test_long_detachment_line_splits_in_linear_time():
+    # Crafted input, not an export: the compound-name lookahead used to scan
+    # every longer run of pieces, which took ~10s on this ~8 KiB line.
+    line = ", ".join(["A"] * 2400) + ", Ordo Xenos, Alien Hunters"
+
+    start = time.perf_counter()
+    names = split_detachments(line)
+
+    assert time.perf_counter() - start < 1
+    assert names == ["A"] * 2400 + ["Ordo Xenos, Alien Hunters"]
