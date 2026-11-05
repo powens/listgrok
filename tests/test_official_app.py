@@ -9,6 +9,48 @@ from listgrok.parsers.official_app import parse_official_app
 EXAMPLES = Path(__file__).parents[1] / "examples" / "official_app"
 
 OFFICIAL_EXAMPLES = {
+    # New Recruit's GW-style export (v37.14): the official layout under its own
+    # footer, with an Oxford comma in the detachment line.
+    "new_recruit_1.txt": {
+        "name": "UM- Terminators",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Ultramarines",
+        "detachments": [
+            "Devastator Brethren",
+            "Tacticus Firestorm Force",
+            "Terminator Storm Force",
+        ],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 12,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    # The same list in New Recruit's other shape: no army-size line, and no blank
+    # line after a group heading or between the units of a group.
+    "new_recruit_2.txt": {
+        "name": "UM- Terminators",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Ultramarines",
+        "detachments": [
+            "Devastator Brethren",
+            "Tacticus Firestorm Force",
+            "Terminator Storm Force",
+        ],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "",
+        "army_size_points": None,
+        "unit_count": 12,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
     "official_1.txt": {
         "name": "11th stuff",
         "points": 2000,
@@ -317,7 +359,8 @@ class TestAllOfficialExamples:
             # Case-insensitive: the classic dialect writes "Attached unit 1",
             # the newer one "Attached Unit 1"; both are kept verbatim.
             assert group.lower().startswith("attached unit "), group
-            assert sorted(roles) == ["Bodyguard", "Leader"]
+            # new_recruit_1's Ancient joins as Support, not Leader.
+            assert sorted(roles) in (["Bodyguard", "Leader"], ["Bodyguard", "Support"])
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_unattached_units_have_no_attachment(self, filename):

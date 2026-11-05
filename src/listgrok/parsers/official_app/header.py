@@ -17,7 +17,8 @@ from listgrok.parsers.official_app.blocks import (
 from listgrok.parsers.official_app.detachment_names import COMPOUND_DETACHMENTS
 
 DISPOSITION_LABEL = "Force Dispositions:"
-JOINER_REGEX = re.compile(r"(, | and )")
+# ", and " first: an Oxford comma is one joiner, or "and C" would become a name.
+JOINER_REGEX = re.compile(r"(, and | and |, )")
 # The most joiners any compound name contains. Bounding the lookahead by it
 # keeps the split linear: an unbounded scan of every longer run is cubic in the
 # number of joiners, which a crafted detachment line can make arbitrarily large.
@@ -66,9 +67,10 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> None:
         m for m in (DETACHMENT_REGEX.match(line) for line in lines) if m
     ]
 
-    if len(size_matches) != 1:
+    # New Recruit can leave the army-size line out.
+    if len(size_matches) > 1:
         raise ParseError(
-            f"Expected exactly one army-size line, found {len(size_matches)}", lines
+            f"Expected at most one army-size line, found {len(size_matches)}", lines
         )
     if len(detachment_matches) != 1:
         raise ParseError(
@@ -76,13 +78,16 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> None:
             lines,
         )
 
-    size, detachment = size_matches[0], detachment_matches[0]
-    army_list.army_size = size.group("name")
-    army_list.army_size_points = parse_points(size.group("points"))
+    detachment = detachment_matches[0]
+    consumed = {detachment.group(0)}
+    if size_matches:
+        size = size_matches[0]
+        army_list.army_size = size.group("name")
+        army_list.army_size_points = parse_points(size.group("points"))
+        consumed.add(size.group(0))
     army_list.detachments = split_detachments(detachment.group("name"))
     army_list.detachment_points = parse_points(detachment.group("points"))
 
-    consumed = {size.group(0), detachment.group(0)}
     rest = [line for line in lines if line not in consumed]
 
     # The newer dialect labels the disposition line ("Force Dispositions: X"),

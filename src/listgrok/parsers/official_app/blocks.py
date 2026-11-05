@@ -44,7 +44,9 @@ BULLET_REGEX = re.compile(r"^[•◦]\s*")
 # "Attached Unit 1". The \b keeps the plural section heading ("Attached
 # Units") from matching.
 GROUP_REGEX = re.compile(r"^Attached unit\b", re.IGNORECASE)
-TRAILER_PREFIX = "Exported with App Version:"
+# Any exporter's footer: the official app writes "Exported with App Version: …",
+# New Recruit "Exported with New Recruit v37.14, …". Bounded, as the text is untrusted.
+TRAILER_REGEX = re.compile(r"^Exported with .{1,80}Data Version:")
 
 
 class BlockKind(Enum):
@@ -119,7 +121,35 @@ def _classify_block(lines: list[str], seen_header: bool) -> list[Block]:
             Block(kind=BlockKind.SECTION, lines=(lines[0],)),
             Block(kind=BlockKind.GROUP, lines=(lines[1],)),
         ]
+    if seen_header and len(lines) > 1 and GROUP_REGEX.match(lines[0].strip()):
+        # New Recruit can leave out the blank line after a group heading.
+        return [
+            Block(kind=BlockKind.GROUP, lines=(lines[0],)),
+            *_classify_block(lines[1:], seen_header),
+        ]
+    if seen_header and POINTS_REGEX.match(lines[0].strip()):
+        return [
+            Block(kind=BlockKind.UNIT, lines=unit) for unit in _split_fused_units(lines)
+        ]
     return [Block(kind=_classify(lines, seen_header), lines=tuple(lines))]
+
+
+def _split_fused_units(lines: list[str]) -> list[tuple[str, ...]]:
+    """Split a block at each unit header: New Recruit can leave out the blank
+    line between units. A header sits at column 0 unbulleted, which no body line
+    carrying a "(N Points)" suffix does.
+    """
+    starts = [
+        index
+        for index, line in enumerate(lines)
+        if POINTS_REGEX.match(line)
+        and not line[0].isspace()
+        and not BULLET_REGEX.match(line)
+    ]
+    if not starts or starts[0] != 0:
+        starts.insert(0, 0)
+    ends = [*starts[1:], len(lines)]
+    return [tuple(lines[start:end]) for start, end in zip(starts, ends, strict=True)]
 
 
 def _is_fused_section_group(lines: list[str]) -> bool:
@@ -140,7 +170,7 @@ def _is_fused_section_group(lines: list[str]) -> bool:
 
 
 def _classify(lines: list[str], seen_header: bool) -> BlockKind:
-    if lines[0].startswith(TRAILER_PREFIX):
+    if TRAILER_REGEX.match(lines[0].strip()):
         return BlockKind.TRAILER
 
     if _is_header(lines):

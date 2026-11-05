@@ -156,6 +156,67 @@ def test_fused_section_and_group_block_splits_into_two_blocks():
     assert blocks[2].lines == ("Attached Unit 1",)
 
 
+HEADER = """T’au Empire
+Retaliation Cadre (3 Detachment Points)
+Purge the Foe
+Strike Force (2,000 Points)
+
+"""
+
+
+def kinds_after_header(body):
+    blocks = classify_blocks(HEADER + body)
+    return [(b.kind, b.lines[0]) for b in blocks[1:]]
+
+
+def test_new_recruit_footer_is_a_trailer():
+    # new_recruit_1.txt
+    footer = "Exported with New Recruit v37.14, Data Version: v8"
+
+    assert kinds_after_header(f"CHARACTERS\n\n{footer}\n")[-1] == (
+        BlockKind.TRAILER,
+        footer,
+    )
+
+
+def test_other_lone_exported_with_line_still_raises():
+    with pytest.raises(ParseError, match="Unrecognised lone line"):
+        classify_blocks(HEADER + "Exported with love\n")
+
+
+def test_group_heading_fused_with_its_units_splits_out_each_unit():
+    # new_recruit_2.txt
+    body = """Attached unit 1
+Marneus Calgar (180 Points)
+  • Attached as: Leader (Character)
+Bladeguard Veteran Squad (180 Points)
+  • Attached as: Bodyguard
+"""
+
+    blocks = classify_blocks(HEADER + body)[1:]
+
+    assert [b.kind for b in blocks] == [
+        BlockKind.GROUP,
+        BlockKind.UNIT,
+        BlockKind.UNIT,
+    ]
+    assert blocks[1].lines == (
+        "Marneus Calgar (180 Points)",
+        "  • Attached as: Leader (Character)",
+    )
+    assert blocks[2].lines[0] == "Bladeguard Veteran Squad (180 Points)"
+
+
+@pytest.mark.parametrize(
+    "body_line",
+    ["  1x Relic (5 Points)", "• 1x Relic (5 Points)", "◦ 1x Relic (5 Points)"],
+)
+def test_indented_or_bulleted_points_line_does_not_start_a_unit(body_line):
+    body = f"Marneus Calgar (180 Points)\n{body_line}\n"
+
+    assert [kind for kind, _ in kinds_after_header(body)] == [BlockKind.UNIT]
+
+
 def test_capitalised_lone_group_heading_is_a_group():
     # official_3.txt: "Attached Unit 2" — the newer dialect capitalises "Unit".
     assert classify_blocks(FUSED_ATTACHED)[4].lines == ("Attached Unit 2",)
