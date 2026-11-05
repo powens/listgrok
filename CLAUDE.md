@@ -26,7 +26,7 @@ Tests live in `tests/` and import `listgrok` via `pythonpath = ["src"]` in `pypr
 
 ## Architecture
 
-**Entry point.** `parse_list(text)` (`src/listgrok/parse_list.py`) delegates straight to `parse_official_app`; the official app's 11th edition export is the only format currently supported, so unrecognised input raises `ParseError` rather than falling through to anything. Keep the rule that a parser raises `ParseError` (not a half-filled `ArmyList`) on input it does not understand: it is what makes a bad parse visible, and it is the precondition for restoring a fallback chain if a second format lands — detection would again be *by attempted parse*, not by sniffing.
+**Entry point.** `parse_list(text)` (`src/listgrok/parse_list.py`) delegates straight to `parse_official_app`; the official app's 11th edition export (and New Recruit's export of the same layout) is the only format currently supported, so unrecognised input raises `ParseError` rather than falling through to anything. Keep the rule that a parser raises `ParseError` (not a half-filled `ArmyList`) on input it does not understand: it is what makes a bad parse visible, and it is the precondition for restoring a fallback chain if a second format lands — detection would again be *by attempted parse*, not by sniffing.
 
 **Data model** (`src/listgrok/models.py`) — plain dataclasses, each with `to_dict()` (stable keys: optional fields are always present, as `None`/`False`/`""`; implemented via `dataclasses.asdict`). `ParseError` lives in `src/listgrok/exceptions.py`; both are re-exported from the package root:
 `ArmyList` (name, points, super_faction, faction, detachments, detachment_points, disposition, army_size, army_size_points, units) → `Unit` (name, sheet_type, is_warlord, enhancement, points, composition, decorations, attachment) → `UnitComposition` (a model set: name, num_models, wargear counts).
@@ -43,6 +43,8 @@ The app has two export dialects and the parser handles both: the *classic* one (
 - `__init__.py` folds the block stream into an `ArmyList`, carrying only the current sheet type and attachment group. It stamps the group onto each attached unit's `Attachment` (verbatim), and stamps `sheet_type` upper-cased so the compact dialect's title-case fused heading reads `ATTACHED UNITS`.
 
 Section headings are recognised structurally (a lone ALL-CAPS line, or the line above a fused group heading), not against an allow-list, so a new GW section heading lands in `sheet_type` without a code change. `ParseError` is reserved for a malformed header block, an unparseable unit header, and an unclassifiable block.
+
+New Recruit's GW-style export (`new_recruit_1/2.txt`) goes through this parser too. It differs only by its `Exported with New Recruit …` trailer, an optional army-size line, and blocks with no blank line after a group heading or between units. `_split_fused` splits those line by line, measuring from the block's first line: a group heading or footer at that margin always starts a new block, while a `(N Points)` or ALL-CAPS line does so only if the block has an indented line, because a compact body's run lines also sit at the margin and can have those shapes. Without an army-size line, a header line that looks like a malformed one (`LOOSE_POINTS_REGEX`) raises rather than mapping as a faction.
 
 ## Fixtures are the spec
 

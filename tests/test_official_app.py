@@ -8,7 +8,55 @@ from listgrok.parsers.official_app import parse_official_app
 
 EXAMPLES = Path(__file__).parents[1] / "examples" / "official_app"
 
+# The Ancient in both New Recruit fixtures joins as Support, not Leader.
+SUPPORT_GROUPS = {
+    ("new_recruit_1.txt", "Attached unit 2"),
+    ("new_recruit_2.txt", "Attached unit 2"),
+}
+
 OFFICIAL_EXAMPLES = {
+    # New Recruit's GW-style export (v37.14): the official layout under its own
+    # footer, with an Oxford comma in the detachment line.
+    "new_recruit_1.txt": {
+        "name": "UM- Terminators",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Ultramarines",
+        "detachments": [
+            "Devastator Brethren",
+            "Tacticus Firestorm Force",
+            "Terminator Storm Force",
+        ],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 12,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    # The same list in New Recruit's other shape: no army-size line, and no blank
+    # line after a group heading or between the units of a group.
+    "new_recruit_2.txt": {
+        "name": "UM- Terminators",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Ultramarines",
+        "detachments": [
+            "Devastator Brethren",
+            "Tacticus Firestorm Force",
+            "Terminator Storm Force",
+        ],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "",
+        "army_size_points": None,
+        "unit_count": 12,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
     "official_1.txt": {
         "name": "11th stuff",
         "points": 2000,
@@ -317,7 +365,16 @@ class TestAllOfficialExamples:
             # Case-insensitive: the classic dialect writes "Attached unit 1",
             # the newer one "Attached Unit 1"; both are kept verbatim.
             assert group.lower().startswith("attached unit "), group
-            assert sorted(roles) == ["Bodyguard", "Leader"]
+            joiner = "Support" if (filename, group) in SUPPORT_GROUPS else "Leader"
+            assert sorted(roles) == sorted(["Bodyguard", joiner])
+
+    @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
+    def test_crlf_line_endings_change_nothing(self, filename):
+        text = (EXAMPLES / filename).read_text(encoding="utf-8")
+
+        crlf = parse_official_app(text.replace("\n", "\r\n"))
+
+        assert crlf.to_dict() == parse_official_app(text).to_dict()
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_unattached_units_have_no_attachment(self, filename):

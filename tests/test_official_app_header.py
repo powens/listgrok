@@ -119,6 +119,15 @@ def test_faction_only_header_leaves_disposition_empty():
                 "Veterans of the Fang",
             ],
         ),
+        # new_recruit_1: a serial list with an Oxford comma.
+        (
+            "Devastator Brethren, Tacticus Firestorm Force, and Terminator Storm Force",
+            [
+                "Devastator Brethren",
+                "Tacticus Firestorm Force",
+                "Terminator Storm Force",
+            ],
+        ),
         (
             "Champions of Fenris, Veterans of the Fang",
             ["Champions of Fenris", "Veterans of the Fang"],
@@ -129,13 +138,57 @@ def test_split_detachments(line, expected):
     assert split_detachments(line) == expected
 
 
-def test_missing_army_size_line_raises():
+def test_new_recruit_2_header_without_an_army_size_line_parses():
+    army_list = ArmyList()
+    parse_header(
+        [
+            "Space Marines",
+            "Ultramarines",
+            "Terminator Storm Force (3 Detachment Points)",
+            "Purge the Foe",
+        ],
+        army_list,
+    )
+
+    assert army_list.super_faction == "Space Marines"
+    assert army_list.faction == "Ultramarines"
+    assert army_list.disposition == "Purge the Foe"
+    assert army_list.army_size == ""
+    assert army_list.army_size_points is None
+
+
+@pytest.mark.parametrize(
+    "size_line",
+    [
+        "Strike Force (2000 pts)",
+        "Strike Force (2000 Point)",
+        "Strike Force 2,000 points",
+    ],
+)
+def test_malformed_army_size_line_raises(size_line):
+    # Synthetic, varying official_1.txt's size line: the line is optional now,
+    # so it must not fall through and shift the positional faction lines.
+    with pytest.raises(ParseError, match="Malformed army-size line"):
+        parse_header(
+            [
+                "Space Marines",
+                "Ultramarines",
+                "Gladius (1 Detachment Points)",
+                size_line,
+            ],
+            ArmyList(),
+        )
+
+
+def test_two_army_size_lines_raise():
+    # Synthetic: no fixture repeats the size line.
     with pytest.raises(ParseError):
         parse_header(
             [
                 "T’au Empire",
                 "Retaliation Cadre (3 Detachment Points)",
-                "Purge the Foe",
+                "Strike Force (2,000 Points)",
+                "Onslaught (3,000 Points)",
             ],
             ArmyList(),
         )

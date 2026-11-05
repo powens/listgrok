@@ -44,7 +44,14 @@ BULLET_REGEX = re.compile(r"^[•◦]\s*")
 # "Attached Unit 1". The \b keeps the plural section heading ("Attached
 # Units") from matching.
 GROUP_REGEX = re.compile(r"^Attached unit\b", re.IGNORECASE)
-TRAILER_PREFIX = "Exported with App Version:"
+# The official app's footer is known by its prefix, "Exported with App Version: …";
+# another exporter's by naming a data version too, "Exported with New Recruit v37.14,
+# Data Version: v8". Bounded, as the text is untrusted.
+TRAILER_REGEX = re.compile(r"^Exported with (?:App Version:|.{1,80}Data Version:)")
+# A header line that means to be the army size but is not POINTS_REGEX's shape:
+# the size line is optional, so this one would otherwise map as a faction line.
+# Leading \b and a capped run: a long digit or comma run cannot restart the scan.
+LOOSE_POINTS_REGEX = re.compile(r"\b\d[\d,]{0,8}\s?(?:pts?|points?)\b", re.IGNORECASE)
 
 
 class BlockKind(Enum):
@@ -70,7 +77,7 @@ def split_blocks(text: str) -> list[list[str]]:
     """Group non-blank lines into blocks, dropping the blank separators."""
     blocks: list[list[str]] = []
     current: list[str] = []
-    for line in text.split("\n"):
+    for line in text.replace("\r\n", "\n").split("\n"):
         if line.strip():
             current.append(line)
         elif current:
@@ -113,13 +120,57 @@ def classify_blocks(text: str) -> list[Block]:
 
 
 def _classify_block(lines: list[str], seen_header: bool) -> list[Block]:
-    """Classify one physical block, splitting a fused section+group pair."""
-    if seen_header and _is_fused_section_group(lines):
+    """Classify one physical block, first splitting it where it fused several."""
+    if not seen_header or _is_header(lines):
+        return [Block(kind=_classify(lines, seen_header), lines=tuple(lines))]
+    if _is_fused_section_group(lines):
         return [
             Block(kind=BlockKind.SECTION, lines=(lines[0],)),
             Block(kind=BlockKind.GROUP, lines=(lines[1],)),
         ]
-    return [Block(kind=_classify(lines, seen_header), lines=tuple(lines))]
+    return [
+        Block(kind=_classify(chunk, seen_header), lines=tuple(chunk))
+        for chunk in _split_fused(lines)
+    ]
+
+
+def _split_fused(lines: list[str]) -> list[list[str]]:
+    """Split a block wherever a line starts a new one: New Recruit can leave out
+    the blank line after a group heading or between units.
+
+    Margin is measured from the block's first line, so a uniformly indented
+    block splits like any other.
+    """
+    margin = _indent(lines[0])
+    nested = any(_indent(line) > margin for line in lines)
+    chunks: list[list[str]] = []
+    for line in lines:
+        if not chunks or (_indent(line) <= margin and _starts_block(line, nested)):
+            chunks.append([line])
+        else:
+            chunks[-1].append(line)
+    return chunks
+
+
+def _starts_block(line: str, nested: bool) -> bool:
+    """Does this line, at the block's margin, begin a block of its own?
+
+    Group headings and footers are unmistakable. A "(N Points)" line or an
+    ALL-CAPS line is only structural when the body is `nested`: a compact body
+    writes its run lines at the margin too, and they can have either shape.
+    """
+    line = line.strip()
+    if BULLET_REGEX.match(line):
+        return False
+    if _is_group_heading(line) or TRAILER_REGEX.match(line):
+        return True
+    return nested and (
+        POINTS_REGEX.match(line) is not None or _is_section_heading(line)
+    )
+
+
+def _indent(line: str) -> int:
+    return len(line) - len(line.lstrip())
 
 
 def _is_fused_section_group(lines: list[str]) -> bool:
@@ -132,7 +183,7 @@ def _is_fused_section_group(lines: list[str]) -> bool:
         return False
     heading, group = (line.strip() for line in lines)
     return (
-        GROUP_REGEX.match(group) is not None
+        _is_group_heading(group)
         and GROUP_REGEX.match(heading) is None
         and POINTS_REGEX.match(heading) is None
         and any(char.isalpha() for char in heading)
@@ -140,7 +191,7 @@ def _is_fused_section_group(lines: list[str]) -> bool:
 
 
 def _classify(lines: list[str], seen_header: bool) -> BlockKind:
-    if lines[0].startswith(TRAILER_PREFIX):
+    if TRAILER_REGEX.match(lines[0].strip()):
         return BlockKind.TRAILER
 
     if _is_header(lines):
@@ -158,7 +209,7 @@ def _classify(lines: list[str], seen_header: bool) -> BlockKind:
         line = lines[0].strip()
         if _is_section_heading(line):
             return BlockKind.SECTION
-        if GROUP_REGEX.match(line):
+        if _is_group_heading(line):
             return BlockKind.GROUP
         raise ParseError("Unrecognised lone line", lines)
 
@@ -167,6 +218,11 @@ def _classify(lines: list[str], seen_header: bool) -> BlockKind:
 
 def _is_header(lines: list[str]) -> bool:
     return any(DETACHMENT_REGEX.match(line.strip()) for line in lines)
+
+
+def _is_group_heading(line: str) -> bool:
+    """The "(N Points)" suffix outranks the prefix: that line is a unit header."""
+    return GROUP_REGEX.match(line) is not None and POINTS_REGEX.match(line) is None
 
 
 def _is_section_heading(line: str) -> bool:
