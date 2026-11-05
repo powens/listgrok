@@ -11,6 +11,7 @@ from listgrok.exceptions import ParseError
 from listgrok.models import ArmyList
 from listgrok.parsers.official_app.blocks import (
     DETACHMENT_REGEX,
+    LOOSE_POINTS_REGEX,
     POINTS_REGEX,
     parse_points,
 )
@@ -89,6 +90,9 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> None:
     army_list.detachment_points = parse_points(detachment.group("points"))
 
     rest = [line for line in lines if line not in consumed]
+    malformed = [line for line in rest if LOOSE_POINTS_REGEX.search(line)]
+    if malformed:
+        raise ParseError(f"Malformed army-size line: {malformed[0]!r}", lines)
 
     # The newer dialect labels the disposition line ("Force Dispositions: X"),
     # making it the third pattern-found line; the classic dialect leaves it

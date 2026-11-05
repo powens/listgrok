@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New Recruit's GW-style export parses: its `Exported with New Recruit …` footer,
   an absent army-size line (`army_size` stays `""`, `army_size_points` `None`),
-  and no blank line after a group heading or between units.
+  and no blank line after a group heading or between units. A section heading,
+  group heading or footer straight after a unit now starts its own block rather
+  than landing in that unit's `decorations`.
 
 ### Fixed
 

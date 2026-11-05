@@ -8,6 +8,12 @@ from listgrok.parsers.official_app import parse_official_app
 
 EXAMPLES = Path(__file__).parents[1] / "examples" / "official_app"
 
+# The Ancient in both New Recruit fixtures joins as Support, not Leader.
+SUPPORT_GROUPS = {
+    ("new_recruit_1.txt", "Attached unit 2"),
+    ("new_recruit_2.txt", "Attached unit 2"),
+}
+
 OFFICIAL_EXAMPLES = {
     # New Recruit's GW-style export (v37.14): the official layout under its own
     # footer, with an Oxford comma in the detachment line.
@@ -359,8 +365,16 @@ class TestAllOfficialExamples:
             # Case-insensitive: the classic dialect writes "Attached unit 1",
             # the newer one "Attached Unit 1"; both are kept verbatim.
             assert group.lower().startswith("attached unit "), group
-            # new_recruit_1's Ancient joins as Support, not Leader.
-            assert sorted(roles) in (["Bodyguard", "Leader"], ["Bodyguard", "Support"])
+            joiner = "Support" if (filename, group) in SUPPORT_GROUPS else "Leader"
+            assert sorted(roles) == sorted(["Bodyguard", joiner])
+
+    @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
+    def test_crlf_line_endings_change_nothing(self, filename):
+        text = (EXAMPLES / filename).read_text(encoding="utf-8")
+
+        crlf = parse_official_app(text.replace("\n", "\r\n"))
+
+        assert crlf.to_dict() == parse_official_app(text).to_dict()
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_unattached_units_have_no_attachment(self, filename):
