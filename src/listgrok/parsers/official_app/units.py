@@ -70,17 +70,22 @@ def _indent_tree(body_lines: Sequence[str]) -> list[Node]:
 def _glyph_tree(body_lines: Sequence[str]) -> list[Node]:
     """Build the forest for an unindented body where every line is bulleted.
 
-    A "◦" line is wargear of the nearest "•" line above it; every "•" line is
-    a root. A body with no "◦" line therefore stays flat, like a single-model
-    unit in the classic dialect.
+    A "◦" line is wargear of the nearest non-keyword "•" line above it; every
+    "•" line is a root. A body with no "◦" line therefore stays flat, like a
+    single-model unit in the classic dialect.
     """
     roots: list[Node] = []
+    # A keyword line can sit between a model and its "◦" wargear
+    # (official_13's "• Warlord"), so sub-bullets go to the last model line.
+    model: Node | None = None
     for raw in body_lines:
         node = Node(text=BULLET_REGEX.sub("", raw), indent=0)
-        if raw.startswith(HOLLOW_BULLET) and roots:
-            roots[-1].children.append(node)
+        if raw.startswith(HOLLOW_BULLET) and model is not None:
+            model.children.append(node)
         else:
             roots.append(node)
+            if not _is_keyword(node.text):
+                model = node
     return roots
 
 
@@ -102,7 +107,11 @@ def _run_tree(body_lines: Sequence[str]) -> list[Node]:
 
     for i, line in enumerate(lines):
         node = Node(text=BULLET_REGEX.sub("", line), indent=0)
-        if bulleted[i] and i + 1 < len(lines) and bulleted[i + 1]:
+        # A keyword line is never wargear, even when it ends the body right
+        # after a run (official_18's Gretchin close on "• Enhancement: …").
+        if _is_keyword(node.text) or (
+            bulleted[i] and i + 1 < len(lines) and bulleted[i + 1]
+        ):
             roots.append(node)
             parent = node if NUM_REGEX.match(node.text) else None
         elif parent is not None:
@@ -131,20 +140,7 @@ def parse_unit(lines: Sequence[str], sheet_type: str) -> Unit:
 
 
 def _populate(unit: Unit, roots: list[Node]) -> None:
-    models: list[Node] = []
-    for node in roots:
-        if node.text == WARLORD_LINE:
-            unit.is_warlord = True
-        elif node.text.startswith(ENHANCEMENT_PREFIXES):
-            unit.enhancement = node.text.split(":", 1)[1].strip()
-        elif (match := ATTACHED_AS_REGEX.match(node.text)) is not None:
-            unit.attachment = Attachment(
-                role=match.group("role").strip(),
-                # The newer dialect may omit the parenthetical entirely.
-                role_detail=(match.group("detail") or "").strip(),
-            )
-        else:
-            models.append(node)
+    models = [node for node in roots if not _lift_keyword(unit, node.text)]
 
     # Nested children mean each root is a model set with its wargear beneath.
     # A flat body means one implicit model set holding all of the wargear.
@@ -165,12 +161,40 @@ def _populate(unit: Unit, roots: list[Node]) -> None:
             # child.children). No 11th ed fixture nests a third level, but if
             # one ever does, it would be silently dropped rather than raising.
             for child in node.children:
-                _add_wargear(unit, model_set, child.text)
+                # An unindented "◦" body files an enhancement under the model
+                # that carries it ("◦ Enhancements: Recon Hunter").
+                if not _lift_keyword(unit, child.text):
+                    _add_wargear(unit, model_set, child.text)
     else:
         model_set = UnitComposition(name=unit.name, num_models=1)
         unit.add_model_set(model_set)
         for node in models:
             _add_wargear(unit, model_set, node.text)
+
+
+def _is_keyword(text: str) -> bool:
+    return (
+        text == WARLORD_LINE
+        or text.startswith(ENHANCEMENT_PREFIXES)
+        or ATTACHED_AS_REGEX.match(text) is not None
+    )
+
+
+def _lift_keyword(unit: Unit, text: str) -> bool:
+    """Apply a keyword line to the unit; False if the line is not one."""
+    if text == WARLORD_LINE:
+        unit.is_warlord = True
+    elif text.startswith(ENHANCEMENT_PREFIXES):
+        unit.enhancement = text.split(":", 1)[1].strip()
+    elif (match := ATTACHED_AS_REGEX.match(text)) is not None:
+        unit.attachment = Attachment(
+            role=match.group("role").strip(),
+            # The newer dialect may omit the parenthetical entirely.
+            role_detail=(match.group("detail") or "").strip(),
+        )
+    else:
+        return False
+    return True
 
 
 def _add_wargear(unit: Unit, model_set: UnitComposition, text: str) -> None:

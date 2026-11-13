@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Official-app exports with notes around the army name — before it, after
+  it, or with no army name at all — now parse; the notes are dropped instead
+  of raising `ParseError`.
+- In unit bodies that lost their indentation but keep their `•`/`◦` bullets,
+  a `• Warlord` line between a model and its `◦` wargear no longer swallows
+  that wargear, and a `◦ Enhancements:` line under a model is read as the
+  unit's enhancement instead of wargear.
+- An `Enhancement:` line ending a compact-dialect unit body is now read as
+  the unit's enhancement instead of a decoration.
+
 ## [0.1.2] - 2026-10-28
 
 ### Security

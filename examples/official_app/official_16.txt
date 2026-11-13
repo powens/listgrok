@@ -1,0 +1,124 @@
+Palworld2 (2,000 Points)
+A Player
+Making Saves
+
+Grey Knights
+Argent Assault and Banishers (3 Detachment Points)
+Priority Assets
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Brotherhood Librarian (115 Points)
+• Attached as: Leader (Character)
+• Warlord
+• 1x Nemesis force weapon
+• 1x Storm bolter
+• 1x Vortex of Doom
+• Enhancements: Sixty-sixth Seal
+
+Paladin Squad (485 Points)
+• Attached as: Bodyguard
+• 1x Paragon
+◦ 1x Nemesis force weapon
+◦ 1x Storm bolter
+• 1x Paladin Ancient
+◦ 1x Ancient’s Banner
+◦ 1x Nemesis force weapon
+◦ 1x Psycannon
+• 8x Paladin
+◦ 1x Apothecary’s Narthecium
+◦ 8x Nemesis force weapon
+◦ 4x Psycannon
+◦ 3x Storm bolter
+
+Attached unit 2
+
+Brotherhood Librarian (115 Points)
+• Attached as: Leader (Character)
+• 1x Nemesis force weapon
+• 1x Storm bolter
+• 1x Vortex of Doom
+• Enhancements: Psychic Celerity
+
+Paladin Squad (485 Points)
+• Attached as: Bodyguard
+• 1x Paragon
+◦ 1x Nemesis force weapon
+◦ 1x Storm bolter
+• 1x Paladin Ancient
+◦ 1x Ancient’s Banner
+◦ 1x Nemesis force weapon
+◦ 1x Psycannon
+• 8x Paladin
+◦ 1x Apothecary’s Narthecium
+◦ 8x Nemesis force weapon
+◦ 4x Psycannon
+◦ 3x Storm bolter
+
+Attached unit 3
+
+Castellan Crowe (100 Points)
+• Attached as: Leader (Character)
+• 1x Black Blade of Antwyr
+• 1x Purifying Flame
+• 1x Storm bolter
+
+Purifier Squad (260 Points)
+• Attached as: Bodyguard
+• 1x Knight of the Flame
+◦ 1x Nemesis force weapon
+◦ 1x Purifying Flame
+◦ 1x Storm bolter
+• 9x Purifier
+◦ 4x Close combat weapon
+◦ 5x Nemesis force weapon
+◦ 4x Psycannon
+◦ 9x Purifying Flame
+◦ 5x Storm bolter
+
+ALLIED UNITS
+
+Callidus Assassin (100 Points)
+• 1x Neural shredder
+• 1x Phase sword and poison blades
+
+Inquisitorial Agents (60 Points)
+• 1x Tome‐skull
+• 5x Inquisitorial Agent
+◦ 5x Agent firearm
+◦ 5x Agent melee weapon
+◦ 1x Eviscerator
+◦ 1x Mystic stave
+◦ 1x Plasma pistol
+• 1x Gun Servitor
+◦ 1x Agent melee weapon
+◦ 1x Multi-melta
+
+Sisters of Battle Immolator (105 Points)
+• 1x Armoured tracks
+• 1x Heavy bolter
+• 1x Hunter-killer missile
+• 1x Immolation flamers
+
+Sisters of Battle Squad (110 Points)
+• 1x Sister Superior
+◦ 1x Bolt pistol
+◦ 1x Close combat weapon
+◦ 1x Inferno pistol
+◦ 1x Power weapon
+• 9x Battle Sister
+◦ 9x Bolt pistol
+◦ 7x Boltgun
+◦ 9x Close combat weapon
+◦ 1x Meltagun
+◦ 1x Multi-melta
+◦ 1x Simulacrum Imperialis
+
+Watch Captain Artemis (65 Points)
+• 1x Hellfire Extremis
+• 1x Master-crafted power weapon
+
+Exported with App Version: v2.6.0 (3), Data Version: v946
