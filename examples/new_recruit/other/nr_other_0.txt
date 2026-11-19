@@ -1,0 +1,63 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Chaos - Chaos Daemons
++ DETACHMENT: Blood Legion, Cavalcade of Chaos (Murdercall)
++ FORCE DISPOSITION: Distruption
++ TOTAL ARMY POINTS: 2000pts
++
++ WARLORD: Char1: Daemon Prince of Chaos with wings
++ ENHANCEMENT: Brazenmaw (on Char1: Daemon Prince of Chaos with wings)
+& Slaughterthirst (Aura) (on Char4: Rendmaster on Blood Throne)
+& Apocalyptic Steeds (on Moun5: Bloodcrushers)
+& Apocalyptic Steeds (on Moun5: Bloodcrushers)
+& Apocalyptic Steeds (on Moun5: Bloodcrushers)
++ NUMBER OF UNITS: 11
++ SECONDARY: - Bring It Down: (2x2) - Assassination: 5 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Daemon Prince of Chaos with wings (205 pts): Warlord, Khorne, Hellforged weapons, Infernal cannon
+
+Enhancement: Brazenmaw (+15 pts)
+Char2: 1x Daemon Prince of Chaos with wings (190 pts): Khorne, Hellforged weapons, Infernal cannon
+
+Char3: 1x Rendmaster on Blood Throne (160 pts): Attendant's hellblades, Blade of blood
+
+Char4: 1x Rendmaster on Blood Throne (185 pts): Attendant's hellblades, Blade of blood
+Enhancement: Slaughterthirst (Aura) (+25 pts)
+
+Char5: 1x Rendmaster on Blood Throne (180 pts): Attendant's hellblades, Blade of blood
+
+6x Bloodcrushers (220 pts)
+• 5x Bloodcrusher
+3 with Hellblade, Juggernaut's bladed horn
+1 with Instrument of Chaos, Hellblade, Juggernaut's bladed horn
+1 with Daemonic Icon, Hellblade, Juggernaut's bladed horn
+Enhancement: Apocalyptic Steeds (+10 pts)
+• 1x Bloodhunter: Hellblade, Juggernaut's bladed horn
+
+6x Bloodcrushers (220 pts)
+• 5x Bloodcrusher
+3 with Hellblade, Juggernaut's bladed horn
+1 with Instrument of Chaos, Hellblade, Juggernaut's bladed horn
+1 with Daemonic Icon, Hellblade, Juggernaut's bladed horn
+Enhancement: Apocalyptic Steeds (+10 pts)
+• 1x Bloodhunter: Hellblade, Juggernaut's bladed horn
+
+6x Bloodcrushers (260 pts)
+• 5x Bloodcrusher
+3 with Hellblade, Juggernaut's bladed horn
+1 with Instrument of Chaos, Hellblade, Juggernaut's bladed horn
+1 with Daemonic Icon, Hellblade, Juggernaut's bladed horn
+Enhancement: Apocalyptic Steeds (+10 pts)
+• 1x Bloodhunter: Hellblade, Juggernaut's bladed horn
+
+10x Flesh Hounds (150 pts)
+• 1x Gore Hound: Collar of Khorne, Burning roar, Gore-drenched fangs
+• 9x Flesh Hound: 9 with Collar of Khorne, Gore-drenched fangs
+
+10x Flesh Hounds (150 pts)
+• 1x Gore Hound: Collar of Khorne, Burning roar, Gore-drenched fangs
+• 9x Flesh Hound: 9 with Collar of Khorne, Gore-drenched fangs
+
+5x Flesh Hounds (80 pts)
+• 1x Gore Hound: Collar of Khorne, Burning roar, Gore-drenched fangs
+• 4x Flesh Hound: 4 with Collar of Khorne, Gore-drenched fangs
