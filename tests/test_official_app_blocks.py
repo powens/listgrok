@@ -553,14 +553,39 @@ def test_footnoted_unit_header_and_its_footnote_block():
     ]
 
 
-@pytest.mark.parametrize("heading", ["ERRORS", "ERREURS"])
+@pytest.mark.parametrize(
+    "heading",
+    [
+        "ERRORS",  # listhammer_adeptus_custodes_errors
+        "ERREURS",  # listhammer_orks_fr
+        "FEHLER",  # the German app's "Fehler", upper-cased as the others are
+        "Errors",  # synthetic: case and a trailing colon are tolerated
+        "ERRORS:",
+    ],
+)
 def test_validation_errors_block_is_classified(heading):
-    # listhammer_adeptus_custodes_errors, listhammer_orks_fr.
     body = f"{heading}\n• Invalid wargear selected.\n\nCHARACTERS\n"
 
     assert kinds_after_header(body) == [
         (BlockKind.VALIDATION_ERRORS, heading),
         (BlockKind.SECTION, "CHARACTERS"),
+    ]
+
+
+@pytest.mark.parametrize(
+    "following,kind",
+    [
+        ("ATTACHED UNITS", BlockKind.SECTION),
+        ("Attached Unit 1", BlockKind.GROUP),
+        ("Boss (80 Points)", BlockKind.UNIT),
+    ],
+)
+def test_validation_errors_block_ends_at_its_first_unbulleted_line(following, kind):
+    # Synthetic: an errors block with no blank line after it, as New Recruit
+    # can fuse blocks.
+    assert kinds_after_header(f"ERRORS\n• a\n{following}\n") == [
+        (BlockKind.VALIDATION_ERRORS, "ERRORS"),
+        (kind, following),
     ]
 
 

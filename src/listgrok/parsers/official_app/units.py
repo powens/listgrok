@@ -37,6 +37,7 @@ ROLE_NAMES = {
     "Appui": "Support",
     "Gardes du Corps": "Bodyguard",
     "Anführer": "Leader",
+    "Unterstützung": "Support",
     "Leibwächter": "Bodyguard",
 }
 ROLE_DETAILS = {
@@ -178,11 +179,19 @@ def _lift_keyword(unit: Unit, text: str) -> bool:
         detail = (match.group("detail") or "").strip()
         unit.attachment = Attachment(
             role=ROLE_NAMES.get(role, role),
-            role_detail=ROLE_DETAILS.get(detail, detail),
+            role_detail=_translate_role_detail(detail),
         )
     else:
         return False
     return True
+
+
+def _translate_role_detail(detail: str) -> str:
+    """Map each keyword of an attached-as detail ("Personnage, Ligne") to English."""
+    return ", ".join(
+        ROLE_DETAILS.get(keyword.strip(), keyword.strip())
+        for keyword in detail.split(",")
+    )
 
 
 def _populate(unit: Unit, roots: list[Node]) -> None:

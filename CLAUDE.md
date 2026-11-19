@@ -26,11 +26,11 @@ This is the map; module and function docstrings carry the mechanics.
 
 - `blocks.py` classifies blank-line-separated blocks by shape alone (`ARMY_NAME`, `HEADER`, `SECTION`, `GROUP`, `UNIT`, `VALIDATION_ERRORS`, `FOOTNOTE`, `TRAILER`), keying the header off its `(N Detachment Points)` line, and splits the blocks New Recruit fuses. Home of all shared regexes.
 - Localised exports: the French and German apps translate the fixed labels (detachment line, group headings, `Attached as:`, `Warlord`, `Enhancement(s):`, army sizes, joiners, footer) and use locale thousands separators (`2.000`, `2'000`, no-break spaces). Each pattern accepts those forms. Attached-as roles and details are normalised to English (`ROLE_NAMES`/`ROLE_DETAILS` in `units.py`); every other string stays verbatim.
-- `header.py` reads faction metadata: labelled lines by pattern, the 1–3 left over by order. `split_detachments` keeps names in `COMPOUND_DETACHMENTS` (`detachment_names.py`) whole; that set is regenerated from GW's app data by the maintainer-local `refresh-detachment-names` skill and only ever grows.
+- `header.py` reads faction metadata: labelled lines by pattern, the 1–3 left over by order. `split_detachments` keeps names in `COMPOUND_DETACHMENTS` (`detachment_names.py`) whole; that set is regenerated from GW's app data (English, French and German names) by the maintainer-local `refresh-detachment-names` skill and only ever grows.
 - `units.py` builds a unit body into a forest in one of three dialects: *classic* (indented), *compact* (unindented bullet runs, `_run_tree`) or *glyph* (unindented, every line bulleted, `_glyph_tree`). `Warlord`, `Enhancement(s):` and `Attached as:` are lifted off the roots and off a model set's children.
 - `__init__.py` reads the army name and points from the text before the header, then folds the blocks into an `ArmyList`, carrying only the current sheet type and attachment group.
 
-Section headings are recognised structurally, not from an allow-list, so a new GW heading lands in `sheet_type` with no code change. `ParseError` is reserved for a missing or malformed header, an unparseable unit header, and an unclassifiable block after the header.
+Section headings are recognised structurally, not from an allow-list, so a new GW heading lands in `sheet_type` with no code change. `ParseError` is reserved for a missing or malformed header, an unparseable unit header, an unclassifiable block after the header, and a footnote not directly below a `*`-marked unit.
 
 ## Fixtures are the spec
 

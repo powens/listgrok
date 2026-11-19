@@ -73,7 +73,12 @@ TRAILER_REGEX = re.compile(
     r"|Exporté avec la Version de l['’]Appli|Exportiert mit App-Version)"
 )
 # The app's validation-error heading, followed by one bulleted line per error.
-VALIDATION_HEADINGS = frozenset({"ERRORS", "ERREURS"})
+# The app upper-cases its "Errors" string, so French reads "ERREURS" and German
+# "FEHLER". Matched ignoring case and a trailing colon, in case a later app
+# version or a hand edit stops upper-casing it.
+VALIDATION_HEADING_REGEX = re.compile(
+    r"^(?:errors|erreurs|fehler)\s?:?$", re.IGNORECASE
+)
 # A footnote on the unit above it: "* This Datasheet also has the Battleline
 # keyword" (listhammer_chaos_knights).
 FOOTNOTE_REGEX = re.compile(r"^\*\s+\S")
@@ -196,8 +201,9 @@ def _classify_block(lines: list[str], seen_header: bool) -> list[Block]:
 def _split_header_tail(lines: list[str]) -> tuple[list[str], list[str]]:
     """Cut a section or group heading, and all after it, off the header block:
     New Recruit can leave out the blank line after the header too. Only lines
-    after the detachment line are looked at, and only headings split, since a
-    unit header has the same shape as the army-size line.
+    after the detachment line are looked at, and only headings (an errors
+    heading among them) split, since a unit header has the same shape as the
+    army-size line.
     """
     detachment = next(
         (i for i, line in enumerate(lines) if DETACHMENT_REGEX.match(line.strip())),
@@ -205,7 +211,11 @@ def _split_header_tail(lines: list[str]) -> tuple[list[str], list[str]]:
     )
     for index in range(detachment + 1, len(lines)):
         line = lines[index].strip()
-        if _is_section_heading(line) or _is_group_heading(line):
+        if (
+            _is_section_heading(line)
+            or _is_group_heading(line)
+            or _is_validation_errors([line])
+        ):
             return lines[:index], lines[index:]
     return lines, []
 
@@ -216,7 +226,9 @@ def _split_fused(lines: list[str]) -> list[list[str]]:
 
     Margin is measured from the block's first line, so a uniformly indented
     block splits like any other. A group heading is always a lone line, so the
-    line after one starts a new block whatever the body's indentation.
+    line after one starts a new block whatever the body's indentation. An
+    errors block is its heading plus bulleted lines, so its first unbulleted
+    line starts a new block.
     """
     margin = _indent(lines[0])
     nested = any(_indent(line) > margin for line in lines)
@@ -226,6 +238,7 @@ def _split_fused(lines: list[str]) -> list[list[str]]:
         if (
             not chunks
             or after_group
+            or (_is_validation_errors(chunks[-1]) and not _is_bullet(line))
             or (_indent(line) <= margin and _starts_block(line, nested))
         ):
             chunks.append([line])
@@ -249,7 +262,7 @@ def _starts_block(line: str, nested: bool) -> bool:
     writes its run lines at the margin too, and they can have either shape.
     """
     line = line.strip()
-    if BULLET_REGEX.match(line):
+    if _is_bullet(line):
         return False
     if _is_group_heading(line) or TRAILER_REGEX.match(line):
         return True
@@ -302,7 +315,7 @@ def _classify(lines: list[str]) -> BlockKind:
         return BlockKind.TRAILER
 
     # Ahead of the lone-line check: "ERRORS" alone would read as a section.
-    if lines[0].strip() in VALIDATION_HEADINGS:
+    if _is_validation_errors(lines):
         return BlockKind.VALIDATION_ERRORS
 
     if FOOTNOTE_REGEX.match(lines[0].strip()):
@@ -323,6 +336,14 @@ def _classify(lines: list[str]) -> BlockKind:
         raise ParseError("Unrecognised lone line", lines)
 
     raise ParseError("Unrecognised block", lines)
+
+
+def _is_validation_errors(lines: list[str]) -> bool:
+    return VALIDATION_HEADING_REGEX.match(lines[0].strip()) is not None
+
+
+def _is_bullet(line: str) -> bool:
+    return BULLET_REGEX.match(line.strip()) is not None
 
 
 def _is_header(lines: list[str]) -> bool:

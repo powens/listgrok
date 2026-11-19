@@ -462,6 +462,11 @@ class TestParseUnit:
             # listhammer_orks_fr, listhammer_adeptus_mechanicus_fr.
             ("Attachée en tant que : Meneur (Personnage)", "Leader", "Character"),
             ("Attachée en tant que : Appui (Personnage)", "Support", "Character"),
+            (
+                "Attachée en tant que : Meneur (Personnage, Ligne)",
+                "Leader",
+                "Character, Battleline",
+            ),
             ("Attachée en tant que : Gardes du Corps", "Bodyguard", ""),
             (
                 "Attachée en tant que : Gardes du Corps (Ligne)",
@@ -476,6 +481,12 @@ class TestParseUnit:
                 "Battleline",
             ),
             ("Angeschlossen als: Leibwächter", "Bodyguard", ""),
+            # The German app's "Support" role, from its string resources.
+            (
+                "Angeschlossen als: Unterstützung (Charaktermodell)",
+                "Support",
+                "Character",
+            ),
         ],
     )
     def test_localised_attached_as_is_normalised_to_english(self, line, role, detail):

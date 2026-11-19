@@ -1095,9 +1095,25 @@ class TestFootnoteFold:
         ]
 
     def test_footnote_before_any_unit_raises(self):
-        with pytest.raises(ParseError, match="Footnote before any unit"):
+        with pytest.raises(ParseError, match="Footnote not directly below"):
             parse_official_app(
                 GROUPED_UNIT_WITHOUT_ATTACHED_AS.replace(
                     "ATTACHED UNITS", "* A stray footnote\n\nATTACHED UNITS"
                 )
+            )
+
+    def test_footnote_below_an_unmarked_unit_raises(self):
+        with pytest.raises(ParseError, match="Footnote not directly below"):
+            parse_official_app(
+                GROUPED_UNIT_WITHOUT_ATTACHED_AS + "\n* A stray footnote\n"
+            )
+
+    def test_footnote_after_a_heading_raises(self):
+        # Synthetic: a heading between the marked unit and the footnote.
+        with pytest.raises(ParseError, match="Footnote not directly below"):
+            parse_official_app(
+                GROUPED_UNIT_WITHOUT_ATTACHED_AS.replace(
+                    "Test Unit (50 Points)", "Test Unit (50 Points)*"
+                )
+                + "\nBATTLELINE\n\n* This Datasheet also has the Battleline keyword\n"
             )

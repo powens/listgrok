@@ -84,6 +84,25 @@ def test_official_3_header_reads_the_labelled_disposition_line():
     assert army_list.army_size_points == 2000
 
 
+@pytest.mark.parametrize(
+    "line",
+    [
+        "Force Dispositions: Disruption",
+        "Dispositions des Forces : Disruption",  # the French app's label
+        "Truppenaufstellungen: Disruption",  # the German app's label
+    ],
+)
+def test_localised_labelled_disposition_line_is_read(line):
+    army_list = ArmyList()
+    parse_header(
+        ["Orks", "Strike Force (2000 points)", "Wreckas (3 Detachment Points)", line],
+        army_list,
+    )
+
+    assert army_list.faction == "Orks"
+    assert army_list.disposition == "Disruption"
+
+
 def test_faction_only_header_leaves_disposition_empty():
     army_list = ArmyList()
     parse_header(
