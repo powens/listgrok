@@ -95,7 +95,14 @@ def classify_blocks(text: str) -> list[Block]:
     blocks: list[Block] = []
     seen_header = False
     name_lines: list[str] = []
+    prev_last = ""
     for lines in split_blocks(text):
+        if seen_header and _is_group_heading(prev_last.strip()):
+            # A blank line may separate a group heading from its underline.
+            lines = _drop_underline(lines)
+        prev_last = lines[-1] if lines else prev_last
+        if not lines:
+            continue
         if not seen_header and not _is_header(lines):
             # Everything before the header is the army name: it may run over
             # several blocks ("Round 2 list", blank, "QFP (2,000 Points)") and
@@ -166,12 +173,17 @@ def _split_fused(lines: list[str]) -> list[list[str]]:
     nested = any(_indent(line) > margin for line in lines)
     chunks: list[list[str]] = []
     after_group = False
+    # The heading's underline was just dropped: the next line still starts a
+    # block, but a second underline is not the heading's and is kept.
+    underlined = False
     for line in lines:
         if after_group and UNDERLINE_REGEX.match(line.strip()):
+            after_group, underlined = False, True
             continue
         if (
             not chunks
             or after_group
+            or underlined
             or (_indent(line) <= margin and _starts_block(line, nested))
         ):
             chunks.append([line])
@@ -184,7 +196,15 @@ def _split_fused(lines: list[str]) -> list[list[str]]:
                 )
             chunks[-1].append(line)
         after_group = chunks[-1] == [line] and _is_group_heading(line.strip())
+        underlined = False
     return chunks
+
+
+def _drop_underline(lines: list[str]) -> list[str]:
+    """Drop a group heading's "====" underline, the first of `lines` if it is one."""
+    if lines and UNDERLINE_REGEX.match(lines[0].strip()):
+        return lines[1:]
+    return lines
 
 
 def _starts_block(line: str, nested: bool) -> bool:
