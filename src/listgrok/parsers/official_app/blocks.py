@@ -44,8 +44,8 @@ BULLET_REGEX = re.compile(r"^[•◦]\s*")
 # "Attached Unit 1". The \b keeps the plural section heading ("Attached
 # Units") from matching.
 GROUP_REGEX = re.compile(r"^Attached unit\b", re.IGNORECASE)
-# Some exports underline each group heading ("Attached unit 1" / "======",
-# official_31). Only that position is decoration; a rule elsewhere still raises.
+# Some exports underline headings ("Attached unit 1" / "======", official_31).
+# Only that position is decoration; a rule elsewhere still raises.
 UNDERLINE_REGEX = re.compile(r"^=+$")
 # The official app's footer is known by its prefix, "Exported with App Version: …";
 # another exporter's by naming a data version too, "Exported with New Recruit v37.14,
@@ -95,14 +95,7 @@ def classify_blocks(text: str) -> list[Block]:
     blocks: list[Block] = []
     seen_header = False
     name_lines: list[str] = []
-    prev_last = ""
-    for lines in split_blocks(text):
-        if seen_header and _is_group_heading(prev_last.strip()):
-            # A blank line may separate a group heading from its underline.
-            lines = _drop_underline(lines)
-        prev_last = lines[-1] if lines else prev_last
-        if not lines:
-            continue
+    for lines in split_blocks(_blank_underlines(text)):
         if not seen_header and not _is_header(lines):
             # Everything before the header is the army name: it may run over
             # several blocks ("Round 2 list", blank, "QFP (2,000 Points)") and
@@ -124,6 +117,32 @@ def classify_blocks(text: str) -> list[Block]:
         first_line = text.split("\n", 1)[0]
         raise ParseError("No header block found", first_line)
     return blocks
+
+
+def _blank_underlines(text: str) -> str:
+    """Turn a heading's "====" underline into a blank line.
+
+    Only the first rule after a section or group heading below the header's
+    detachment line goes, even across blank lines; any other rule is left to
+    raise. A blank rather than nothing, so the heading still ends its block
+    when no blank line follows the underline.
+    """
+    lines = text.replace("\r\n", "\n").split("\n")
+    past_detachments = False
+    after_heading = False
+    for index, line in enumerate(lines):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if after_heading and UNDERLINE_REGEX.match(stripped):
+            lines[index] = ""
+            after_heading = False
+            continue
+        after_heading = past_detachments and (
+            _is_section_heading(stripped) or _is_group_heading(stripped)
+        )
+        past_detachments = past_detachments or bool(DETACHMENT_REGEX.match(stripped))
+    return "\n".join(lines)
 
 
 def _classify_block(lines: list[str], seen_header: bool) -> list[Block]:
@@ -166,24 +185,16 @@ def _split_fused(lines: list[str]) -> list[list[str]]:
 
     Margin is measured from the block's first line, so a uniformly indented
     block splits like any other. A group heading is always a lone line, so the
-    line after one starts a new block whatever the body's indentation, unless
-    it is the heading's underline, which is dropped.
+    line after one starts a new block whatever the body's indentation.
     """
     margin = _indent(lines[0])
     nested = any(_indent(line) > margin for line in lines)
     chunks: list[list[str]] = []
     after_group = False
-    # The heading's underline was just dropped: the next line still starts a
-    # block, but a second underline is not the heading's and is kept.
-    underlined = False
     for line in lines:
-        if after_group and UNDERLINE_REGEX.match(line.strip()):
-            after_group, underlined = False, True
-            continue
         if (
             not chunks
             or after_group
-            or underlined
             or (_indent(line) <= margin and _starts_block(line, nested))
         ):
             chunks.append([line])
@@ -196,15 +207,7 @@ def _split_fused(lines: list[str]) -> list[list[str]]:
                 )
             chunks[-1].append(line)
         after_group = chunks[-1] == [line] and _is_group_heading(line.strip())
-        underlined = False
     return chunks
-
-
-def _drop_underline(lines: list[str]) -> list[str]:
-    """Drop a group heading's "====" underline, the first of `lines` if it is one."""
-    if lines and UNDERLINE_REGEX.match(lines[0].strip()):
-        return lines[1:]
-    return lines
 
 
 def _starts_block(line: str, nested: bool) -> bool:

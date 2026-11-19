@@ -297,6 +297,37 @@ def test_second_underline_under_a_group_heading_still_raises(body):
         classify_blocks(HEADER + body)
 
 
+@pytest.mark.parametrize(
+    "body",
+    [
+        "ATTACHED UNITS\n============\nAttached unit 1\nA (5 Points)\n  • 1x B\n",
+        "ATTACHED UNITS\n\n============\n\nAttached unit 1\n\nA (5 Points)\n",
+        "OTHER DATASHEETS\n============\nA (5 Points)\n• 1x B\n",
+    ],
+)
+def test_underline_under_a_section_heading_is_dropped(body):
+    # Synthetic, from official_31.txt's underlined group headings.
+    blocks = classify_blocks(HEADER + body)[1:]
+
+    assert [b.lines[0].strip() for b in blocks if b.kind is BlockKind.SECTION] == [
+        body.split("\n", 1)[0]
+    ]
+    assert not any("=" in line for b in blocks for line in b.lines)
+
+
+def test_underline_fused_with_the_header_block_is_dropped():
+    # Synthetic, after nr_official_2.txt: no blank line after the header.
+    body = "ATTACHED UNITS\n============\n\nA (5 Points)\n  • 1x B\n"
+
+    blocks = classify_blocks(HEADER.rstrip("\n") + "\n" + body)
+
+    assert [b.kind for b in blocks] == [
+        BlockKind.HEADER,
+        BlockKind.SECTION,
+        BlockKind.UNIT,
+    ]
+
+
 def test_lone_underline_outside_a_group_heading_still_raises():
     # Synthetic: only a group heading's underline is known to be decoration.
     with pytest.raises(ParseError, match="Unrecognised lone line"):
