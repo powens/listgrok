@@ -447,3 +447,71 @@ def test_oversized_army_points_stay_part_of_the_name():
 
     assert army_list.name == line
     assert army_list.points is None
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        pytest.param(
+            "Attached unit 1\nCaptain (80 Points)\n• Attached as: Leader\n"
+            "• 1x Bolt pistol\n",
+            id="group-then-compact-unit",
+        ),
+        pytest.param(
+            "Attached Units\nAttached unit 1\nCaptain (80 Points)\n"
+            "• Attached as: Leader\n• 1x Bolt pistol\n",
+            id="title-case-section-group-then-compact-unit",
+        ),
+    ],
+)
+def test_group_heading_fused_with_a_compact_unit_splits_out(body):
+    # Synthetic, nr_official_4.txt's fusing in the compact dialect's
+    # unindented body: a group heading is a lone line, so the line after it
+    # starts a block whatever the body's indentation.
+    assert kinds_after_header(body)[-2:] == [
+        (BlockKind.GROUP, "Attached unit 1"),
+        (BlockKind.UNIT, "Captain (80 Points)"),
+    ]
+
+
+def test_group_heading_after_a_compact_unit_splits_out():
+    # Synthetic, as above: the next group follows a compact unit directly.
+    body = (
+        "Attached unit 1\nCaptain (80 Points)\n• Attached as: Leader\n"
+        "• 1x Bolt pistol\nAttached unit 2\nLieutenant (70 Points)\n"
+        "• Attached as: Leader\n• 1x Bolt pistol\n"
+    )
+
+    assert kinds_after_header(body) == [
+        (BlockKind.GROUP, "Attached unit 1"),
+        (BlockKind.UNIT, "Captain (80 Points)"),
+        (BlockKind.GROUP, "Attached unit 2"),
+        (BlockKind.UNIT, "Lieutenant (70 Points)"),
+    ]
+
+
+def test_unit_header_fused_into_a_compact_body_raises():
+    # Synthetic: in an unindented body a fused unit header cannot be told from
+    # a run line by indentation, so rather than swallow it into the previous
+    # unit's decorations (and drop its points), the parse fails.
+    body = (
+        "Captain (80 Points)\n• Warlord\n• 1x Bolt pistol\n"
+        "Lieutenant (70 Points)\n• 1x Bolt pistol\n"
+    )
+
+    with pytest.raises(ParseError, match="Unit header inside a compact body"):
+        classify_blocks(HEADER + body)
+
+
+@pytest.mark.parametrize("tail", ["CHARACTERS", "Attached unit 1"])
+def test_heading_fused_onto_the_header_block_splits_out(tail):
+    # Synthetic, a further fusing of nr_official_3.txt: no blank line between
+    # the header and the first heading.
+    blocks = classify_blocks(HEADER.rstrip("\n") + f"\n{tail}\n")
+
+    assert blocks[0].kind is BlockKind.HEADER
+    assert tail not in blocks[0].lines
+    assert (blocks[1].kind, blocks[1].lines) in [
+        (BlockKind.SECTION, (tail,)),
+        (BlockKind.GROUP, (tail,)),
+    ]

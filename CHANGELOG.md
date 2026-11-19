@@ -13,7 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   an absent army-size line (`army_size` stays `""`, `army_size_points` `None`),
   and no blank line after a group heading or between units. A section heading,
   group heading or footer straight after a unit now starts its own block rather
-  than landing in that unit's `decorations`.
+  than landing in that unit's `decorations`, and a heading straight after the
+  header block is no longer read as a header line.
+
+### Changed
+
+- A header with no army-size line now raises `ParseError` when a leftover line is
+  a bare army-size name (`Strike Force`), rather than mapping it as the
+  disposition. A unit header fused into an unindented (compact) unit body raises
+  rather than becoming that unit's decorations.
 
 ### Fixed
 

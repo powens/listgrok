@@ -235,3 +235,23 @@ def test_long_detachment_line_splits_in_linear_time():
 
     assert time.perf_counter() - start < 1
     assert names == ["A"] * 2400 + ["Ordo Xenos, Alien Hunters"]
+
+
+@pytest.mark.parametrize(
+    "size_line", ["Strike Force", "Incursion", "Onslaught", "Combat Patrol"]
+)
+def test_army_size_line_without_points_raises(size_line):
+    # Synthetic, nr_official_3.txt's header with the size line's points cut
+    # off: without a size line the rest maps by position, so a bare size name
+    # would otherwise land in disposition and shift the faction lines.
+    with pytest.raises(ParseError, match="Malformed army-size line"):
+        parse_header(
+            [
+                "Space Marines",
+                "Ultramarines",
+                "Gladius (1 Detachment Points)",
+                "Purge the Foe",
+                size_line,
+            ],
+            ArmyList(),
+        )

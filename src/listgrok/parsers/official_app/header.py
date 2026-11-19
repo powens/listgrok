@@ -18,6 +18,9 @@ from listgrok.parsers.official_app.blocks import (
 from listgrok.parsers.official_app.detachment_names import COMPOUND_DETACHMENTS
 
 DISPOSITION_LABEL = "Force Dispositions:"
+# The army-size names, matched whole: a size line that lost its "(N Points)"
+# suffix would otherwise map by position as a faction or disposition line.
+ARMY_SIZES = frozenset({"Combat Patrol", "Incursion", "Strike Force", "Onslaught"})
 # ", and " first: an Oxford comma is one joiner, or "and C" would become a name.
 JOINER_REGEX = re.compile(r"(, and | and |, )")
 # The most joiners any compound name contains. Bounding the lookahead by it
@@ -90,7 +93,9 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> None:
     army_list.detachment_points = parse_points(detachment.group("points"))
 
     rest = [line for line in lines if line not in consumed]
-    malformed = [line for line in rest if LOOSE_POINTS_REGEX.search(line)]
+    malformed = [
+        line for line in rest if LOOSE_POINTS_REGEX.search(line) or line in ARMY_SIZES
+    ]
     if malformed:
         raise ParseError(f"Malformed army-size line: {malformed[0]!r}", lines)
 

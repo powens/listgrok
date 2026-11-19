@@ -362,6 +362,23 @@ OFFICIAL_EXAMPLES = {
         "attached_groups": 1,
         "decorations": {},
     },
+    # New Recruit v38.5's GW-style export: the official layout under its own
+    # footer.
+    "nr_official_2.txt": {
+        "name": "Vangaurd Onslaught Warrior Bioform Onslaught",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Tyranids",
+        "detachments": ["Vanguard Onslaught", "Warrior Bioform Onslaught"],
+        "detachment_points": 3,
+        "disposition": "Reconnaissance",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 20,
+        "unit_points_total": 2000,
+        "attached_groups": 6,
+        "decorations": {},
+    },
     # New Recruit's GW-style export (v37.14, examples/new_recruit/official/): the official layout under its own
     # footer, with an Oxford comma in the detachment line.
     "nr_official_3.txt": {
