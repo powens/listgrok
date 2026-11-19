@@ -36,3 +36,5 @@ htmlcov/
 docs/superpowers/
 
 .DS_Store
+# Playwright MCP browser-session logs
+.playwright-mcp/
