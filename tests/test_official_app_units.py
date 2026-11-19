@@ -382,6 +382,28 @@ class TestParseUnit:
         assert unit.composition[1].name == "Tempestor Prime"
         assert unit.composition[1].wargear == {"Command Rod": 1}
 
+    def test_unindented_warlord_does_not_take_the_wargear_below_it(self):
+        # official_11 Militarum Tempestus Command Squad with the indentation
+        # stripped, as the unindented lvo2026 exports write it: the "◦" line
+        # after "• Warlord" is the Tempestor Prime's wargear, not Warlord's.
+        unit = parse_unit(
+            [
+                "Militarum Tempestus Command Squad (85 Points)",
+                "• Attached as: Leader (Character)",
+                "• 4x Tempestus Scion",
+                "◦ 4x Close combat weapon",
+                "• 1x Tempestor Prime",
+                "• Warlord",
+                "◦ 1x Command Rod",
+            ],
+            "ATTACHED UNITS",
+        )
+
+        assert unit.is_warlord is True
+        assert unit.decorations == []
+        assert unit.composition[1].name == "Tempestor Prime"
+        assert unit.composition[1].wargear == {"Command Rod": 1}
+
     def test_enhancement_nested_under_a_model_set_is_lifted(self):
         # official_25 Company Heroes: the Ancient carries the enhancement.
         unit = parse_unit(

@@ -70,17 +70,24 @@ def _indent_tree(body_lines: Sequence[str]) -> list[Node]:
 def _glyph_tree(body_lines: Sequence[str]) -> list[Node]:
     """Build the forest for an unindented body where every line is bulleted.
 
-    A "◦" line is wargear of the nearest "•" line above it; every "•" line is
-    a root. A body with no "◦" line therefore stays flat, like a single-model
-    unit in the classic dialect.
+    A "◦" line is wargear of the nearest "•" line above it that is not a
+    keyword; every "•" line is a root. A body with no "◦" line therefore stays
+    flat, like a single-model unit in the classic dialect. Skipping keywords
+    matters because the indented export nests "Warlord" under the model that
+    carries it, above that model's wargear (official_11); with the indentation
+    gone it reads "• 1x Tempestor Prime" / "• Warlord" / "◦ 1x Command Rod",
+    and the Command Rod belongs to the Tempestor Prime.
     """
     roots: list[Node] = []
+    parent: Node | None = None
     for raw in body_lines:
         node = Node(text=BULLET_REGEX.sub("", raw), indent=0)
-        if raw.startswith(HOLLOW_BULLET) and roots:
-            roots[-1].children.append(node)
-        else:
-            roots.append(node)
+        if raw.startswith(HOLLOW_BULLET) and parent is not None:
+            parent.children.append(node)
+            continue
+        roots.append(node)
+        if not _is_keyword(node.text):
+            parent = node
     return roots
 
 
@@ -128,6 +135,15 @@ def parse_unit(lines: Sequence[str], sheet_type: str) -> Unit:
     )
     _populate(unit, build_tree(lines[1:]))
     return unit
+
+
+def _is_keyword(text: str) -> bool:
+    """True for a unit-level keyword line that _lift_keyword would apply."""
+    return (
+        text == WARLORD_LINE
+        or text.startswith(ENHANCEMENT_PREFIXES)
+        or ATTACHED_AS_REGEX.match(text) is not None
+    )
 
 
 def _lift_keyword(unit: Unit, text: str) -> bool:

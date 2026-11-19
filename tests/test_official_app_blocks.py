@@ -189,7 +189,8 @@ def test_army_name_without_a_points_suffix_is_one_block():
 
 def test_everything_before_the_header_is_one_army_name_block():
     # A points-closed block no longer ends the name: any text up to the header
-    # belongs to it, blank separators included.
+    # belongs to the block, blank separators included. Splitting the name from
+    # trailing notes is the fold's job (TestArmyNameFold).
     text = "Name (2,000 Points)\n\nnotes one\nnotes two\n\n" + NO_ARMY_NAME
     blocks = classify_blocks(text)
 

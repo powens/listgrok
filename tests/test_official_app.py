@@ -555,3 +555,31 @@ class TestArmyNameFold:
 
         assert army_list.name == "Round 2 list\n\nQFP"
         assert army_list.points == 2000
+
+    def test_notes_after_the_points_line_are_dropped(self):
+        # lvo2026_grey_knights: player notes follow the name in the same block.
+        army_list = parse_official_app(
+            "Palworld2 (2,000 Points)\nDonovan Sailo\nMaking Saves\n\n"
+            + ARMY_NAME_HEADER
+        )
+
+        assert army_list.name == "Palworld2"
+        assert army_list.points == 2000
+
+    def test_notes_blocks_after_the_points_line_are_dropped(self):
+        # lvo2026_chaos_space_marines: notes in their own blocks after the name.
+        army_list = parse_official_app(
+            "Snorting lines (2,000 Points)\n\nDan this is whimsy\n\n"
+            "**THING YOU SHOULD KNOW***\n- a note\n\n" + ARMY_NAME_HEADER
+        )
+
+        assert army_list.name == "Snorting lines"
+        assert army_list.points == 2000
+
+    def test_without_a_points_line_only_the_first_block_is_the_name(self):
+        army_list = parse_official_app(
+            "No more Overwatch\n\nsome notes\nmore notes\n\n" + ARMY_NAME_HEADER
+        )
+
+        assert army_list.name == "No more Overwatch"
+        assert army_list.points is None

@@ -56,15 +56,22 @@ def parse_official_app(list_text: str) -> ArmyList:
 
 
 def _parse_army_name(lines: Sequence[str], army_list: ArmyList) -> None:
-    """Everything before the header is the name; a trailing "(N Points)" on it
-    is the list's points total, and without one points stays None."""
-    text = "\n".join(lines).strip()
-    match = POINTS_REGEX.match(text)
-    if match is None:
-        army_list.name = text
-        return
-    army_list.name = match.group("name")
-    army_list.points = parse_points(match.group("points"))
+    """Read the name and list points from the text before the header.
+
+    The name runs up to the last line ending in "(N Points)", whose suffix is
+    the list's points total; it may span blank lines ("Round 2 list", blank,
+    "QFP (2,000 Points)"). Anything after that line is player notes and is
+    dropped, best effort (lvo2026_chaos_space_marines, lvo2026_grey_knights).
+    With no points line, the first block is the name, any later blocks are
+    dropped, and points stays None (official_28).
+    """
+    for end in reversed(range(len(lines))):
+        if (match := POINTS_REGEX.match(lines[end].strip())) is not None:
+            army_list.name = "\n".join([*lines[:end], match.group("name")]).strip()
+            army_list.points = parse_points(match.group("points"))
+            return
+    first_block = lines[: lines.index("")] if "" in lines else lines
+    army_list.name = "\n".join(first_block).strip()
 
 
 def _parse_unit_in(lines: Sequence[str], sheet_type: str, group: str) -> Unit:
