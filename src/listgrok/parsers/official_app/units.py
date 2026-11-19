@@ -1,12 +1,12 @@
 """Parse a unit block of an 11th edition official-app export.
 
-The body comes in two dialects, told apart by whether any line is indented.
-The classic export indents: bullet glyphs are stripped and the column the
-text starts at decides nesting, so a body line indented deeper than the line
-above it is that line's child. The newer compact export writes every line at column
-zero and encodes nesting with bullet runs instead — see _run_tree. A classic
-body that has lost its indentation (e.g. in copy/paste) still bullets every
-line, so "•" versus "◦" decides nesting — see _glyph_tree.
+The body comes in three dialects, chosen by build_tree:
+
+- classic: indented. Bullets are stripped and the column the text starts at
+  decides nesting (_indent_tree).
+- glyph: a classic body that lost its indentation but bullets every line, so
+  "•" versus "◦" decides nesting (_glyph_tree).
+- compact: unindented, nesting encoded by bullet runs (_run_tree).
 """
 
 from collections.abc import Sequence
@@ -172,18 +172,16 @@ def _populate(unit: Unit, roots: list[Node]) -> None:
         for node in models:
             match = NUM_REGEX.match(node.text)
             if match is None:
-                # Mirrors _add_wargear: a root that isn't "Nx name" is not a
-                # model set we can name or count, so it goes to decorations
-                # rather than fabricating a UnitComposition with num_models=None.
+                # Not a model set we can count; like _add_wargear, keep it as
+                # a decoration rather than invent num_models.
                 unit.decorations.append(node.text)
                 continue
             model_set = UnitComposition(
                 name=match.group("name"), num_models=int(match.group("num"))
             )
             unit.add_model_set(model_set)
-            # NOTE: only one level of nesting is visited here (child.text, not
-            # child.children). No 11th ed fixture nests a third level, but if
-            # one ever does, it would be silently dropped rather than raising.
+            # Only one level is read: a third level (none in any fixture)
+            # would be dropped silently.
             for child in node.children:
                 # In a multi-model unit the app writes "Warlord" and the
                 # enhancement under the model that carries it (official_11,

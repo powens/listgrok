@@ -1,7 +1,8 @@
 """Parse the metadata block of an 11th edition official-app export.
 
-The two labelled lines are found by pattern, not position, because the app has
-moved them between dialects before. What remains maps by order.
+The army-size, detachment and "Force Dispositions:" lines are found by
+pattern, not position, because the app has moved them between dialects. The
+1–3 lines left over map by order.
 """
 
 import re

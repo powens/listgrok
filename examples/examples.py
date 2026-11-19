@@ -11,7 +11,7 @@ def official_app():
         try:
             army_list = parse_list(file.read_text())
         except ParseError as error:
-            # Some lvo2026_* lists are hand-annotated and do not parse.
+            # lvo2026_genestealer_cults is hand-annotated and does not parse.
             print(f"Failed {file.name}: {error}\n\n")
             continue
         print(f"Parsed {file.name}: {army_list.name}")
