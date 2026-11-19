@@ -1,65 +1,46 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Overview
-
-listgrok is a zero-dependency library that parses Warhammer 40k 11th edition army lists (text exported from various army-builder apps) into a common data model. Early development: APIs are unstable.
+listgrok is a zero-dependency library that parses Warhammer 40k 11th edition army lists (text exported from army-builder apps) into a common data model. Early development: APIs are unstable.
 
 ## Commands
 
 ```sh
-make test        # uv run pytest
-make lint        # uv run --group lint ruff check .
-make format      # uv run --group lint ruff format .
-make typecheck   # uv run ty check src/
-make coverage    # coverage run + report
-make build       # uv build
-
-uv run pytest tests/test_official_app_units.py::TestBuildTree::test_flat_body_has_no_children  # single test
-uv run python examples/examples.py   # manual smoke run over examples/
+make test | lint | format | typecheck | coverage | coverage-html | build   # see Makefile
+uv run pytest tests/test_official_app_units.py::TestBuildTree::test_flat_body_has_no_children  # one test
+uv run python examples/examples.py   # smoke run over examples/official_app/
 ```
 
-CI (`.github/workflows/on-main.yml`) runs lint, test, coverage, typecheck, build, and a built-wheel import smoke on Python 3.10–3.15. Keep the runtime dependency list empty and stick to 3.10-compatible syntax. Pushing a `v*` tag triggers `.github/workflows/release.yml`, which asserts the tag matches `__version__`, rebuilds, and publishes to PyPI via trusted publishing; the release steps are documented in CONTRIBUTING.md.
-
-Tests live in `tests/` and import `listgrok` via `pythonpath = ["src"]` in `pyproject.toml`, so no install step is needed. `--random-order` is on by default (via `addopts`) — tests must not depend on execution order. The version is single-sourced from `__version__` in `src/listgrok/__init__.py` via `[tool.hatch.version]`.
+- The runtime dependency list stays empty, and syntax stays 3.10-compatible (CI runs 3.10–3.15).
+- Tests import `listgrok` from `src/` via pytest's `pythonpath`, so no install step. `--random-order` is always on: tests must be order-independent.
+- The version lives only in `__version__` (`src/listgrok/__init__.py`). A `v*` tag publishes to PyPI; release steps are in CONTRIBUTING.md.
 
 ## Architecture
 
-**Entry point.** `parse_list(text)` (`src/listgrok/parse_list.py`) delegates straight to `parse_official_app`; the official app's 11th edition export (and New Recruit's export of the same layout) is the only format currently supported, so unrecognised input raises `ParseError` rather than falling through to anything. Keep the rule that a parser raises `ParseError` (not a half-filled `ArmyList`) on input it does not understand: it is what makes a bad parse visible, and it is the precondition for restoring a fallback chain if a second format lands — detection would again be *by attempted parse*, not by sniffing.
+`parse_list(text)` delegates to `parse_official_app`, the only parser: GW's official app 11th edition export, plus New Recruit's export of the same layout. A parser raises `ParseError` on input it does not understand, never a half-filled `ArmyList`. That keeps a bad parse visible, and lets a future second format be detected by attempted parse rather than by sniffing.
 
-**Data model** (`src/listgrok/models.py`) — plain dataclasses, each with `to_dict()` (stable keys: optional fields are always present, as `None`/`False`/`""`; implemented via `dataclasses.asdict`). `ParseError` lives in `src/listgrok/exceptions.py`; both are re-exported from the package root:
-`ArmyList` (name, points, super_faction, faction, detachments, detachment_points, disposition, army_size, army_size_points, units) → `Unit` (name, sheet_type, is_warlord, enhancement, points, composition, decorations, attachment) → `UnitComposition` (a model set: name, num_models, wargear counts).
+**Data model** (`models.py`): dataclasses whose `to_dict()` keys are stable (optional fields present as `None`/`False`/`""`). `ArmyList` → `Unit` → `UnitComposition` (a model set: name, num_models, wargear counts). Every unit has at least one model set; a single-model unit's is named after the unit. `Unit.decorations` holds body lines that are neither `Nx <wargear>` nor a keyword. Attached units stay in the flat `ArmyList.units`, in file order, with `Unit.attachment` set; other units have `attachment = None`.
 
-A single-model unit still gets one `UnitComposition` named after the unit with `num_models = 1`. `decorations` is the escape hatch for body lines that are not `Nx <wargear>` and not a known keyword. `Unit.attachment` is an `Attachment` (group, role, role_detail) for units inside an `ATTACHED UNITS` group, and `None` otherwise — attached units stay in the flat `ArmyList.units` list in file order rather than nesting under their leader.
+### `parsers/official_app/`: classify, then fold
 
-### official_app/ (GW's official 40k app, 11th edition)
+This is the map; module and function docstrings carry the mechanics.
 
-The app has two export dialects and the parser handles both: the *classic* one (army-name block, indented unit bodies, ALL-CAPS headings — every current fixture) and the *compact* one (no army-name block — `name` stays `""` and `points` `None` — a labelled `Force Dispositions:` line, the attached-units heading fused with its first group line, and unindented bullet-run bodies). Structured as **classify, then fold**, in four small modules:
+- `blocks.py` classifies blank-line-separated blocks by shape alone (`ARMY_NAME`, `HEADER`, `SECTION`, `GROUP`, `UNIT`, `TRAILER`), keying the header off its `(N Detachment Points)` line, and splits the blocks New Recruit fuses. Home of all shared regexes.
+- `header.py` reads faction metadata: labelled lines by pattern, the 1–3 left over by order. `split_detachments` keeps names in `COMPOUND_DETACHMENTS` (`detachment_names.py`) whole; that set is regenerated from GW's app data by the maintainer-local `refresh-detachment-names` skill and only ever grows.
+- `units.py` builds a unit body into a forest in one of three dialects: *classic* (indented), *compact* (unindented bullet runs, `_run_tree`) or *glyph* (unindented, every line bulleted, `_glyph_tree`). `Warlord`, `Enhancement(s):` and `Attached as:` are lifted off the roots and off a model set's children.
+- `__init__.py` reads the army name and points from the text before the header, then folds the blocks into an `ArmyList`, carrying only the current sheet type and attachment group.
 
-- `blocks.py` splits the export on blank lines and classifies each block by shape alone into `ARMY_NAME`, `HEADER`, `SECTION`, `GROUP`, `UNIT` or `TRAILER`. The header block is identified by its `(N Detachment Points)` line — the one marker no other block carries. Keying off that rather than "the points line is not first" is deliberate: under the latter rule a multi-line army name has exactly the header's shape. A two-line block whose second line is a group heading is the compact dialect's fused pair and splits into `SECTION` + `GROUP`; group headings match case-insensitively (`Attached unit 1` / `Attached Unit 1`). Everything before the header is one `ARMY_NAME` block, blank separators kept verbatim: a name can span blank lines, and need not carry a `(N Points)` suffix (`official_28.txt`); the fold ends the name at the last line carrying that suffix, reads it as the list points, and drops any notes after it (`lvo2026_grey_knights.txt`); without one, the first block is the name, later blocks are dropped, and `points` stays `None`. All shared regexes live here.
-- `header.py` finds the army-size, detachment and (compact dialect) `Force Dispositions:`-labelled disposition lines *by pattern, not position*, then maps the remaining 1–3 lines by order (3 → super_faction/faction/disposition, 2 → faction/disposition, 1 → faction; when the disposition was label-found, 2 → super_faction/faction). `split_detachments` splits a serial list ("A and B", "A, B and C") on every ", " and " and ", except where a run of pieces spells a name in `COMPOUND_DETACHMENTS` (`detachment_names.py`: the few detachments whose own name contains a joiner, e.g. `Legends of Saga and Song`, `Ordo Xenos, Alien Hunters`), which is kept whole, longest match first. The export carries no other signal, so that set is generated from GW's app data by a maintainer-local skill and only ever grows — old exports still carry detachments GW has removed. Known limitation: a new compound name not yet listed is split apart.
-- `units.py` builds the body into a forest, choosing the dialect by whether any line is indented. Classic: bullets stripped, nesting measured at the column the text starts (so an unbulleted continuation line aligned under a bulleted one is its sibling), and an `Attached as:` line never takes children (app v2.6.0 (144) out-dents it). Compact (`_run_tree`): a bulleted line followed by another bulleted line is a root; a bullet-then-plain run holds the wargear of the "Nx"-shaped root above it, or stays flat after a keyword root. Glyph (`_glyph_tree`, a classic body that lost its indentation): unindented but *every* line bulleted — `•` lines are roots, `◦` lines nest under the `•` above; the all-bulleted test is what separates it from compact, whose bodies always have plain run lines. In every case: if any root has children each root is a model set with its wargear beneath; a flat body collapses into one implicit model set. `Warlord`, `Enhancement(s):` and `Attached as: <role>` (parenthetical detail optional) are lifted off the roots first, and off a model set's children too — in a multi-model unit the app nests `Warlord` / the enhancement under the model carrying it (`official_11/25.txt`). Repeated wargear names sum.
-- `__init__.py` folds the block stream into an `ArmyList`, carrying only the current sheet type and attachment group. It stamps the group onto each attached unit's `Attachment` (verbatim), and stamps `sheet_type` upper-cased so the compact dialect's title-case fused heading reads `ATTACHED UNITS`.
-
-Section headings are recognised structurally (a lone ALL-CAPS line, or the line above a fused group heading), not against an allow-list, so a new GW section heading lands in `sheet_type` without a code change. `ParseError` is reserved for a missing or malformed header block, an unparseable unit header, and an unclassifiable block after the header.
-
-New Recruit's GW-style export (`examples/new_recruit/official/nr_official_2–4.txt`; `nr_official_0–1.txt` there pair New Recruit's `+`-framed WTC header with a GW-style body, and `examples/new_recruit/other/nr_other_0.txt` a WTC header with a mixed `CharN:` / bullet body; no parser handles those three yet, and they are not in any test) goes through this parser too. It differs only by its `Exported with New Recruit …` trailer, an optional army-size line, and blocks with no blank line after the header, after a group heading or between units. The header block's tail is cut off at the first section or group heading after its detachment line. `_split_fused` splits the other blocks line by line, measuring from the block's first line: a group heading or footer at that margin always starts a new block, and so does the line after a group heading, while a `(N Points)` or ALL-CAPS line does so only if the block has an indented line, because a compact body's run lines also sit at the margin and can have those shapes. Before any of this, `_blank_underlines` turns a single `====` underline straight after a section or group heading below the detachment line into a blank line, even across blank lines (`official_31.txt`); any other rule still raises. In a compact body, an unbulleted `(N Points)` line that is not `Nx`-shaped and has no `:` can only be a fused unit header; it raises rather than landing in the previous unit's decorations. Without an army-size line, a header line that looks like a malformed one (`LOOSE_POINTS_REGEX`, or a bare size name such as `Strike Force`) raises rather than mapping as a faction.
+Section headings are recognised structurally, not from an allow-list, so a new GW heading lands in `sheet_type` with no code change. `ParseError` is reserved for a missing or malformed header, an unparseable unit header, and an unclassifiable block after the header.
 
 ## Fixtures are the spec
 
-`examples/official_app/official_*.txt` are real exports and drive the tests. The `lvo2026_*.txt` files beside them are LVO 2026 lists (via listhammer), unindented app v2.6.0 exports, some hand-annotated; all but `lvo2026_genestealer_cults.txt`, which does not parse, are in `OFFICIAL_EXAMPLES`. When adding a new export sample, add an entry to `OFFICIAL_EXAMPLES` (an `nr_`-prefixed key is read from `examples/new_recruit/official/`) in `tests/test_official_app.py` — the parametrized `TestAllOfficialExamples` checks faction metadata and unit count for every file listed there, asserts all units are well-formed, and asserts the units' points sum to the expected total. Each entry must also carry an `attached_groups` key (the number of attached-unit groups expected), a `unit_points_total` key (the tabulated sum — a list may have no list-points line to read it from), and a `decorations` key (unit name → expected decoration lines, `{}` normally; `official_15.txt`'s `Mark of Chaos:` lines land there; a `"Name (points)"` key overrides a plain `"Name"` one when same-named units differ, as `official_15.txt`'s two Chosen do; a `(lines, n)` value means exactly `n` same-named units carry the lines and the rest none, for when points cannot tell them apart, as in `lvo2026_chaos_knights.txt`). The tests read these keys directly — an entry missing one raises `KeyError`. Unit tests in `test_official_app_blocks.py`, `test_official_app_header.py` and `test_official_app_units.py` state which example file each case came from; keep that convention when adding cases. `official_1`–`official_10` were removed from `examples/` (the only whole-file fixtures of the compact and glyph dialects among them); cases citing them are in git history at `6bc7874`, and the dialect code they exercise stays — the unindented `lvo2026_*.txt` exports need it.
+`examples/official_app/` holds real exports: `official_*.txt`, and `lvo2026_*.txt` (LVO 2026 lists via listhammer; unindented app v2.6.0 exports, some hand-annotated). Every file there except `lvo2026_genestealer_cults.txt`, which does not parse, is an `OFFICIAL_EXAMPLES` entry in `tests/test_official_app.py`, checked end to end by `TestAllOfficialExamples`.
+
+To add an export, add an `OFFICIAL_EXAMPLES` entry (an `nr_`-prefixed key reads from `examples/new_recruit/official/`). Every entry needs `attached_groups`, `unit_points_total` and `decorations` keys; the comments in `test_units_are_well_formed` explain the `decorations` value forms. Cases in `test_official_app_{blocks,header,units}.py` name the example file they came from; keep that convention.
+
+In no test, because no parser handles their format yet: `nr_official_0–1.txt` and `nr_other_0.txt` under `examples/new_recruit/`, `examples/ironbuilt/`, and `examples/unknown/`. `official_1`–`official_10` were deleted (cases citing them: git `6bc7874`); the compact and glyph code they covered stays, because the `lvo2026_*` exports need it.
 
 ## Agent skills
 
-### Issue tracker
-
-Issues live as GitHub issues in `powens/listgrok`, managed with the `gh` CLI. See `docs/agents/issue-tracker.md`.
-
-### Triage labels
-
-The five canonical roles map 1:1 to labels of the same name. See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-Single-context: root `CONTEXT.md` plus `docs/adr/`, both created lazily. See `docs/agents/domain.md`.
+- Issues: GitHub issues in `powens/listgrok` via `gh` — `docs/agents/issue-tracker.md`.
+- Triage: the five canonical roles map 1:1 to same-named labels — `docs/agents/triage-labels.md`.
+- Domain docs: root `CONTEXT.md` plus `docs/adr/`, created lazily — `docs/agents/domain.md`.
