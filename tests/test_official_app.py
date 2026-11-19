@@ -362,6 +362,207 @@ OFFICIAL_EXAMPLES = {
         "attached_groups": 1,
         "decorations": {},
     },
+    # LVO 2026 lists (via listhammer): unindented app v2.6.0 exports. Most
+    # carry player notes between the name and the header, which are dropped;
+    # lvo2026_world_eaters has no "(N Points)" line, so its first block (song
+    # lyrics) is the name and points is None. lvo2026_genestealer_cults is
+    # hand-annotated and does not parse, so it is not listed.
+    "lvo2026_adeptus_mechanicus.txt": {
+        "name": "Maybe this year I'll have fun in Vegas",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Adeptus Mechanicus",
+        "detachments": ["Cohort Cybernetica", "Lords of the Forge"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 15,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
+    "lvo2026_aeldari.txt": {
+        "name": "10th ed is dead, long live 10th ed",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Aeldari",
+        "detachments": ["Aspect Host"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 16,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "lvo2026_chaos_knights.txt": {
+        "name": "LVO Huntem",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Knights",
+        "detachments": ["Houndpack Lance", "Hunting Warpack"],
+        "detachment_points": 3,
+        "disposition": "Reconnaissance",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 14,
+        "unit_points_total": 2000,
+        "attached_groups": 0,
+        "decorations": {
+            # One of each of these War Dogs carries the keyword line and its
+            # same-named siblings do not; the Executioners all cost 140, so
+            # a "Name (points)" key cannot single it out.
+            "War Dog Brigand": (["Houndpack Lance Keyword: Character"], 1),
+            "War Dog Executioner": (["Houndpack Lance Keyword: Character"], 1),
+            "War Dog Karnivore": (["Houndpack Lance Keyword: Character"], 1),
+        },
+    },
+    "lvo2026_chaos_space_marines.txt": {
+        "name": "Snorting lines and rolling nines",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Space Marines",
+        "detachments": ["Creations of Bile"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 13,
+        "unit_points_total": 2000,
+        "attached_groups": 2,
+        "decorations": {},
+    },
+    "lvo2026_dark_angels.txt": {
+        "name": "My first ever army",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Dark Angels",
+        "detachments": ["Company of Hunters", "Darkflight Pursuit"],
+        "detachment_points": 3,
+        "disposition": "Reconnaissance",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 16,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
+    "lvo2026_deathwatch.txt": {
+        "name": "Tome to go LVO",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Deathwatch",
+        "detachments": ["Black Spear Task Force"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 11,
+        "unit_points_total": 2000,
+        "attached_groups": 2,
+        "decorations": {},
+    },
+    "lvo2026_grey_knights.txt": {
+        "name": "Palworld2",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Grey Knights",
+        "detachments": ["Argent Assault", "Banishers"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 11,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "lvo2026_imperial_knights.txt": {
+        "name": "1 Valourstrike Castellan",
+        "points": 1995,
+        "super_faction": "",
+        "faction": "Imperial Knights",
+        "detachments": ["Dominus Foebreakers", "Valourstrike Lance"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 7,
+        "unit_points_total": 1995,
+        "attached_groups": 0,
+        "decorations": {},
+    },
+    "lvo2026_orks.txt": {
+        "name": "Meta",
+        "points": 1995,
+        "super_faction": "",
+        "faction": "Orks",
+        "detachments": ["Blitz Brigade", "Runt Swarm", "Wreckas"],
+        "detachment_points": 3,
+        "disposition": "Take and Hold",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 16,
+        "unit_points_total": 1995,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "lvo2026_space_wolves.txt": {
+        "name": "Technically not 30 Wolf Guard Terminators",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Space Wolves",
+        "detachments": ["Legends of Saga and Song", "Saga of the Great Wolf"],
+        "detachment_points": 3,
+        "disposition": "Take and Hold",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 11,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "lvo2026_tau_empire.txt": {
+        "name": "LVO Emotional Support Hammerheads",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "T’au Empire",
+        "detachments": ["Retaliation Cadre"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 18,
+        "unit_points_total": 2000,
+        "attached_groups": 4,
+        "decorations": {},
+    },
+    "lvo2026_world_eaters.txt": {
+        "name": (
+            "Listen on! Listen on! This is the truth of it.\n"
+            "Fighting leads to killing, and killing gets to warring.\n"
+            "And that was damn near the death of us all.\n"
+            "Look at us now, busted up and everyone talking about hard rain!\n"
+            "But we've learned by the dust of 'em all. Bartertown's learned.\n"
+            "Now when men get to fighting, it happens here.\n"
+            "And it finishes here.\n"
+            "Two men enter, one man leaves"
+        ),
+        "points": None,
+        "super_faction": "",
+        "faction": "World Eaters",
+        "detachments": ["Khorne Daemonkin", "Vessels of Wrath"],
+        "detachment_points": 3,
+        "disposition": "Priority Assets",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 16,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
     # New Recruit v38.5's GW-style export: the official layout under its own
     # footer.
     "nr_official_2.txt": {
@@ -491,6 +692,7 @@ class TestAllOfficialExamples:
     def test_units_are_well_formed(self, filename):
         expected_decorations = OFFICIAL_EXAMPLES[filename]["decorations"]
         army_list = parse_example(filename)
+        carriers: dict[str, int] = {}
 
         for unit in army_list.units:
             assert unit.name, f"{filename}: unit with empty name"
@@ -504,10 +706,16 @@ class TestAllOfficialExamples:
             # regressed rather than the fixture growing a legitimately odd line.
             # A "Name (points)" key wins over a plain "Name" one, for a list
             # whose same-named units decorate differently (official_15).
-            expected = expected_decorations.get(
-                f"{unit.name} ({unit.points})",
-                expected_decorations.get(unit.name, []),
-            )
+            key = f"{unit.name} ({unit.points})"
+            if key not in expected_decorations:
+                key = unit.name
+            expected = expected_decorations.get(key, [])
+            # A (lines, n) value: exactly n same-named units carry the lines
+            # and the rest carry none (lvo2026_chaos_knights' War Dogs).
+            if isinstance(expected, tuple):
+                if unit.decorations:
+                    carriers[key] = carriers.get(key, 0) + 1
+                expected = expected[0] if unit.decorations else []
             assert unit.decorations == expected, (
                 f"{filename}: {unit.name} has unexpected decorations"
             )
@@ -517,6 +725,12 @@ class TestAllOfficialExamples:
                     f"{filename}: {unit.name} model set has no num_models"
                 )
                 assert all(count > 0 for count in model_set.wargear.values())
+
+        assert carriers == {
+            key: value[1]
+            for key, value in expected_decorations.items()
+            if isinstance(value, tuple)
+        }, f"{filename}: wrong number of units carry counted decorations"
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_parsed_list_is_json_serialisable(self, filename):
