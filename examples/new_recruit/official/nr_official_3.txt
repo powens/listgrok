@@ -1,0 +1,135 @@
+UM- Terminators (2,000 Points)
+ 
+Space Marines
+Ultramarines
+Devastator Brethren, Tacticus Firestorm Force, and Terminator Storm Force (3 Detachment Points)
+Purge the Foe
+Strike Force (2,000 Points)
+ 
+ATTACHED UNITS
+ 
+Attached unit 1
+ 
+Marneus Calgar (180 Points)
+  • Attached as: Leader (Character)
+  • Warlord
+  • 1x Gauntlets of Ultramar
+ 
+Bladeguard Veteran Squad (180 Points)
+  • Attached as: Bodyguard
+  • 1x Bladeguard Veteran Sergeant
+     ◦ 1x Master-crafted power weapon
+     ◦ 1x Plasma pistol
+  • 5x Bladeguard Veterans
+     ◦ 5x Heavy Bolt Pistol
+     ◦ 5x Master-crafted power weapon
+ 
+Attached unit 2
+ 
+Ancient in Terminator Armour (75 Points)
+  • Attached as: Support (Character)
+  • 1x Master-crafted power weapon
+  • 1x Storm bolter
+ 
+Terminator Assault Squad (390 Points)
+  • Attached as: Bodyguard
+  • 1x Assault Terminator Sergeant
+     ◦ 1x Storm Shield
+     ◦ 1x Thunder Hammer
+  • 9x Assault Terminator
+     ◦ 9x Storm Shield
+     ◦ 9x Thunder Hammer
+ 
+Attached unit 3
+ 
+Captain in Terminator Armour (110 Points)
+  • Attached as: Leader (Character)
+  • 1x Relic Weapon
+  • 1x Storm bolter
+  • Enhancements: Champion of the First Company
+ 
+Terminator Squad (380 Points)
+  • Attached as: Bodyguard
+  • 1x Terminator Sergeant
+     ◦ 1x Power fist
+     ◦ 1x Storm bolter
+  • 9x Terminator
+     ◦ 2x Assault Cannon
+     ◦ 9x Power fist
+     ◦ 7x Storm bolter
+ 
+OTHER DATASHEETS
+ 
+Company Heroes (125 Points)
+  • 1x Ancient
+     ◦ 1x Combat Knife
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Bolt Rifle
+  • 1x Company Champion
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Power Weapon
+  • 2x Company Veteran
+     ◦ 2x Combat Knife
+     ◦ 2x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Bolt Rifle
+     ◦ 1x Master-crafted Heavy Bolter
+ 
+Eradicator Squad with Melta Rifles (200 Points)
+  • 3x Eradicator
+     ◦ 3x Bolt pistol
+     ◦ 3x Ceramite Fists
+     ◦ 3x Melta rifle
+  • 1x Eradicator Sergeant
+     ◦ 1x Bolt pistol
+     ◦ 1x Ceramite Fists
+     ◦ 1x Melta rifle
+  • 2x Eradicator with Multi-melta
+     ◦ 2x Bolt pistol
+     ◦ 2x Ceramite Fists
+     ◦ 2x Multi-melta
+ 
+Hellblaster Squad (115 Points)
+  • 4x Hellblaster
+     ◦ 4x Bolt pistol
+     ◦ 4x Ceramite Fists
+     ◦ 4x Plasma Incinerator
+  • 1x Hellblaster Sergeant
+     ◦ 1x Ceramite Fists
+     ◦ 1x Plasma Incinerator
+     ◦ 1x Plasma pistol
+ 
+Hellblaster Squad (115 Points)
+  • 4x Hellblaster
+     ◦ 4x Bolt pistol
+     ◦ 4x Ceramite Fists
+     ◦ 4x Plasma Incinerator
+  • 1x Hellblaster Sergeant
+     ◦ 1x Ceramite Fists
+     ◦ 1x Plasma Incinerator
+     ◦ 1x Plasma pistol
+ 
+Scout Squad (65 Points)
+  • 1x Scout Sergeant
+     ◦ 1x Bolt pistol
+     ◦ 1x Chainsword
+     ◦ 1x Shotgun
+  • 4x Scout
+     ◦ 4x Bolt pistol
+     ◦ 4x Combat Knife
+     ◦ 1x Missile Launcher
+     ◦ 2x Shotgun
+     ◦ 1x Sniper Rifle
+ 
+Scout Squad (65 Points)
+  • 1x Scout Sergeant
+     ◦ 1x Bolt pistol
+     ◦ 1x Chainsword
+     ◦ 1x Shotgun
+  • 4x Scout
+     ◦ 4x Bolt pistol
+     ◦ 4x Combat Knife
+     ◦ 1x Heavy Bolter
+     ◦ 2x Shotgun
+     ◦ 1x Sniper Rifle
+ 
+Exported with New Recruit v37.14, Data Version: v8
