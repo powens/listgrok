@@ -1,0 +1,143 @@
+his is my parameter, and my parameter is me (2,000 Points)
+
+Space Marines
+Dark Angels
+Assault Brethren, Stormlance Task Force and Terminator Storm Force (3 Detachment Points)
+Take and Hold
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Captain in Terminator Armour (100 Points)
+  • Attached as: Leader (Character)
+  • 1x Relic Weapon
+  • 1x Storm Bolter
+  • Enhancements: Furious Assault (Upgrade)
+
+Ancient in Terminator Armour (75 Points)
+  • Attached as: Support (Character)
+  • 1x Master-crafted Power Weapon
+  • 1x Storm Bolter
+
+Deathwing Knights (255 Points)
+  • Attached as: Bodyguard
+  • 1x Watcher in the Dark
+  • 4x Deathwing Knights
+     ◦ 4x Mace of Absolution
+  • 1x Knight Master
+     ◦ 1x Great Weapon of the Unforgiven
+
+Attached unit 2
+
+Captain in Terminator Armour (115 Points)
+  • Attached as: Leader (Character)
+  • 1x Relic Fist
+  • 1x Storm Bolter
+  • Enhancements: Corporeum Reliquary
+
+Ancient in Terminator Armour (75 Points)
+  • Attached as: Support (Character)
+  • 1x Master-crafted Power Weapon
+  • 1x Storm Bolter
+
+Deathwing Knights (255 Points)
+  • Attached as: Bodyguard
+  • 1x Watcher in the Dark
+  • 4x Deathwing Knights
+     ◦ 4x Mace of Absolution
+  • 1x Knight Master
+     ◦ 1x Great Weapon of the Unforgiven
+
+Attached unit 3
+
+Sammael (120 Points)
+  • Attached as: Leader (Character)
+  • 1x Bolt Pistol
+  • 1x Master-crafted Plasma Cannon
+  • 1x The Raven Sword
+  • 1x Twin Storm Bolter
+
+Ravenwing Command Squad (115 Points)
+  • Attached as: Support (Character)
+  • 1x Ravenwing Apothecary
+     ◦ 1x Bolt Pistol
+     ◦ 1x Corvus Hammers
+     ◦ 1x Plasma Talon
+  • 1x Ravenwing Champion
+     ◦ 1x Bolt Pistol
+     ◦ 1x Master-crafted Power Weapon
+     ◦ 1x Plasma Talon
+  • 1x Ravenwing Ancient
+     ◦ 1x Bolt Pistol
+     ◦ 1x Corvus Hammers
+     ◦ 1x Plasma Talon
+
+Outrider Squad (90 Points)
+  • Attached as: Bodyguard
+  • Enhancements: Supercharged Engines (Upgrade)
+  • 2x Outrider
+     ◦ 2x Chainsword
+     ◦ 2x Heavy Bolt Pistol
+     ◦ 2x Twin Bolt Rifle
+  • 1x Outrider Sergeant
+     ◦ 1x Chainsword
+     ◦ 1x Heavy Bolt Pistol
+     ◦ 1x Twin Bolt Rifle
+
+CHARACTERS
+
+Company Heroes (125 Points)
+  • 1x Company Champion
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Power Weapon
+  • 1x Company veteran with bolt rifle
+     ◦ 1x Combat Knife
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Bolt Rifle
+  • 1x Ancient
+     ◦ 1x Combat Knife
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Bolt Rifle
+  • 1x Company Veteran with heavy bolter
+     ◦ 1x Combat Knife
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Heavy Bolter
+
+Lion El'Jonson (415 Points)
+  • Warlord
+  • 1x Arma Luminis
+  • 1x Fealty
+
+OTHER DATASHEETS
+
+Bladeguard Veteran Squad (90 Points)
+  • 1x Bladeguard Veteran Sergeant
+     ◦ 1x Heavy Bolt Pistol
+     ◦ 1x Master-crafted Power Sword
+  • 2x Bladeguard Veteran
+     ◦ 2x Heavy Bolt Pistol
+     ◦ 2x Master-crafted Power Sword
+
+Ravenwing Black Knights (85 Points)
+  • 1x Ravenwing Huntmaster
+     ◦ 1x Bolt Pistol
+     ◦ 1x Corvus Hammers
+     ◦ 1x Plasma Talon
+  • 2x Ravenwing Black Knight
+     ◦ 2x Bolt Pistol
+     ◦ 2x Corvus Hammers
+     ◦ 2x Plasma Talon
+
+Ravenwing Black Knights (85 Points)
+  • 1x Ravenwing Huntmaster
+     ◦ 1x Bolt Pistol
+     ◦ 1x Corvus Hammers
+     ◦ 1x Plasma Talon
+  • 2x Ravenwing Black Knight
+     ◦ 2x Bolt Pistol
+     ◦ 2x Corvus Hammers
+     ◦ 2x Plasma Talon
+
+Exported with App Version: v2.8.1 (1), Data Version: v995

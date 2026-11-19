@@ -1,0 +1,164 @@
+Host of Urlakh (2000 points)
+
+Chaos Space Marines
+Pactbound Zealots (3 Detachment Points)
+Priority Assets
+Strike Force (2000 points)
+
+
+CHARACTERS
+
+Attached unit 1 
+
+Chaos Lord (110 points)
+  • Mark of Chaos: Khorne
+  • Warlord
+  • 1x Daemon hammer
+    1x Plasma pistol
+  • Enhancement: Talisman of Burning Blood
+
+Chosen (140 points)
+  • Mark of Chaos: Khorne
+  • 1x Chosen Champion
+    • 1x Accursed weapon
+      1x Boltgun
+      1x Plasma pistol
+  • 4x Chosen
+    • 3x Accursed weapon
+      3x Bolt pistol
+      4x Boltgun
+      1x Plasma pistol
+      1x Power fist
+
+BATTLELINE
+
+Cultist Mob (90 points)
+  • Mark of Chaos: Khorne
+  • 1x Cultist Champion
+    • 1x Autopistol
+      1x Brutal assault weapon
+  • 19x Chaos Cultist
+    • 19x Autopistol
+      19x Brutal assault weapon
+
+Cultist Mob (50 points)
+  • Mark of Chaos: Khorne
+  • 1x Cultist Champion
+    • 1x Autopistol
+      1x Brutal assault weapon
+  • 9x Chaos Cultist
+    • 9x Autopistol
+      9x Brutal assault weapon
+
+
+OTHER DATASHEETS
+
+Chaos Predator Destructor (145 points)
+  • Mark of Chaos: Tzeentch
+  • 1x Armoured tracks
+    1x Combi-bolter
+    1x Havoc launcher
+    2x Heavy bolter
+    1x Predator autocannon
+
+Chosen (280 points)
+  • Mark of Chaos: Slaanesh
+  • 1x Chosen Champion
+    • 1x Boltgun
+      1x Chaos Icon
+      1x Plasma pistol
+      1x Power fist
+  • 9x Chosen
+    • 6x Accursed weapon
+      8x Bolt pistol
+      5x Boltgun
+      2x Combi-weapon
+      2x Paired accursed weapons
+      1x Plasma pistol
+      1x Power fist
+
+
+
+Defiler (330 points)
+  • Mark of Chaos: Nurgle
+  • 1x Ectoplasma destructor
+    2x Excruciator cannon
+    2x Heavy reaper autocannon
+    1x Shearing claws
+
+Havocs (135 points)
+  • Mark of Chaos: Tzeentch
+  • 1x Havoc Champion
+    • 1x Accursed weapon
+      1x Flamer
+  • 4x Havoc
+    • 4x Close Combat Weapon
+      1x Havoc autocannon
+      2x Havoc heavy bolter
+      1x Havoc reaper chaincannon
+
+Helbrute (125 points)
+  • Mark of Chaos: Slaanesh
+  • 1x Close combat weapon
+    2x Heavy flamer
+    2x Helbrute fist
+
+Raptors (225 points)
+  • Mark of Chaos: Khorne
+  • 1x Raptor Champion
+    • 1x Heavy melee weapon
+      1x Plasma pistol
+  • 9x Raptor
+    • 3x Astartes chainsword
+      6x Bolt pistol
+      4x Heavy melee weapon
+      2x Mutations
+      3x Plasma pistol
+
+Raptors (115 points)
+  • Mark of Chaos: Khorne
+  • 1x Raptor Champion
+    • 1x Heavy melee weapon
+      1x Plasma pistol
+  • 4x Raptor
+    • 1x Astartes chainsword
+      3x Bolt pistol
+      2x Heavy melee weapon
+      1x Mutations
+      1x Plasma pistol
+
+Traitor Guardsmen Squad (65 points)
+  • Mark of Chaos: Tzeentch
+  • 1x Traitor Sergeant
+    • 1x Corrupted pistol
+      1x Power weapon
+  • 9x Traitor Guardsmen
+    • 9x Close combat weapon
+      1x Cultist sniper rifle
+      6x Lasgun
+      1x Meltagun
+      1x Plasma gun
+
+Traitor Guardsmen Squad (65 points)
+  • Mark of Chaos: Tzeentch
+  • 1x Traitor Sergeant
+    • 1x Boltgun
+      1x Power weapon
+  • 9x Traitor Guardsmen
+    • 9x Close combat weapon
+      1x Cultist sniper rifle
+      6x Lasgun
+      1x Meltagun
+      1x Plasma gun
+
+
+ALLIED UNITS
+
+Beasts of Nurgle (80 points)
+  • 1x Putrid appendages
+
+Nurglings (45 points)
+  • 3x Nurgling Swarm
+    • 3x Diseased claws and teeth
+
+Exported with App Version: v2.8.1 (149), Data Version: v995

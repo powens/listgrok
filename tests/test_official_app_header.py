@@ -5,6 +5,10 @@ import pytest
 from listgrok import ArmyList, ParseError
 from listgrok.parsers.official_app.header import parse_header, split_detachments
 
+# Cases citing official_1 to official_10 were trimmed from exports since
+# removed from examples/; they remain in git history, e.g.
+# `git show 6bc7874:examples/official_app/official_3.txt`.
+
 
 def test_official_1_header_has_no_super_faction():
     army_list = ArmyList()
@@ -125,6 +129,10 @@ def test_faction_only_header_leaves_disposition_empty():
         ),
     ],
 )
+
+# Cases citing official_1 to official_10 were trimmed from exports since
+# removed from examples/; they remain in git history, e.g.
+# `git show 6bc7874:examples/official_app/official_3.txt`.
 def test_split_detachments(line, expected):
     assert split_detachments(line) == expected
 

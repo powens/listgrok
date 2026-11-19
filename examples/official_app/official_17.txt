@@ -1,0 +1,99 @@
+ShamblePoP (2,000 Points)
+
+Death Guard
+Paragons of Putrescence and Shamblerot Vectorium (3 Detachment Points)
+Priority Assets
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Typhus (90 Points)
+  • Attached as: Leader (Character)
+  • 1x Lakrimae
+
+Noxious Blightbringer (70 Points)
+  • Attached as: Leader (Character)
+  • 1x Cursed plague bell
+  • 1x Plasma pistol
+  • Enhancements: Rejuvenating Swarm
+
+Poxwalkers (130 Points)
+  • Attached as: Bodyguard
+  • 20x Poxwalker
+     ◦ 20x Improvised weapon
+
+CHARACTERS
+
+Malignant Plaguecaster (60 Points)
+  • 1x Bolt pistol
+  • 1x Corrupted staff
+  • 1x Plague Wind
+
+Malignant Plaguecaster (60 Points)
+  • 1x Bolt pistol
+  • 1x Corrupted staff
+  • 1x Plague Wind
+
+Mortarion (375 Points)
+  • Warlord
+  • 1x Lantern
+  • 1x Rotwind
+  • 1x Silence
+
+BATTLELINE
+
+Poxwalkers (65 Points)
+  • 10x Poxwalker
+     ◦ 10x Improvised weapon
+
+DEDICATED TRANSPORTS
+
+Chaos Rhino (75 Points)
+  • 1x Armoured tracks
+  • 1x Combi-bolter
+
+OTHER DATASHEETS
+
+Chaos Spawn (80 Points)
+  • 2x Chaos Spawn
+     ◦ 2x Hideous mutations
+
+Defiler (330 Points)
+  • 2x Excruciator cannon
+  • 1x Hades battle cannon
+  • 1x Heavy reaper autocannon
+  • 1x Heavy reaper autocannon
+  • 1x Shearing claws
+
+Myphitic Blight-haulers (95 Points)
+  • 1x Bile spurt
+  • 1x Gnashing maw
+  • 1x Missile launcher
+  • 1x Multi-melta
+
+Myphitic Blight-haulers (95 Points)
+  • 1x Bile spurt
+  • 1x Gnashing maw
+  • 1x Missile launcher
+  • 1x Multi-melta
+
+Myphitic Blight-haulers (95 Points)
+  • 1x Bile spurt
+  • 1x Gnashing maw
+  • 1x Missile launcher
+  • 1x Multi-melta
+
+ALLIED UNITS
+
+Knight Despoiler (380 Points)
+  • 1x Despoiler battle cannon
+  • 1x Despoiler battle cannon
+  • 1x Diabolus heavy stubber
+  • 1x Diabolus heavy stubber
+  • 1x Diabolus heavy stubber
+  • 1x Ruinspear rocket pod
+  • 1x Titanic feet
+
+Exported with App Version: v2.8.1 (1), Data Version: v995

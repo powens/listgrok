@@ -3,11 +3,16 @@ import time
 import pytest
 
 from listgrok import ParseError
+from listgrok.parsers.official_app import parse_official_app
 from listgrok.parsers.official_app.blocks import (
     BlockKind,
     classify_blocks,
     parse_points,
 )
+
+# Cases citing official_1 to official_10 were trimmed from exports since
+# removed from examples/; they remain in git history, e.g.
+# `git show 6bc7874:examples/official_app/official_3.txt`.
 
 # Trimmed from official_1.txt: one of each block kind.
 MINIMAL = """11th stuff (2,000 Points)
@@ -172,9 +177,31 @@ def test_unclassifiable_block_after_the_header_raises():
         classify_blocks(NO_ARMY_NAME + "\nstray line one\nstray line two\n")
 
 
-def test_unclassifiable_block_before_the_header_raises():
-    with pytest.raises(ParseError):
-        classify_blocks("stray line\n\n" + NO_ARMY_NAME)
+def test_army_name_without_a_points_suffix_is_one_block():
+    # official_28: the name line carries no "(N Points)" suffix. Everything
+    # before the header is the army name.
+    blocks = classify_blocks("No more Overwatch\n\n" + NO_ARMY_NAME)
+
+    assert blocks[0].kind is BlockKind.ARMY_NAME
+    assert blocks[0].lines == ("No more Overwatch",)
+    assert blocks[1].kind is BlockKind.HEADER
+
+
+def test_everything_before_the_header_is_one_army_name_block():
+    # A points-closed block no longer ends the name: any text up to the header
+    # belongs to the block, blank separators included. Splitting the name from
+    # trailing notes is the fold's job (TestArmyNameFold).
+    text = "Name (2,000 Points)\n\nnotes one\nnotes two\n\n" + NO_ARMY_NAME
+    blocks = classify_blocks(text)
+
+    assert blocks[0].kind is BlockKind.ARMY_NAME
+    assert blocks[0].lines == (
+        "Name (2,000 Points)",
+        "",
+        "notes one",
+        "notes two",
+    )
+    assert blocks[1].kind is BlockKind.HEADER
 
 
 def test_title_case_lone_line_after_the_header_raises():
@@ -188,6 +215,10 @@ def test_title_case_lone_line_after_the_header_raises():
 @pytest.mark.parametrize(
     "text,expected", [("2,000", 2000), ("70", 70), ("1,260", 1260)]
 )
+
+# Cases citing official_1 to official_10 were trimmed from exports since
+# removed from examples/; they remain in git history, e.g.
+# `git show 6bc7874:examples/official_app/official_3.txt`.
 def test_parse_points_strips_thousands_commas(text, expected):
     assert parse_points(text) == expected
 
@@ -204,16 +235,22 @@ def test_army_name_with_a_long_whitespace_run_classifies_in_linear_time():
     assert blocks[0].kind is BlockKind.ARMY_NAME
 
 
-@pytest.mark.parametrize(
-    "text",
-    [
-        # Crafted input, not an export: digit runs past Python's 4300-digit
-        # int() limit used to escape as ValueError rather than ParseError.
-        "Army (" + "9" * 5000 + " Points)\n\n" + NO_ARMY_NAME,
-        NO_ARMY_NAME.replace("(3 Detachment", "(" + "9" * 5000 + " Detachment"),
-    ],
-    ids=["army-points", "detachment-points"],
-)
-def test_oversized_point_total_raises_parse_error(text):
+def test_oversized_detachment_points_raise_parse_error():
+    # Crafted input, not an export: digit runs past Python's 4300-digit int()
+    # limit used to escape as ValueError rather than ParseError.
     with pytest.raises(ParseError):
-        classify_blocks(text)
+        classify_blocks(
+            NO_ARMY_NAME.replace("(3 Detachment", "(" + "9" * 5000 + " Detachment")
+        )
+
+
+def test_oversized_army_points_stay_part_of_the_name():
+    # Crafted input, not an export: a points suffix too long to be one is not
+    # read as the list total (int() would raise past 4300 digits), so the
+    # whole line is the name and points stays None.
+    line = "Army (" + "9" * 5000 + " Points)"
+
+    army_list = parse_official_app(line + "\n\n" + NO_ARMY_NAME)
+
+    assert army_list.name == line
+    assert army_list.points is None

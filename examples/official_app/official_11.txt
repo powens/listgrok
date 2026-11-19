@@ -1,0 +1,187 @@
+BLOW ME (away) (2,000 Points)
+
+Astra Militarum
+Bridgehead Strike and Combined Arms (3 Detachment Points)
+Take and Hold
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Militarum Tempestus Command Squad (85 Points)
+  • Attached as: Leader (Character)
+  • 4x Tempestus Scion
+     ◦ 4x Close combat weapon
+     ◦ 1x Hot-shot lasgun
+     ◦ 1x Hot-shot laspistol
+     ◦ 1x Medi-pack
+     ◦ 1x Meltagun
+     ◦ 1x Plasma gun
+     ◦ 1x Regimental Standard
+  • 1x Tempestor Prime
+     • Warlord
+     ◦ 1x Command Rod
+     ◦ 1x Tempestus dagger
+
+Tempestus Scions (150 Points)
+  • Attached as: Bodyguard
+  • 1x Tempestor
+     ◦ 1x Plasma pistol
+     ◦ 1x Power fist
+  • 9x Tempestus Scion
+     ◦ 9x Close combat weapon
+     ◦ 4x Hot-shot lasgun
+     ◦ 1x Hot-shot laspistol
+     ◦ 2x Meltagun
+     ◦ 2x Plasma gun
+     ◦ 1x Vox-caster
+
+Attached unit 2
+
+Cadian Command Squad (60 Points)
+  • Attached as: Leader (Character)
+  • 1x Cadian Commander
+     ◦ 1x Plasma pistol
+     ◦ 1x Power fist
+  • 1x Cadian Veteran Guardsman
+     ◦ 1x Close combat weapon
+     ◦ 1x Plasma gun
+     ◦ 1x Plasma pistol
+  • 1x Cadian Veteran Guardsman
+     ◦ 1x Close combat weapon
+     ◦ 1x Lasgun
+     ◦ 1x Master Vox
+  • 1x Cadian Veteran Guardsman
+     ◦ 1x Close combat weapon
+     ◦ 1x Lasgun
+     ◦ 1x Medi-pack
+  • 1x Cadian Veteran Guardsman
+     ◦ 1x Close combat weapon
+     ◦ 1x Plasma gun
+
+Ursula Creed (85 Points)
+  • Attached as: Leader (Character)
+  • 1x Duty and Vengeance
+  • 1x Power weapon
+
+Cadian Shock Troops (70 Points)
+  • Attached as: Bodyguard (Battleline)
+  • 1x Shock Trooper Sergeant
+     ◦ 1x Close combat weapon
+     ◦ 1x Sergeant’s autogun
+  • 9x Shock Trooper
+     ◦ 9x Close combat weapon
+     ◦ 7x Lasgun
+     ◦ 1x Meltagun
+     ◦ 1x Plasma gun
+     ◦ 1x Vox-caster
+
+CHARACTERS
+
+Gaunt’s Ghosts (95 Points)
+  • 1x Ibram Gaunt
+     ◦ 1x Bolt Pistol
+     ◦ 1x Gaunt’s chainsword
+  • 1x Colm Corbec
+     ◦ 1x Corbec’s hot-shot lascarbine
+     ◦ 1x Straight silver knife
+  • 1x Elim Rawne
+     ◦ 1x Rawne’s lascarbine
+     ◦ 1x Straight silver knife
+  • 1x Hlaine Larkin
+     ◦ 1x Larkin’s long-las
+     ◦ 1x Straight silver knife
+  • 1x ’Try Again’ Bragg
+     ◦ 1x Bragg’s autocannon
+     ◦ 1x Straight silver knife
+  • 1x Oan Mkoll
+     ◦ 1x Lascarbine
+     ◦ 1x Mkoll’s straight silver knife
+
+Rogal Dorn Commander (305 Points)
+  • 1x Armoured tracks
+  • 1x Coaxial autocannon
+  • 1x Heavy stubber
+  • 2x Meltagun
+  • 2x Multi-melta
+  • 1x Oppressor cannon
+  • 1x Pulveriser cannon
+  • Enhancements: Grand Strategist
+
+OTHER DATASHEETS
+
+Hellhound (115 Points)
+  • 1x Armoured tracks
+  • 1x Hunter-killer missile
+  • 1x Inferno cannon
+  • 1x Multi-melta
+
+Krieg Combat Engineers (65 Points)
+  • 1x Krieg Engineer Watchmaster
+     ◦ 1x Hand flamer
+     ◦ 1x Power weapon
+  • 4x Krieg Combat Engineer
+     ◦ 1x Autopistol
+     ◦ 4x Close combat weapon
+     ◦ 2x Combat shotgun
+     ◦ 1x Flamer
+     ◦ 1x Remote Mine
+
+Krieg Combat Engineers (65 Points)
+  • 1x Krieg Engineer Watchmaster
+     ◦ 1x Hand flamer
+     ◦ 1x Power weapon
+  • 4x Krieg Combat Engineer
+     ◦ 1x Autopistol
+     ◦ 4x Close combat weapon
+     ◦ 2x Combat shotgun
+     ◦ 1x Flamer
+     ◦ 1x Remote Mine
+
+Leman Russ Battle Tank (175 Points)
+  • 1x Armoured tracks
+  • 1x Hunter-killer missile
+  • 1x Lascannon
+  • 1x Leman Russ battle cannon
+  • 2x Multi-melta
+
+Leman Russ Battle Tank (175 Points)
+  • 1x Armoured tracks
+  • 1x Hunter-killer missile
+  • 1x Lascannon
+  • 1x Leman Russ battle cannon
+  • 2x Multi-melta
+
+Leman Russ Eradicator (145 Points)
+  • 1x Armoured tracks
+  • 1x Eradicator nova cannon
+  • 1x Heavy flamer
+  • 2x Heavy flamer
+  • 1x Hunter-killer missile
+
+Leman Russ Exterminator (170 Points)
+  • 1x Armoured tracks
+  • 1x Exterminator autocannon
+  • 1x Heavy bolter
+  • 1x Hunter-killer missile
+  • 2x Multi-melta
+
+Leman Russ Vanquisher (130 Points)
+  • 1x Armoured tracks
+  • 1x Heavy bolter
+  • 2x Heavy bolter
+  • 1x Hunter-killer missile
+  • 1x Vanquisher battle cannon
+
+Scout Sentinels (55 Points)
+  • 1x Close combat weapon
+  • 1x Hunter-killer missile
+  • 1x Lascannon
+  • 1x Sentinel chainsaw
+
+Scout Sentinels (55 Points)
+  • 1x Close combat weapon
+  • 1x Hunter-killer missile
+  • 1x Plasma cannon
+  • 1x Sentinel chainsaw

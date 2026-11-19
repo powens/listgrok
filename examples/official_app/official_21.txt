@@ -1,0 +1,160 @@
+Need to gaârd something over there v1 (2000 points)
+
+Leagues of Votann
+Farseekers and Needgaârd Oathband (3 Detachment Points)
+Reconnaissance
+Strike Force (2000 points)
+
+Attached Units
+Attached Unit 1
+
+Kâhl (95 points)
+• Attached as: Leader (Character)
+  • Warlord
+  • 1x Autoch-pattern combi-bolter
+    1x Forgewrought plasma axe
+    1x Rampart Crest
+  • Enhancement: Oathbound Speculator
+
+Einhyr Hearthguard (270 points)
+• Attached as: Bodyguard
+  • 1x Hesyr
+    • 1x Concussion gauntlet
+      1x EtaCarn plasma gun
+      1x Exoarmour grenade launcher
+      1x Teleport Crest
+  • 9x Einhyr Hearthguard
+    • 9x Concussion gauntlet
+      9x EtaCarn plasma gun
+      9x Exoarmour grenade launcher
+
+Attached Unit 2
+
+Memnyr Strategist (55 points)
+• Attached as: Leader (Character)
+  • 1x Autoch-pattern bolt pistol
+    1x Close combat weapon
+  • Enhancement: Dead Reckoning
+
+Ironkin Steeljacks with Heavy Volkanite Disintegrators (170 points)
+• Attached as: Bodyguard
+  • 1x Steeljack Theyn
+    • 1x Heavy volkanite disintegrator
+      1x Plasma knife
+      1x Preymark Crest
+  • 5x Ironkin Steeljack
+    • 5x Heavy volkanite disintegrator
+      5x Plasma knife
+
+
+BATTLELINE
+
+Hearthkyn Warriors (90 points)
+  • 1x Theyn
+    • 1x Autoch-pattern bolt pistol
+      1x Close combat weapon
+      1x Theyn’s melee weapon
+      1x Theyn’s pistol
+      1x Weavefield crest
+  • 9x Hearthkyn Warrior
+    • 9x Autoch-pattern bolt pistol
+      9x Close combat weapon
+      1x HYLas auto rifle
+      7x Ion blaster
+      1x Magna-rail rifle
+
+
+DEDICATED TRANSPORTS
+
+Kapricus Carrier (70 points)
+  • 1x Armoured hull
+    1x Magna-coil autocannon
+    1x Twin magna‑coil autocannon
+
+Sagitaur (85 points)
+  • 1x Armoured wheels
+    1x HYLas beam cannon
+    1x Twin bolt cannon
+
+
+OTHER DATASHEETS
+
+Brôkhyr Thunderkyn (170 points)
+  • 6x Brôkhyr Thunderkyn
+    • 6x Close combat weapon
+      6x SP conversion beamer
+
+Brôkhyr Thunderkyn (170 points)
+  • 6x Brôkhyr Thunderkyn
+    • 6x Close combat weapon
+      6x Graviton blast cannon
+
+Hekaton Land Fortress (250 points)
+  • 1x Armoured wheels
+    1x Heavy magna-rail cannon
+    1x MATR autocannon
+    1x Panspectral Scanner
+    2x Twin bolt cannon
+
+Hernkyn Pioneers (85 points)
+  • 3x Hernkyn Pioneer
+    • 3x Bolt revolver
+      3x Bolt shotgun
+      1x HYLas rotary cannon
+      3x Magna-coil autocannon
+      1x Panspectral Scanner
+      3x Plasma knife
+      1x Rollbar Searchlight
+
+Hernkyn Pioneers (85 points)
+  • 3x Hernkyn Pioneer
+    • 3x Bolt revolver
+      3x Bolt shotgun
+      1x HYLas rotary cannon
+      3x Magna-coil autocannon
+      1x Panspectral Scanner
+      3x Plasma knife
+      1x Rollbar Searchlight
+
+Hernkyn Yaegirs (105 points)
+  • Enhancement: Shroudwërke Talismans (Upgrade)
+  • 1x Yaegir Theyn
+    • 1x Bolt shotgun
+      1x Close combat weapon
+  • 9x Hernkyn Yaegir
+    • 1x APM launcher
+      7x Bolt shotgun
+      9x Close combat weapon
+      1x Magna-coil rifle
+
+Ironkin Steeljacks with Melee Weapons (75 points)
+  • 1x Steeljack Theyn
+    • 1x Autoch-pattern bolter
+      1x Plasma sword
+      1x Preymark Crest
+  • 2x Ironkin Steeljack
+    • 2x Autoch-pattern bolter
+      2x Plasma sword
+
+Ironkin Steeljacks with Melee Weapons (75 points)
+  • 1x Steeljack Theyn
+    • 1x Autoch-pattern bolter
+      1x Plasma sword
+      1x Preymark Crest
+  • 2x Ironkin Steeljack
+    • 2x Autoch-pattern bolter
+      2x Plasma sword
+
+Kapricus Defenders (75 points)
+  • 1x Armoured hull
+    1x HYLas rotary cannon
+    1x Smoke Launcher
+    1x Twin magna‑coil autocannon
+
+Kapricus Defenders (75 points)
+  • 1x Armoured hull
+    1x HYLas rotary cannon
+    1x Smoke Launcher
+    1x Twin magna‑coil autocannon
+
+Exported with App Version: v2.8.1 (149), Data Version: v995

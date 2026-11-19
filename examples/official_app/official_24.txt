@@ -1,0 +1,141 @@
+WAAAAAAGGGHHH (1995 points)
+
+Orks
+Dread Mob, Green Tide and Taktikal Brigade (3 Detachment Points)
+Take and Hold
+Strike Force (2000 points)
+
+Attached Units
+Attached Unit 1
+
+Warboss (115 points)
+• Attached as: Leader (Character)
+  • Warlord
+  • 1x Kustom Shoota
+    1x Power Klaw
+  • Enhancement: Ferocious Show-off
+
+Boyz (85 points)
+• Attached as: Bodyguard (Battleline)
+  • 9x Boy
+    • 9x Choppa
+      9x Shoota
+      9x Slugga
+  • 1x Nob
+    • 1x Kombi-rokkit
+      1x Kustom Choppa
+
+Attached Unit 2
+
+Beastboss (85 points)
+• Attached as: Leader (Character)
+  • 1x Beast Snagga Klaw and Beastchoppa
+    1x Shoota
+
+Beast Snagga Boyz (80 points)
+• Attached as: Bodyguard (Battleline)
+  • 9x Beast Snagga Boy
+    • 9x Choppa
+      9x Slugga
+  • 1x Nob
+    • 1x Power Snappa
+      1x Slugga
+
+Attached Unit 3
+
+Bigboss (50 points)
+• Attached as: Support (Character)
+  • 1x Big Choppa
+    1x Slugga
+
+Boyz (85 points)
+• Attached as: Bodyguard (Battleline)
+  • 9x Boy
+    • 9x Choppa
+      9x Shoota
+      9x Slugga
+  • 1x Nob
+    • 1x Kustom Choppa
+      1x Kustom Shoota
+
+Attached Unit 4
+
+Big Mek with Shokk Attack Gun (110 points)
+• Attached as: Leader (Character)
+  • 1x Big Mek’s Toolz
+    1x Shokk Attack Gun
+
+Painboy (45 points)
+• Attached as: Support (Character)
+  • 1x Dok’s Toolz
+    1x ’Urty Syringe
+
+Tankbustas (160 points)
+• Attached as: Bodyguard
+  • 5x Tankbusta
+    • 5x Busta Rokkit Launcha
+      5x Gitstikka
+      1x Pulsa Rokkit (Once per battle, per unit)
+  • 1x Nob
+    • 1x Choppa
+      1x Rokkit Pistol
+      1x Smash Hammer
+
+
+CHARACTERS
+
+Big Mek Dakkarig (190 points)
+  • 1x Blitzkannon
+    1x Multi-busta Launcha
+    1x Stompy Feet
+  • Enhancement: Dreadherder
+
+Big Mek Dakkarig (160 points)
+  • 1x Blitzkannon
+    1x Multi-busta Launcha
+    1x Stompy Feet
+
+Wazdakka Gutsmek (200 points)
+  • 1x Fixit’s Wrench
+    1x Grabba Dragga
+    1x Psyko-gatler
+    1x Speeding Bulk and Flaming Exhaust
+
+
+BATTLELINE
+
+Boyz (85 points)
+  • 9x Boy
+    • 9x Choppa
+      9x Shoota
+      9x Slugga
+  • 1x Nob
+    • 1x Kombi-rokkit
+      1x Kustom Choppa
+
+
+OTHER DATASHEETS
+
+Gorkanaut (325 points)
+  • 1x Deffstorm Mega-shoota
+    2x Dual Big Shoota
+    1x Klaw of Gork
+    2x Rokkit Launcha
+    1x Skorcha
+
+Gretchin (45 points)
+  • 10x Gretchin
+    • 10x Grot Blasta
+      10x Scavenged Shivs
+
+Gretchin (45 points)
+  • 10x Gretchin
+    • 10x Grot Blasta
+      10x Scavenged Shivs
+
+Killa Kans (130 points)
+  • 3x Killa Kan
+    • 3x Kan Blasta
+      3x Kan Klaw
+
+Exported with App Version: v2.8.1 (149), Data Version: v995

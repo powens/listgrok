@@ -1,0 +1,160 @@
+Sons of dom (2,000 Points)
+
+Space Marines
+Black Templars
+Assault Brethren, Ironstorm Spearhead and Tacticus Attack Force (3 Detachment Points)
+Take and Hold
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+High Marshal Helbrecht (125 Points)
+  • Attached as: Leader (Character)
+  • Warlord
+  • 1x Ferocity
+  • 1x Sword of the High Marshals
+
+Judiciar (50 Points)
+  • Attached as: Support (Character)
+  • 1x Absolvor Bolt Pistol
+  • 1x Executioner Relic Blade
+
+Bladeguard Veteran Squad (180 Points)
+  • Attached as: Bodyguard
+  • 1x Bladeguard Veteran Sergeant
+     ◦ 1x Master-crafted Power Sword
+     ◦ 1x Neo-volkite Pistol
+  • 5x Bladeguard Veteran
+     ◦ 5x Heavy Bolt Pistol
+     ◦ 5x Master-crafted Power Sword
+
+Attached unit 2
+
+Judiciar (50 Points)
+  • Attached as: Support (Character)
+  • 1x Absolvor Bolt Pistol
+  • 1x Executioner Relic Blade
+
+Bladeguard Veteran Squad (180 Points)
+  • Attached as: Bodyguard
+  • 1x Bladeguard Veteran Sergeant
+     ◦ 1x Master-crafted Power Sword
+     ◦ 1x Neo-volkite Pistol
+  • 5x Bladeguard Veteran
+     ◦ 5x Heavy Bolt Pistol
+     ◦ 5x Master-crafted Power Sword
+
+CHARACTERS
+
+Company Heroes (145 Points)
+  • 1x Company Champion
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Power Weapon
+  • 1x Company veteran with bolt rifle
+     ◦ 1x Combat Knife
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Bolt Rifle
+  • 1x Ancient
+     ◦ 1x Combat Knife
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Bolt Rifle
+     ◦ Enhancements: Imperium’s Sword
+  • 1x Company Veteran with heavy bolter
+     ◦ 1x Combat Knife
+     ◦ 1x Master-crafted Bolt Pistol
+     ◦ 1x Master-crafted Heavy Bolter
+
+Emperor's Champion (110 Points)
+  • 1x Black Sword
+  • 1x Bolt Pistol
+  • Enhancements: Martial Paragon
+
+Execrator (65 Points)
+  • 1x Absolvor Bolt Pistol
+  • 1x Crozius Arcanum
+  • 1x Master-crafted Power Weapon
+
+DEDICATED TRANSPORTS
+
+Impulsor (80 Points)
+  • 1x Armoured Hull
+  • 1x Multi-melta
+  • 1x Shield Dome
+  • 1x Storm Bolters
+
+Impulsor (80 Points)
+  • 1x Armoured Hull
+  • 1x Multi-melta
+  • 1x Shield Dome
+  • 1x Storm Bolters
+
+OTHER DATASHEETS
+
+Aggressor Squad (90 Points)
+  • 1x Aggressor Sergeant
+     ◦ 1x Flamestorm Gauntlets
+     ◦ 1x Twin Power Fists
+  • 2x Aggressor
+     ◦ 2x Flamestorm Gauntlets
+     ◦ 2x Twin Power Fists
+
+Aggressor Squad (90 Points)
+  • 1x Aggressor Sergeant
+     ◦ 1x Flamestorm Gauntlets
+     ◦ 1x Twin Power Fists
+  • 2x Aggressor
+     ◦ 2x Flamestorm Gauntlets
+     ◦ 2x Twin Power Fists
+
+Eradicator Squad with melta rifles (100 Points)
+  • 1x Eradicator Sergeant
+     ◦ 1x Bolt Pistol
+     ◦ 1x Ceramite Fists
+     ◦ 1x Melta Rifle
+  • 2x Eradicator
+     ◦ 2x Bolt Pistol
+     ◦ 2x Ceramite Fists
+     ◦ 1x Melta Rifle
+     ◦ 1x Multi-melta
+
+Eradicator Squad with melta rifles (100 Points)
+  • 1x Eradicator Sergeant
+     ◦ 1x Bolt Pistol
+     ◦ 1x Ceramite Fists
+     ◦ 1x Melta Rifle
+  • 2x Eradicator
+     ◦ 2x Bolt Pistol
+     ◦ 2x Ceramite Fists
+     ◦ 1x Melta Rifle
+     ◦ 1x Multi-melta
+
+Land Raider (245 Points)
+  • 1x Armoured Tracks
+  • 2x Godhammer Lascannon
+  • 1x Hunter-killer Missile
+  • 1x Multi-melta
+  • 1x Storm Bolter
+  • 1x Twin Heavy Bolter
+
+Land Raider Redeemer (245 Points)
+  • 1x Armoured Tracks
+  • 2x Flamestorm Cannon
+  • 1x Hunter-killer Missile
+  • 1x Multi-melta
+  • 1x Storm Bolter
+  • 1x Twin Assault Cannon
+
+Scout Squad (65 Points)
+  • 1x Scout Sergeant
+     ◦ 1x Bolt Pistol
+     ◦ 1x Boltgun
+     ◦ 1x Chainsword
+  • 4x Scout
+     ◦ 4x Bolt Pistol
+     ◦ 3x Boltgun
+     ◦ 4x Combat Knife
+     ◦ 1x Missile Launcher
+
+Exported with App Version: v2.8.1 (1), Data Version: v995

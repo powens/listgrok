@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from listgrok import parse_list
+from listgrok import ParseError, parse_list
 
 
 def official_app():
@@ -8,7 +8,12 @@ def official_app():
     for file in root_dir.iterdir():
         if file.suffix != ".txt":
             continue
-        army_list = parse_list(file.read_text())
+        try:
+            army_list = parse_list(file.read_text())
+        except ParseError as error:
+            # Some lvo2026_* lists are hand-annotated and do not parse.
+            print(f"Failed {file.name}: {error}\n\n")
+            continue
         print(f"Parsed {file.name}: {army_list.name}")
         print(army_list)
         print("\n\n")
