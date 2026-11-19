@@ -56,12 +56,13 @@ def parse_official_app(list_text: str) -> ArmyList:
 
 
 def _parse_army_name(lines: Sequence[str], army_list: ArmyList) -> None:
-    match = POINTS_REGEX.match("\n".join(lines).strip())
+    """Everything before the header is the name; a trailing "(N Points)" on it
+    is the list's points total, and without one points stays None."""
+    text = "\n".join(lines).strip()
+    match = POINTS_REGEX.match(text)
     if match is None:
-        # Unreachable in practice: classify_blocks only labels a block
-        # ARMY_NAME after this exact regex already matched it. Kept as
-        # defensive insurance against that invariant changing underfoot.
-        raise ParseError("Unexpected army-name block", lines)
+        army_list.name = text
+        return
     army_list.name = match.group("name")
     army_list.points = parse_points(match.group("points"))
 

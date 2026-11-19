@@ -130,21 +130,25 @@ def parse_unit(lines: Sequence[str], sheet_type: str) -> Unit:
     return unit
 
 
+def _lift_keyword(unit: Unit, text: str) -> bool:
+    """Apply a unit-level keyword line to `unit`; False if `text` is not one."""
+    if text == WARLORD_LINE:
+        unit.is_warlord = True
+    elif text.startswith(ENHANCEMENT_PREFIXES):
+        unit.enhancement = text.split(":", 1)[1].strip()
+    elif (match := ATTACHED_AS_REGEX.match(text)) is not None:
+        unit.attachment = Attachment(
+            role=match.group("role").strip(),
+            # The newer dialect may omit the parenthetical entirely.
+            role_detail=(match.group("detail") or "").strip(),
+        )
+    else:
+        return False
+    return True
+
+
 def _populate(unit: Unit, roots: list[Node]) -> None:
-    models: list[Node] = []
-    for node in roots:
-        if node.text == WARLORD_LINE:
-            unit.is_warlord = True
-        elif node.text.startswith(ENHANCEMENT_PREFIXES):
-            unit.enhancement = node.text.split(":", 1)[1].strip()
-        elif (match := ATTACHED_AS_REGEX.match(node.text)) is not None:
-            unit.attachment = Attachment(
-                role=match.group("role").strip(),
-                # The newer dialect may omit the parenthetical entirely.
-                role_detail=(match.group("detail") or "").strip(),
-            )
-        else:
-            models.append(node)
+    models = [node for node in roots if not _lift_keyword(unit, node.text)]
 
     # Nested children mean each root is a model set with its wargear beneath.
     # A flat body means one implicit model set holding all of the wargear.
@@ -165,7 +169,11 @@ def _populate(unit: Unit, roots: list[Node]) -> None:
             # child.children). No 11th ed fixture nests a third level, but if
             # one ever does, it would be silently dropped rather than raising.
             for child in node.children:
-                _add_wargear(unit, model_set, child.text)
+                # In a multi-model unit the app writes "Warlord" and the
+                # enhancement under the model that carries it (official_11,
+                # official_25), so the keyword lift applies here too.
+                if not _lift_keyword(unit, child.text):
+                    _add_wargear(unit, model_set, child.text)
     else:
         model_set = UnitComposition(name=unit.name, num_models=1)
         unit.add_model_set(model_set)

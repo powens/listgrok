@@ -1,0 +1,116 @@
+Iron Supplements (1995 points)
+
+Chaos Space Marines
+Cabal of Chaos and Warpstrike Champions (3 Detachment Points)
+Disruption
+Strike Force (2000 points)
+
+Attached Units
+Attached Unit 1
+
+Sorcerer in Terminator Armour (105 points)
+• Attached as: Leader (Character)
+  • 1x Chaos Familiar
+    1x Combi-bolter
+    1x Force weapon
+    1x Infernal Gaze
+  • Enhancement: Infernal Fulgurite
+
+Chaos Terminator Squad (370 points)
+• Attached as: Bodyguard
+  • 1x Terminator Champion
+    • 1x Combi-bolter
+      1x Power fist
+  • 9x Chaos Terminator
+    • 2x Accursed weapon
+      2x Chainfist
+      7x Combi-bolter
+      5x Power fist
+      2x Reaper autocannon
+
+Attached Unit 2
+
+Sorcerer in Terminator Armour (110 points)
+• Attached as: Leader (Character)
+  • 1x Chaos Familiar
+    1x Combi-bolter
+    1x Force weapon
+    1x Infernal Gaze
+  • Enhancement: Tzagulla
+
+Chaos Terminator Squad (370 points)
+• Attached as: Bodyguard
+  • 1x Terminator Champion
+    • 1x Combi-bolter
+      1x Power fist
+  • 9x Chaos Terminator
+    • 2x Accursed weapon
+      2x Chainfist
+      7x Combi-bolter
+      5x Power fist
+      2x Reaper autocannon
+
+
+CHARACTERS
+
+Chaos Lord in Terminator Armour (100 points)
+  • 1x Chainfist
+    1x Combi-bolter
+  • Enhancement: Touched by the Warp
+
+Kravek Morne (130 points)
+  • Warlord
+  • 1x Baleflamer
+    1x Combi-bolter
+    1x Last Argument and power fist
+    1x Servo-harness
+
+
+BATTLELINE
+
+Cultist Mob (50 points)
+  • 1x Cultist Champion
+    • 1x Autopistol
+      1x Brutal assault weapon
+  • 9x Chaos Cultist
+    • 9x Autopistol
+      9x Brutal assault weapon
+
+Cultist Mob (50 points)
+  • 1x Cultist Champion
+    • 1x Autopistol
+      1x Brutal assault weapon
+  • 9x Chaos Cultist
+    • 9x Autopistol
+      9x Brutal assault weapon
+
+
+OTHER DATASHEETS
+
+Fellgor Beastmen (60 points)
+  • 1x Fellgor Champion
+    • 1x Bolt pistol
+      1x Chainsword
+  • 9x Fellgor Beastmen
+    • 9x Autopistol
+      9x Close combat weapon
+
+Mutilators (165 points)
+  • 3x Mutilator
+    • 3x Fleshmetal weapons
+
+Mutilators (165 points)
+  • 3x Mutilator
+    • 3x Fleshmetal weapons
+
+Obliterators (160 points)
+  • 2x Obliterator
+    • 2x Crushing fists
+      2x Fleshmetal guns
+
+Obliterators (160 points)
+  • 2x Obliterator
+    • 2x Crushing fists
+      2x Fleshmetal guns
+
+Exported with App Version: v2.8.1 (149), Data Version: v995

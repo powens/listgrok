@@ -8,10 +8,10 @@ EXAMPLES = Path(__file__).parents[1] / "examples"
 
 
 def test_official_app_export_routes_to_the_official_app_parser():
-    army_list = parse_list((EXAMPLES / "official_app" / "official_1.txt").read_text())
+    army_list = parse_list((EXAMPLES / "official_app" / "official_11.txt").read_text())
 
-    assert army_list.faction == "T’au Empire"
-    assert army_list.disposition == "Purge the Foe"
+    assert army_list.faction == "Astra Militarum"
+    assert army_list.disposition == "Take and Hold"
 
 
 def test_unrecognised_export_raises_rather_than_returning_a_partial_list():

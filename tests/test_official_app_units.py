@@ -5,6 +5,10 @@ import pytest
 from listgrok import ParseError
 from listgrok.parsers.official_app.units import build_tree, parse_unit
 
+# Cases citing official_1 to official_10 were trimmed from exports since
+# removed from examples/; they remain in git history, e.g.
+# `git show 6bc7874:examples/official_app/official_3.txt`.
+
 
 class TestBuildTree:
     def test_flat_body_has_no_children(self):
@@ -356,6 +360,45 @@ class TestParseUnit:
         )
 
         assert unit.enhancement == "Thirst for Glory"
+
+    def test_warlord_nested_under_a_model_set_is_lifted(self):
+        # official_11 Militarum Tempestus Command Squad: in a multi-model unit
+        # the app puts "Warlord" under the model that carries it.
+        unit = parse_unit(
+            [
+                "Militarum Tempestus Command Squad (85 Points)",
+                "  • Attached as: Leader (Character)",
+                "  • 4x Tempestus Scion",
+                "     ◦ 4x Close combat weapon",
+                "  • 1x Tempestor Prime",
+                "     • Warlord",
+                "     ◦ 1x Command Rod",
+            ],
+            "ATTACHED UNITS",
+        )
+
+        assert unit.is_warlord is True
+        assert unit.decorations == []
+        assert unit.composition[1].name == "Tempestor Prime"
+        assert unit.composition[1].wargear == {"Command Rod": 1}
+
+    def test_enhancement_nested_under_a_model_set_is_lifted(self):
+        # official_25 Company Heroes: the Ancient carries the enhancement.
+        unit = parse_unit(
+            [
+                "Company Heroes (145 Points)",
+                "  • 1x Company Champion",
+                "     ◦ 1x Master-crafted Power Weapon",
+                "  • 1x Ancient",
+                "     ◦ 1x Combat Knife",
+                "     ◦ Enhancements: Imperium’s Sword",
+            ],
+            "CHARACTERS",
+        )
+
+        assert unit.enhancement == "Imperium’s Sword"
+        assert unit.decorations == []
+        assert unit.composition[1].wargear == {"Combat Knife": 1}
 
     def test_unrecognised_body_line_becomes_a_decoration(self):
         # Synthetic: no fixture has one yet, but the model keeps an escape

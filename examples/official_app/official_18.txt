@@ -1,0 +1,121 @@
+Fathers of the fang (1,995 Points)
+
+Space Marines
+Space Wolves
+Assault Brethren, Ironstorm Spearhead and Saga of the Beastslayer (3 Detachment Points)
+Take and Hold
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Logan Grimnar (150 Points)
+  • Attached as: Leader (Character)
+  • Warlord
+  • 1x Axe Morkai
+  • 1x Storm Bolter
+  • 1x Tyrnak and Fenrir
+
+Terminator Assault Squad (400 Points)
+  • Attached as: Bodyguard
+  • Enhancements: Furious Assault (Upgrade)
+  • 1x Terminator Sergeant
+     ◦ 1x Storm Shield
+     ◦ 1x Thunder Hammer
+  • 9x Terminator
+     ◦ 9x Storm Shield
+     ◦ 9x Thunder Hammer
+
+Attached unit 2
+
+Chaplain in Terminator Armour (95 Points)
+  • Attached as: Leader (Character)
+  • 1x Crozius Arcanum
+  • 1x Storm Bolter
+  • Enhancements: Imperium’s Sword
+
+Wolf Guard Terminators (400 Points)
+  • Attached as: Bodyguard
+  • 1x Wolf Guard Terminator Pack Leader
+     ◦ 1x Relic Greataxe
+  • 9x Wolf Guard Terminator
+     ◦ 2x Assault Cannon
+     ◦ 7x Master-crafted Power Weapon
+     ◦ 2x Power Fist
+     ◦ 7x Storm Shield
+
+CHARACTERS
+
+Wolf Guard Battle Leader (95 Points)
+  • 1x Storm Shield
+  • 1x Thunder Hammer
+  • Enhancements: Wolf-Touched
+
+DEDICATED TRANSPORTS
+
+Impulsor (70 Points)
+  • 1x Armoured Hull
+  • 1x Ironhail Heavy Stubber
+  • 1x Shield Dome
+  • 1x Storm Bolters
+
+Impulsor (70 Points)
+  • 1x Armoured Hull
+  • 1x Ironhail Heavy Stubber
+  • 1x Shield Dome
+  • 1x Storm Bolters
+
+Rhino (70 Points)
+  • 1x Armoured Tracks
+  • 1x Hunter-killer Missile
+  • 1x Storm Bolter
+
+OTHER DATASHEETS
+
+Eradicator Squad with melta rifles (100 Points)
+  • 1x Eradicator Sergeant
+     ◦ 1x Bolt Pistol
+     ◦ 1x Ceramite Fists
+     ◦ 1x Melta Rifle
+  • 2x Eradicator
+     ◦ 2x Bolt Pistol
+     ◦ 2x Ceramite Fists
+     ◦ 1x Melta Rifle
+     ◦ 1x Multi-melta
+
+Eradicator Squad with melta rifles (100 Points)
+  • 1x Eradicator Sergeant
+     ◦ 1x Bolt Pistol
+     ◦ 1x Ceramite Fists
+     ◦ 1x Melta Rifle
+  • 2x Eradicator
+     ◦ 2x Bolt Pistol
+     ◦ 2x Ceramite Fists
+     ◦ 1x Melta Rifle
+     ◦ 1x Multi-melta
+
+Scout Squad (65 Points)
+  • 1x Scout Sergeant
+     ◦ 1x Bolt Pistol
+     ◦ 1x Boltgun
+     ◦ 1x Chainsword
+  • 4x Scout
+     ◦ 4x Bolt Pistol
+     ◦ 2x Boltgun
+     ◦ 4x Combat Knife
+     ◦ 1x Heavy Bolter
+     ◦ 1x Sniper Rifle
+
+Venerable Dreadnought (130 Points)
+  • 1x Blizzard Shield
+  • 1x Fenrisian Great Axe
+  • 1x Heavy Flamer
+
+Wulfen with Storm Shields (250 Points)
+  • 10x Wulfen with Storm Shield
+     ◦ 1x Death Totem
+     ◦ 9x Stormfrag Auto-launcher
+     ◦ 10x Thunder Hammer
+
+Exported with App Version: v2.8.1 (1), Data Version: v995

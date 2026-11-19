@@ -1,0 +1,75 @@
++==========================================
+Staring down 3.5 years of power creep and an edition change — Tyranids
+Invasion Fleet (3DP)
+Force Disposition: Take and Hold
+2000 / 2000 pts · 16 units
++==========================================
+
+── ATTACHED CHARACTERS ─────────
+----Attached Unit A [380 pts]---------------------
+The Swarmlord [WARLORD] [210 pts]
+Weapons: Synaptic Pulse, Bone Sabres
+↳ Attached to:
+
+Tyrant Guard [170 pts]
+6x Tyrant Guard
+Weapons: Scything talons and rending claws x6
+
+----Attached Unit B [365 pts]---------------------
+Hive Tyrant [195 pts]
+Weapons: Monstrous bonesword and lash whip, Monstrous scything talons
+↳ Attached to:
+
+Tyrant Guard [170 pts]
+6x Tyrant Guard
+Weapons: Scything talons and rending claws x6
+
+----Attached Unit C [195 pts]---------------------
+Tyranid Prime with Lash Whip [75 pts]
+Weapons: Rending claw, Lash whip, Scything talons
+↳ Attached to:
+
+Hormagaunts [120 pts]
+20x Hormagaunts
+Weapons: Hormagaunt talons x20
+
+----Attached Unit D [195 pts]---------------------
+Tyranid Prime with Lash Whip [75 pts]
+Weapons: Rending claw, Lash whip, Scything talons
+↳ Attached to:
+
+Hormagaunts [120 pts]
+20x Hormagaunts
+Weapons: Hormagaunt talons x20
+
+── UNATTACHED CHARACTERS ───────
+The Red Terror [130 pts]
+Weapons: Gaping maw, Scything talons
+
+── INFANTRY ────────────────────
+Biovores [60 pts]
+1x Biovore
+Weapons: Spore mine launcher, Chitin-barbed limbs
+
+Von Ryan's Leapers [105 pts]
+6x Von Ryan's Leaper
+Weapons: Leaper's talons x6
+
+Neurolictor [80 pts]
+Weapons: Piercing claws and talons
+
+Neurolictor [80 pts]
+Weapons: Piercing claws and talons
+
+── MONSTERS ────────────────────
+Psychophage [110 pts]
+Weapons: Psychoclastic torrent, Talons and betentacled maw
+
+Tyrannofex [180 pts]
+Weapons: Stinger salvoes, Acid spray, Powerful limbs
+
+Toxicrene [120 pts]
+Weapons: Massive toxic lashes
+
+Total: 2000 pts
+https://ironbuilt.app/?s=65T999nd

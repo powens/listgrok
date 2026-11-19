@@ -84,22 +84,19 @@ def split_blocks(text: str) -> list[list[str]]:
 def classify_blocks(text: str) -> list[Block]:
     blocks: list[Block] = []
     seen_header = False
-    name_fragments: list[str] = []
+    name_lines: list[str] = []
     for lines in split_blocks(text):
         if not seen_header and not _is_header(lines):
-            if not POINTS_REGEX.match("\n".join(lines).strip()):
-                # An army name may itself contain blank lines ("Round 2 list",
-                # blank, "QFP (2,000 Points)"), so a pre-header block without
-                # the points suffix is held as the start of the name. The
-                # blank separators are kept so the name reads back verbatim.
-                name_fragments += [*lines, ""]
-                continue
-            lines = [*name_fragments, *lines]
-            name_fragments = []
-        if name_fragments:
-            # The header arrived while a name was still open: those blocks
-            # were never closed by a "(N Points)" line, so they are not a name.
-            raise ParseError("Unrecognised block before the header", name_fragments)
+            # Everything before the header is the army name: it may run over
+            # several blocks ("Round 2 list", blank, "QFP (2,000 Points)") and
+            # need not end in a points suffix (official_28). The blank
+            # separators are kept so the name reads back verbatim.
+            name_lines += [""] if name_lines else []
+            name_lines += lines
+            continue
+        if name_lines:
+            blocks.append(Block(kind=BlockKind.ARMY_NAME, lines=tuple(name_lines)))
+            name_lines = []
         for block in _classify_block(lines, seen_header):
             seen_header = seen_header or block.kind is BlockKind.HEADER
             blocks.append(block)
@@ -119,7 +116,7 @@ def _classify_block(lines: list[str], seen_header: bool) -> list[Block]:
             Block(kind=BlockKind.SECTION, lines=(lines[0],)),
             Block(kind=BlockKind.GROUP, lines=(lines[1],)),
         ]
-    return [Block(kind=_classify(lines, seen_header), lines=tuple(lines))]
+    return [Block(kind=_classify(lines), lines=tuple(lines))]
 
 
 def _is_fused_section_group(lines: list[str]) -> bool:
@@ -139,17 +136,17 @@ def _is_fused_section_group(lines: list[str]) -> bool:
     )
 
 
-def _classify(lines: list[str], seen_header: bool) -> BlockKind:
+def _classify(lines: list[str]) -> BlockKind:
+    """Classify the header block or a block after it.
+
+    classify_blocks has already folded every block before the header into the
+    army name, so only the header itself can arrive here with seen_header unset.
+    """
     if lines[0].startswith(TRAILER_PREFIX):
         return BlockKind.TRAILER
 
     if _is_header(lines):
         return BlockKind.HEADER
-
-    if not seen_header:
-        if POINTS_REGEX.match("\n".join(lines).strip()):
-            return BlockKind.ARMY_NAME
-        raise ParseError("Unrecognised block before the header", lines)
 
     if POINTS_REGEX.match(lines[0].strip()):
         return BlockKind.UNIT

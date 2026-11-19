@@ -1,0 +1,197 @@
+Twisted Neophytes - Dumpster 🔥 (2000 points) Lets set terrain together and roll some dice.
+
+Genestealer Cults
+Biosanctic Broodsurge and Xenocult Masses
+(3 Detachment Points)
+Take and Hold
+Strike Force (2000 points)
+
+Attached Units
+Attached Unit 1
+
+Patriarch (100 points) - battleshock at the start of ea. fight phase
+• Attached as: Leader (Character)
+• Warlord
+• 1x Patriarch’s claws - twin linked
+• Enhancement: Predatory Instincts (heroic for -1 Cp and can still use heroic on another unit)
+
+Purestrain Genestealers (140 points) M8" adv + chg
+• Attached as: Bodyguard
+• 10x Purestrain Genestealer
+• 10x Cult claws and talons
+
+Attached Unit 2
+
+Primus (70 points)
+• Attached as: Leader (Character) +1 to hit
+• 1x Cult bonesword
+1x Scoped needle pistol
+1x Toxin injector claw
+
+Biophagus (50 points) + 1 to wnd infantry + lethal
+• Attached as: Support (Character)
+• 1x Alchemicus Familiar
+1x Autopistol
+1x Chemical vials
+1x Injector goad
+
+Acolyte Hybrids with Autopistols (130 points)
+• Attached as: Bodyguard (Battleline)
+• 1x Acolyte Leader
+• 1x Autopistol
+1x Leader’s bio-weapons
+• 9x Acolyte Hybrid
+• 2x Autopistol
+1x Cult Icon
+3x Cult claws and knife
+6x Heavy mining tool (3 DM anti vehicle 4+)
+
+Attached Unit 3
+
+Primus (70 points)
+• Attached as: Leader (Character) +1 to hit
+• 1x Cult bonesword
+1x Scoped needle pistol
+1x Toxin injector claw
+
+Biophagus (50 points) +1 to wnd infantry + lethal
+• Attached as: Support (Character)
+• 1x Alchemicus Familiar
+1x Autopistol
+1x Chemical vials
+1x Injector goad
+
+Hybrid Metamorphs (140 points) lots of attacks strike or sweep.
+• Attached as: Bodyguard
+• 1x Metamorph Leader
+• 1x Hand flamer
+1x Leader’s cult weapons
+• 9x Hybrid Metamorph
+• 1x Cult Icon
+8x Hand flamer
+9x Metamorph mutations
+
+Attached Unit 4
+
+Primus (70 points) +1 to hit
+• Attached as: Leader (Character)
+• 1x Cult bonesword
+1x Scoped needle pistol
+1x Toxin injector claw
+
+Biophagus (50 points) +1 to wnd Infantry + lethal
+• Attached as: Support (Character)
+• 1x Alchemicus Familiar
+1x Autopistol
+1x Chemical vials
+1x Injector goad
+
+Hybrid Metamorphs (140 points)lots of attacks strike or sweep
+• Attached as: Bodyguard
+• 1x Metamorph Leader
+• 1x Hand flamer
+1x Leader’s cult weapons
+• 9x Hybrid Metamorph
+• 1x Cult Icon
+8x Hand flamer
+9x Metamorph mutations
+
+Attached Unit 5
+
+Benefictus (75 points) lethal hits - ok overwatch
+• Attached as: Leader (Character)
+• 1x Close combat weapon
+1x Psionic Cascade
+
+Neophyte Hybrids (135 points)
+• Attached as: Bodyguard (Battleline)
+• 1x Neophyte Leader
+• 1x Anointed pistol
+1x Autopistol
+1x Power weapon
+• 19x Neophyte Hybrid
+• 19x Autopistol
+19x Close combat weapon
+1x Cult Icon
+2x Grenade launcher
+11x Hybrid firearm
+2x Mining laser
+2x Seismic cannon
+2x Webber
+
+Attached Unit 6
+
+Benefictus (75 points) lethal ok overwatch
+• Attached as: Leader (Character)
+• 1x Close combat weapon
+1x Psionic Cascade
+
+Neophyte Hybrids (135 points)
+• Attached as: Bodyguard (Battleline)
+• 1x Neophyte Leader
+• 1x Anointed pistol
+1x Autopistol
+1x Power weapon
+• 19x Neophyte Hybrid
+• 19x Autopistol
+19x Close combat weapon
+1x Cult Icon
+2x Grenade launcher
+11x Hybrid firearm
+2x Mining laser
+2x Seismic cannon
+2x Webber
+
+
+CHARACTERS
+
+Abominant (85 points) gets back up on a 2+
+• 1x Power sledgehammer STR 12 AP 2 DM D6+1
+
+
+BATTLELINE
+
+Acolyte Hybrids with Autopistols (70 points)
+• 1x Acolyte Leader
+• 1x Autopistol
+1x Leader’s bio-weapons
+• 4x Acolyte Hybrid
+• 1x Cult Icon
+1x Cult claws and knife
+3x Heavy mining tool - 3 DM, anti vehicle 4+
+
+
+DEDICATED TRANSPORTS
+
+Goliath Truck (75 points)
+• 1x Armoured hull
+1x Demolition charge cache
+1x Heavy stubber
+1x Twin autocannon - twin linked 3 DM
+
+Goliath Truck (75 points)
+• 1x Armoured hull
+1x Demolition charge cache
+1x Heavy stubber
+1x Twin autocannon - twin linked 3 damage
+
+
+OTHER DATASHEETS
+
+Achilles Ridgerunners (95 points) - strips cover adds AP
+• 1x Armoured hull
+1x Heavy mortar
+1x Survey Augur
+1x Twin heavy stubber
+
+Achilles Ridgerunners (95 points) strips cover adds AP
+• 1x Armoured hull
+1x Heavy mortar
+1x Survey Augur
+1x Twin heavy stubber
+
+Purestrain Genestealers (75 points) M8" adv + CHG
+• 5x Purestrain Genestealer
+• 5x Cult claws and talons
+
+Exported with App Version: v2.6.0 (144), Data Version: v946

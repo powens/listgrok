@@ -45,7 +45,7 @@ jobs:
       - name: Build
         run: uv build
       - name: Smoke test the built wheel
-        run: uv run --isolated --no-project --with dist/*.whl python -c "import listgrok, pathlib; print(listgrok.parse_list(pathlib.Path('examples/official_app/official_1.txt').read_text()).name)"
+        run: uv run --isolated --no-project --with dist/*.whl python -c "import listgrok, pathlib; print(listgrok.parse_list(pathlib.Path('examples/official_app/official_11.txt').read_text()).name)"
 
       - name: Publish to PyPI
         run: uv publish --trusted-publishing always
