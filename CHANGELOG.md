@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   header block is no longer read as a header line.
 - A `====` underline beneath an `Attached unit N` or section heading is dropped
   rather than raising `Unrecognised lone line`.
+- Python 3.15 is tested in CI and listed in the package classifiers.
 
 ### Changed
 

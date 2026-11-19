@@ -138,10 +138,6 @@ def test_faction_only_header_leaves_disposition_empty():
         ),
     ],
 )
-
-# Cases citing official_1 to official_10 were trimmed from exports since
-# removed from examples/; they remain in git history, e.g.
-# `git show 6bc7874:examples/official_app/official_3.txt`.
 def test_split_detachments(line, expected):
     assert split_detachments(line) == expected
 
@@ -174,8 +170,8 @@ def test_nr_official_4_header_without_an_army_size_line_parses():
     ],
 )
 def test_malformed_army_size_line_raises(size_line):
-    # Synthetic, varying official_1.txt's size line: the line is optional now,
-    # so it must not fall through and shift the positional faction lines.
+    # Synthetic, varying official_1.txt's size line: the line is optional, so
+    # a malformed one must not fall through and shift the faction lines.
     with pytest.raises(ParseError, match="Malformed army-size line"):
         parse_header(
             [

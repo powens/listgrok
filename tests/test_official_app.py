@@ -600,8 +600,8 @@ OFFICIAL_EXAMPLES = {
         "attached_groups": 6,
         "decorations": {},
     },
-    # New Recruit's GW-style export (v37.14, examples/new_recruit/official/): the official layout under its own
-    # footer, with an Oxford comma in the detachment line.
+    # New Recruit v37.14's GW-style export, with an Oxford comma in the
+    # detachment line.
     "nr_official_3.txt": {
         "name": "UM- Terminators",
         "points": 2000,
@@ -649,10 +649,8 @@ def parse_example(filename: str):
     return parse_official_app(example_path(filename).read_text())
 
 
-# Synthetic: no 11th edition fixture has a grouped unit that omits its
-# "Attached as:" line, so this input is hand-built to exercise that path —
-# the fold must still stamp the group onto the unit with an empty role
-# rather than leaving attachment=None.
+# Synthetic, minimal form of official_15's groups: a grouped unit with no
+# "Attached as:" line still gets an attachment, with an empty role.
 GROUPED_UNIT_WITHOUT_ATTACHED_AS = """Test Army (100 Points)
 
 Test Faction
@@ -668,10 +666,8 @@ Test Unit (50 Points)
   • 1x Test Wargear
 """
 
-# Synthetic: a second block carrying a "(N Detachment Points)" line, which is
-# the HEADER signature. classify_blocks has no way to tell this apart from a
-# legitimate header, so the fold itself must reject the second one rather than
-# silently overwriting all the metadata parsed from the first.
+# Synthetic: a second "(N Detachment Points)" block looks like a header to
+# classify_blocks, so the fold must reject it rather than overwrite the first.
 TWO_HEADER_BLOCKS = """Test Army (100 Points)
 
 Test Faction
@@ -756,17 +752,13 @@ class TestAllOfficialExamples:
     def test_parsed_list_is_json_serialisable(self, filename):
         army_list = parse_example(filename)
 
-        # Every to_dict test elsewhere builds objects with empty composition,
-        # so UnitComposition.to_dict() never runs there. Exercising it here,
-        # over a fully parsed tree, proves the whole model is JSON-clean.
+        # The only test that runs to_dict() over a fully populated tree.
         json.dumps(army_list.to_dict())
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_unit_points_sum_to_the_list_total(self, filename):
-        # The total is tabulated rather than read back from army_list.points
-        # because a list may have no list-points line (official_28, and the
-        # compact dialect) — its points stay None while the units must still
-        # sum correctly.
+        # Tabulated, not read from army_list.points, which is None for a list
+        # with no points line (official_28, lvo2026_world_eaters).
         army_list = parse_example(filename)
 
         expected_total = OFFICIAL_EXAMPLES[filename]["unit_points_total"]

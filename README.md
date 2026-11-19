@@ -17,11 +17,8 @@ listgrok has no runtime dependencies and supports Python 3.10 and newer.
 ## Supported formats
 
 - [x] Official GW 40k app (11th edition)
-
-Planned:
-
 - [ ] NewRecruit:
-  - [ ] GW format
+  - [x] GW format
   - [ ] Markdown format
   - [ ] WTC
   - [ ] WTC-short

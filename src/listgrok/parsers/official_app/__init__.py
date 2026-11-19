@@ -1,4 +1,5 @@
-"""Parse army lists exported from GW's official Warhammer 40k app (11th edition).
+"""Parse army lists exported from GW's official Warhammer 40k app (11th edition),
+and New Recruit's export of the same layout.
 
 The export is folded from a classified block stream into an ArmyList, carrying
 only the current sheet type and the current attachment group as state.
@@ -47,9 +48,7 @@ def parse_official_app(list_text: str) -> ArmyList:
         elif block.kind is BlockKind.TRAILER:
             pass
         else:
-            # classify_blocks only ever emits the BlockKind members handled
-            # above; this guards against a future kind being added there and
-            # silently falling through here instead of being wired in.
+            # Guards a BlockKind added to classify_blocks but not wired in here.
             raise ParseError(f"Unhandled block kind: {block.kind}", block.lines)
 
     return army_list

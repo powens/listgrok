@@ -423,8 +423,7 @@ class TestParseUnit:
         assert unit.composition[1].wargear == {"Combat Knife": 1}
 
     def test_unrecognised_body_line_becomes_a_decoration(self):
-        # Synthetic: no fixture has one yet, but the model keeps an escape
-        # hatch for body lines that are neither wargear nor a known keyword.
+        # Synthetic, in the shape of official_15's "Mark of Chaos: <god>".
         unit = parse_unit(
             [
                 "Ghostkeel Battlesuit (150 Points)",
@@ -438,11 +437,8 @@ class TestParseUnit:
         assert unit.composition[0].wargear == {"Ghostkeel fists": 1}
 
     def test_unrecognised_nested_root_becomes_a_decoration(self):
-        # Synthetic: no 11th fixture has a nested (multi-model) unit whose
-        # root line fails NUM_REGEX, but the parser must not fabricate a
-        # UnitComposition(num_models=None) for one — it goes to decorations,
-        # mirroring the flat-body case above and what _add_wargear already
-        # does for an unrecognised child line.
+        # Synthetic: a model-set root that is not "Nx name" becomes a
+        # decoration, not a UnitComposition with num_models=None.
         unit = parse_unit(
             [
                 "Kroot Carnivores (65 Points)",

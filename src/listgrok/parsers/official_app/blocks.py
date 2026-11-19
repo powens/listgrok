@@ -1,16 +1,13 @@
-"""Split a GW official-app (11th edition) export into classified blocks.
+"""Split an official-app (11th edition) export into classified blocks.
 
-Classification is by shape alone — no army-list knowledge lives here. The
-metadata block is identified by its "(N Detachment Points)" line, which no other
-block carries; everything before it is the army name, everything after it is
-section headings, attachment-group headings and unit blocks. Keying off that
-line rather than off "the points line is not first" is what lets a multi-line
-army name work: under the latter rule it has exactly the header's shape.
+Classification is by shape alone. The header is the block with a
+"(N Detachment Points)" line, which no other block carries: everything before
+it is the army name, everything after it is section headings, attachment-group
+headings, unit blocks and the footer. Blocks New Recruit fuses by leaving out
+blank lines are split apart here.
 
-This module is also the shared home for the export's regex patterns —
-including NUM_REGEX, ATTACHED_AS_REGEX and BULLET_REGEX, which this module
-does not itself use. They live here so units.py has one place to import them
-from alongside POINTS_REGEX and DETACHMENT_REGEX, which classification does use.
+This module is also the home of every regex the parser shares, including
+some only units.py and header.py use.
 """
 
 import re
@@ -265,11 +262,8 @@ def _is_fused_section_group(lines: list[str]) -> bool:
 
 
 def _classify(lines: list[str]) -> BlockKind:
-    """Classify the header block or a block after it.
-
-    classify_blocks has already folded every block before the header into the
-    army name, so only the header itself can arrive here with seen_header unset.
-    """
+    """Classify the header block or a block after it; classify_blocks has
+    already folded every block before the header into the army name."""
     if TRAILER_REGEX.match(lines[0].strip()):
         return BlockKind.TRAILER
 

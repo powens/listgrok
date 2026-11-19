@@ -487,9 +487,9 @@ def test_army_name_without_a_points_suffix_is_one_block():
 
 
 def test_everything_before_the_header_is_one_army_name_block():
-    # A points-closed block no longer ends the name: any text up to the header
-    # belongs to the block, blank separators included. Splitting the name from
-    # trailing notes is the fold's job (TestArmyNameFold).
+    # Any text up to the header belongs to the block, blank separators
+    # included. Splitting the name from trailing notes is the fold's job
+    # (TestArmyNameFold).
     text = "Name (2,000 Points)\n\nnotes one\nnotes two\n\n" + NO_ARMY_NAME
     blocks = classify_blocks(text)
 
@@ -514,10 +514,6 @@ def test_title_case_lone_line_after_the_header_raises():
 @pytest.mark.parametrize(
     "text,expected", [("2,000", 2000), ("70", 70), ("1,260", 1260)]
 )
-
-# Cases citing official_1 to official_10 were trimmed from exports since
-# removed from examples/; they remain in git history, e.g.
-# `git show 6bc7874:examples/official_app/official_3.txt`.
 def test_parse_points_strips_thousands_commas(text, expected):
     assert parse_points(text) == expected
 
