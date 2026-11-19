@@ -9,6 +9,7 @@ The body comes in three dialects, chosen by build_tree:
 - compact: unindented, nesting encoded by bullet runs (_run_tree).
 """
 
+import re
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 
@@ -23,8 +24,27 @@ from listgrok.parsers.official_app.blocks import (
 )
 
 HOLLOW_BULLET = "◦"
-WARLORD_LINE = "Warlord"
-ENHANCEMENT_PREFIXES = ("Enhancements:", "Enhancement:")
+# English, French and German. French puts a space before the colon.
+WARLORD_LINES = frozenset({"Warlord", "Seigneur de Guerre", "Kriegsherr"})
+ENHANCEMENT_REGEX = re.compile(
+    r"^(?:Enhancements?|Optimisations?|Verbesserung(?:en)?)\s?:\s*(?P<name>.*)$"
+)
+# Attached-as roles and details are a closed set, so the French and German
+# words map to the English ones and a consumer filtering on "Leader" needs no
+# translation table. A word not listed is kept verbatim.
+ROLE_NAMES = {
+    "Meneur": "Leader",
+    "Appui": "Support",
+    "Gardes du Corps": "Bodyguard",
+    "Anführer": "Leader",
+    "Leibwächter": "Bodyguard",
+}
+ROLE_DETAILS = {
+    "Personnage": "Character",
+    "Ligne": "Battleline",
+    "Charaktermodell": "Character",
+    "Linientruppen": "Battleline",
+}
 
 
 @dataclass
@@ -140,23 +160,25 @@ def parse_unit(lines: Sequence[str], sheet_type: str) -> Unit:
 def _is_keyword(text: str) -> bool:
     """True for a unit-level keyword line that _lift_keyword would apply."""
     return (
-        text == WARLORD_LINE
-        or text.startswith(ENHANCEMENT_PREFIXES)
+        text in WARLORD_LINES
+        or ENHANCEMENT_REGEX.match(text) is not None
         or ATTACHED_AS_REGEX.match(text) is not None
     )
 
 
 def _lift_keyword(unit: Unit, text: str) -> bool:
     """Apply a unit-level keyword line to `unit`; False if `text` is not one."""
-    if text == WARLORD_LINE:
+    if text in WARLORD_LINES:
         unit.is_warlord = True
-    elif text.startswith(ENHANCEMENT_PREFIXES):
-        unit.enhancement = text.split(":", 1)[1].strip()
+    elif (match := ENHANCEMENT_REGEX.match(text)) is not None:
+        unit.enhancement = match.group("name").strip()
     elif (match := ATTACHED_AS_REGEX.match(text)) is not None:
+        role = match.group("role").strip()
+        # The newer dialect may omit the parenthetical entirely.
+        detail = (match.group("detail") or "").strip()
         unit.attachment = Attachment(
-            role=match.group("role").strip(),
-            # The newer dialect may omit the parenthetical entirely.
-            role_detail=(match.group("detail") or "").strip(),
+            role=ROLE_NAMES.get(role, role),
+            role_detail=ROLE_DETAILS.get(detail, detail),
         )
     else:
         return False

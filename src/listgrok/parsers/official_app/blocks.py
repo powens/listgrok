@@ -3,8 +3,13 @@
 Classification is by shape alone. The header is the block with a
 "(N Detachment Points)" line, which no other block carries: everything before
 it is the army name, everything after it is section headings, attachment-group
-headings, unit blocks and the footer. Blocks New Recruit fuses by leaving out
-blank lines are split apart here.
+headings, unit blocks, the app's validation errors, unit footnotes and the
+footer. Blocks New Recruit fuses by leaving out blank lines are split apart
+here.
+
+The French and German apps translate the fixed labels this module keys on, so
+each pattern below accepts their forms too; translated section headings need
+nothing, being recognised by shape.
 
 This module is also the home of every regex the parser shares, including
 some only units.py and header.py use.
@@ -22,36 +27,62 @@ from listgrok.exceptions import ParseError
 # Unbounded digit runs reach int(), which raises ValueError past 4300 digits,
 # so counts are capped and an oversized one simply fails to match.
 
-# re.DOTALL so a multi-line army name matches as a single name. Point totals may
-# carry thousands commas ("2,000 Points"), and \s+ keeps a doubled space before
-# the parenthetical ("I choose violence.  (2,000 Points)") off the name.
+# A points value, with or without a thousands separator. The app writes the
+# separator its locale uses: "2,000", "2.000", "2'000", or a space, a no-break
+# space or a narrow no-break space (listhammer_adeptus_custodes, _tau_empire,
+# _tyranids, _orks_fr).
+_POINTS_VALUE = r"\d{1,3}(?:[,.'’ \u00a0\u202f]\d{3}){1,2}|\d{1,9}"
+# re.DOTALL so a multi-line army name matches as a single name, and \s+ keeps a
+# doubled space before the parenthetical ("I choose violence.  (2,000 Points)")
+# off the name. "Punkte" is the German app's word. A trailing "*" marks a unit
+# a footnote block describes (listhammer_chaos_knights).
 POINTS_REGEX = re.compile(
-    r"^(?P<name>.*?\S)\s+\((?P<points>[\d,]{1,9})\s[Pp]oints\)$", re.DOTALL
+    rf"^(?P<name>.*?\S)\s+\((?P<points>{_POINTS_VALUE})\s(?:[Pp]oints|Punkte)\)\*?$",
+    re.DOTALL,
 )
 DETACHMENT_REGEX = re.compile(
-    r"^(?P<name>.+?)\s\((?P<points>\d{1,6})\sDetachment\s[Pp]oints?\)$"
+    r"^(?P<name>.+?)\s\((?P<points>\d{1,6})\s"
+    r"(?:Detachment\s[Pp]oints?|Points?\sde\sDétachement|Kontingentspunkte?)\)$"
 )
 NUM_REGEX = re.compile(r"^(?P<num>\d{1,6})x\s(?P<name>.+)$")
+# French writes "Attachée en tant que : …", German "Angeschlossen als: …".
 ATTACHED_AS_REGEX = re.compile(
-    r"^Attached as:\s*(?P<role>[^(\s](?:[^(]*[^(\s])?)\s*"
+    r"^(?:Attached as|Attachée en tant que|Angeschlossen als)\s?:"
+    r"\s*(?P<role>[^(\s](?:[^(]*[^(\s])?)\s*"
     r"(?:\((?P<detail>[^)]*)\))?$"
 )
 BULLET_REGEX = re.compile(r"^[•◦]\s*")
 # IGNORECASE: the classic dialect writes "Attached unit 1", the newer one
-# "Attached Unit 1". The \b keeps the plural section heading ("Attached
-# Units") from matching.
-GROUP_REGEX = re.compile(r"^Attached unit\b", re.IGNORECASE)
+# "Attached Unit 1". French writes "Unité Attachée 1" or "Unité 1 Attachée",
+# German "Angeschlossene Einheit 1". The \b keeps the plural section heading
+# ("Attached Units", "Angeschlossene Einheiten") from matching; French's plural
+# ("Unités Attachées") fails at the "s".
+GROUP_REGEX = re.compile(
+    r"^(?:Attached unit|Unité Attachée|Unité \d{1,4} Attachée|Angeschlossene Einheit)\b",
+    re.IGNORECASE,
+)
 # Some exports underline headings ("Attached unit 1" / "======", official_31).
 # Only that position is decoration; a rule elsewhere still raises.
 UNDERLINE_REGEX = re.compile(r"^=+$")
-# The official app's footer is known by its prefix, "Exported with App Version: …";
-# another exporter's by naming a data version too, "Exported with New Recruit v37.14,
-# Data Version: v8". Bounded, as the text is untrusted.
-TRAILER_REGEX = re.compile(r"^Exported with (?:App Version:|.{1,80}Data Version:)")
+# The official app's footer is known by its prefix, "Exported with App Version: …",
+# or the French or German one; another exporter's by naming a data version too,
+# "Exported with New Recruit v37.14, Data Version: v8". Bounded, as the text is
+# untrusted.
+TRAILER_REGEX = re.compile(
+    r"^(?:Exported with (?:App Version:|.{1,80}Data Version:)"
+    r"|Exporté avec la Version de l['’]Appli|Exportiert mit App-Version)"
+)
+# The app's validation-error heading, followed by one bulleted line per error.
+VALIDATION_HEADINGS = frozenset({"ERRORS", "ERREURS"})
+# A footnote on the unit above it: "* This Datasheet also has the Battleline
+# keyword" (listhammer_chaos_knights).
+FOOTNOTE_REGEX = re.compile(r"^\*\s+\S")
 # A header line that means to be the army size but is not POINTS_REGEX's shape:
 # the size line is optional, so this one would otherwise map as a faction line.
 # Leading \b and a capped run: a long digit or comma run cannot restart the scan.
-LOOSE_POINTS_REGEX = re.compile(r"\b\d[\d,]{0,8}\s?(?:pts?|points?)\b", re.IGNORECASE)
+LOOSE_POINTS_REGEX = re.compile(
+    r"\b\d[\d,.'’\u00a0\u202f ]{0,8}\s?(?:pts?|points?|punkte)\b", re.IGNORECASE
+)
 
 
 class BlockKind(Enum):
@@ -60,6 +91,8 @@ class BlockKind(Enum):
     SECTION = auto()
     GROUP = auto()
     UNIT = auto()
+    VALIDATION_ERRORS = auto()
+    FOOTNOTE = auto()
     TRAILER = auto()
 
 
@@ -70,7 +103,8 @@ class Block:
 
 
 def parse_points(text: str) -> int:
-    return int(text.replace(",", ""))
+    """Read a POINTS_REGEX "points" group, dropping any thousands separator."""
+    return int(re.sub(r"\D", "", text))
 
 
 def split_blocks(text: str) -> list[list[str]]:
@@ -266,6 +300,13 @@ def _classify(lines: list[str]) -> BlockKind:
     already folded every block before the header into the army name."""
     if TRAILER_REGEX.match(lines[0].strip()):
         return BlockKind.TRAILER
+
+    # Ahead of the lone-line check: "ERRORS" alone would read as a section.
+    if lines[0].strip() in VALIDATION_HEADINGS:
+        return BlockKind.VALIDATION_ERRORS
+
+    if FOOTNOTE_REGEX.match(lines[0].strip()):
+        return BlockKind.FOOTNOTE
 
     if _is_header(lines):
         return BlockKind.HEADER

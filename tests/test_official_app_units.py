@@ -456,6 +456,93 @@ class TestParseUnit:
         assert unit.composition[0].num_models == 9
         assert unit.composition[0].wargear == {"Kroot rifle": 9}
 
+    @pytest.mark.parametrize(
+        "line,role,detail",
+        [
+            # listhammer_orks_fr, listhammer_adeptus_mechanicus_fr.
+            ("Attachée en tant que : Meneur (Personnage)", "Leader", "Character"),
+            ("Attachée en tant que : Appui (Personnage)", "Support", "Character"),
+            ("Attachée en tant que : Gardes du Corps", "Bodyguard", ""),
+            (
+                "Attachée en tant que : Gardes du Corps (Ligne)",
+                "Bodyguard",
+                "Battleline",
+            ),
+            # listhammer_world_eaters_de, and another German Listhammer list.
+            ("Angeschlossen als: Anführer (Charaktermodell)", "Leader", "Character"),
+            (
+                "Angeschlossen als: Leibwächter (Linientruppen)",
+                "Bodyguard",
+                "Battleline",
+            ),
+            ("Angeschlossen als: Leibwächter", "Bodyguard", ""),
+        ],
+    )
+    def test_localised_attached_as_is_normalised_to_english(self, line, role, detail):
+        unit = parse_unit(["Mek (55 Points)", f"• {line}", "• 1x Outils de Mek"], "")
+
+        assert unit.attachment is not None
+        assert (unit.attachment.role, unit.attachment.role_detail) == (role, detail)
+
+    def test_unknown_attached_as_role_is_kept_verbatim(self):
+        # Synthetic: a role outside the translation table is not guessed at.
+        unit = parse_unit(
+            ["Captain (80 Points)", "  • Attached as: Escort (Elite)"], "CHARACTERS"
+        )
+
+        assert unit.attachment is not None
+        assert (unit.attachment.role, unit.attachment.role_detail) == (
+            "Escort",
+            "Elite",
+        )
+
+    @pytest.mark.parametrize(
+        "warlord,enhancement",
+        [
+            # listhammer_adeptus_mechanicus_fr, listhammer_orks_fr.
+            ("Seigneur de Guerre", "Optimisation : Necromechanic"),
+            ("Seigneur de Guerre", "Optimisations : Necromechanic"),
+            # listhammer_imperial_knights_de, and another German Listhammer list.
+            ("Kriegsherr", "Verbesserungen: Necromechanic"),
+            ("Kriegsherr", "Verbesserung: Necromechanic"),
+        ],
+    )
+    def test_localised_warlord_and_enhancement_are_lifted(self, warlord, enhancement):
+        unit = parse_unit(
+            [
+                "Tech-Priest Enginseer (75 points)",
+                f"• {warlord}",
+                "• 1x Mechanicus pistol",
+                f"• {enhancement}",
+            ],
+            "PERSONNAGES",
+        )
+
+        assert unit.is_warlord
+        assert unit.enhancement == "Necromechanic"
+        assert unit.decorations == []
+
+    def test_footnote_marker_is_dropped_from_the_unit_header(self):
+        # listhammer_chaos_knights War Dog Karnivore.
+        unit = parse_unit(
+            ["War Dog Karnivore (145 Points)*", "• 1x Slaughterclaw"], "CHARACTERS"
+        )
+
+        assert unit.name == "War Dog Karnivore"
+        assert unit.points == 145
+
+    @pytest.mark.parametrize("points", ["2.000", "2\u202f000", "2'000"])
+    def test_separator_formatted_unit_points(self, points):
+        unit = parse_unit([f"Titanic Thing ({points} Points)"], "CHARACTERS")
+
+        assert unit.points == 2000
+
+    def test_punkte_unit_points(self):
+        # listhammer_world_eaters_de.
+        unit = parse_unit(["Angron (330 Punkte)", "• Kriegsherr"], "CHARAKTERMODELLE")
+
+        assert unit.points == 330
+
     def test_comma_formatted_unit_points(self):
         unit = parse_unit(
             ["Titanic Thing (1,000 Points)", "  • 1x Big gun"], "CHARACTERS"

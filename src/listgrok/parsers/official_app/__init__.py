@@ -10,6 +10,7 @@ from collections.abc import Sequence
 from listgrok.exceptions import ParseError
 from listgrok.models import ArmyList, Attachment, Unit
 from listgrok.parsers.official_app.blocks import (
+    BULLET_REGEX,
     POINTS_REGEX,
     BlockKind,
     classify_blocks,
@@ -45,6 +46,18 @@ def parse_official_app(list_text: str) -> ArmyList:
             group = block.lines[0].strip()
         elif block.kind is BlockKind.UNIT:
             army_list.add_unit(_parse_unit_in(block.lines, sheet_type, group))
+        elif block.kind is BlockKind.VALIDATION_ERRORS:
+            army_list.validation_errors += [
+                BULLET_REGEX.sub("", line.strip()) for line in block.lines[1:]
+            ]
+        elif block.kind is BlockKind.FOOTNOTE:
+            # A footnote describes the unit above it, so it joins that unit's
+            # decorations rather than being dropped.
+            if not army_list.units:
+                raise ParseError("Footnote before any unit", block.lines)
+            army_list.units[-1].decorations += [
+                line.strip().removeprefix("*").strip() for line in block.lines
+            ]
         elif block.kind is BlockKind.TRAILER:
             pass
         else:

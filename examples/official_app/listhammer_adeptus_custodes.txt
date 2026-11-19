@@ -1,0 +1,66 @@
+4++ Magic (2.000 Points)
+
+Adeptus Custodes
+Emperor’s Chosen, Grav‑Assault Force, and Might of the Moritoi (3 Detachment Points)
+Take and Hold
+Strike Force (2.000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Trajann Valoris (265 Points)
+• Attached as: Leader (Character)
+• Warlord
+• 1x Eagle’s Scream
+• 1x Watcher’s Axe
+
+Allarus Custodians (180 Points)
+• Attached as: Bodyguard
+• 2x Allarus Custodians
+◦ 2x Balistus Grenade Launcher
+◦ 2x Guardian Spear
+◦ 1x Vexilla
+
+OTHER DATASHEETS
+
+Caladius Annihilator Grav‑Tank (250 Points)
+• 1x Arachnus Blaze Carronade
+• 1x Armoured Hull
+• 1x Twin Lastrum Bolt Cannon
+
+Contemptor‑Galatus Dreadnought (220 Points)
+• 1x Warblade
+
+Prosecutor Squad (45 Points)
+• 4x Prosecutors
+◦ 4x Boltgun
+◦ 4x Gun Stock
+
+Telemon Heavy Dreadnought (310 Points)
+• 1x Dual Caestus Fists
+• 1x Spiculus Bolt Launcher
+• 2x Twin Neutronium Cascade Projectors
+• Enhancements: Augury Uplink (one per army) (Upgrade)
+
+Telemon Heavy Dreadnought (340 Points)
+• 1x Dual Caestus Fists
+• 1x Spiculus Bolt Launcher
+• 2x Twin Neutronium Cascade Projectors
+• Enhancements: Memento Moritoi (one per army) (Upgrade)
+
+Venatari with Verutum Lances (270 Points)
+• 3x Venatari
+◦ 3x Verutum Lance
+
+Witchseeker Squad (60 Points)
+• 5x Witchseekers
+◦ 5x Flamer
+◦ 5x Gun Stock
+
+Witchseeker Squad (60 Points)
+• 5x Witchseekers
+◦ 5x Flamer
+◦ 5x Gun Stock
+
+Exported with App Version: v2.8.1 (1), Data Version: v995

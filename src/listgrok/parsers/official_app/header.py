@@ -21,9 +21,20 @@ from listgrok.parsers.official_app.detachment_names import COMPOUND_DETACHMENTS
 DISPOSITION_LABEL = "Force Dispositions:"
 # The army-size names, matched whole: a size line that lost its "(N Points)"
 # suffix would otherwise map by position as a faction or disposition line.
-ARMY_SIZES = frozenset({"Combat Patrol", "Incursion", "Strike Force", "Onslaught"})
+# Only the French and German names seen in exports are listed.
+ARMY_SIZES = frozenset(
+    {
+        "Combat Patrol",
+        "Incursion",
+        "Strike Force",
+        "Onslaught",
+        "Force de Frappe",
+        "Einsatzverband",
+    }
+)
 # ", and " first: an Oxford comma is one joiner, or "and C" would become a name.
-JOINER_REGEX = re.compile(r"(, and | and |, )")
+# The French and German apps join with "et" and "und".
+JOINER_REGEX = re.compile(r"(, and | and |, et | et |, und | und |, )")
 # The most joiners any compound name contains. Bounding the lookahead by it
 # keeps the split linear: an unbounded scan of every longer run is cubic in the
 # number of joiners, which a crafted detachment line can make arbitrarily large.

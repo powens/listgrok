@@ -512,10 +512,123 @@ def test_title_case_lone_line_after_the_header_raises():
 
 
 @pytest.mark.parametrize(
-    "text,expected", [("2,000", 2000), ("70", 70), ("1,260", 1260)]
+    "text,expected",
+    [
+        ("2,000", 2000),
+        ("70", 70),
+        ("1,260", 1260),
+        # listhammer_adeptus_custodes, _tau_empire, _tyranids, _orks_fr.
+        ("2.000", 2000),
+        ("2'000", 2000),
+        ("2\u00a0000", 2000),
+        ("2\u202f000", 2000),
+        # Seen in Listhammer lists not kept as fixtures.
+        ("2 000", 2000),
+        ("2’000", 2000),
+    ],
 )
-def test_parse_points_strips_thousands_commas(text, expected):
+def test_parse_points_strips_thousands_separators(text, expected):
     assert parse_points(text) == expected
+
+
+@pytest.mark.parametrize("sep", [".", "'", "’", " ", "\u00a0", "\u202f"])
+def test_army_size_with_a_thousands_separator_parses(sep):
+    army_list = parse_official_app(NO_ARMY_NAME.replace("2,000", f"2{sep}000"))
+
+    assert army_list.army_size_points == 2000
+
+
+def test_footnoted_unit_header_and_its_footnote_block():
+    # listhammer_chaos_knights: "*" after the points marks a unit the
+    # footnote block below it describes.
+    body = (
+        "CHARACTERS\n\nWar Dog Karnivore (145 Points)*\n• Warlord\n"
+        "• 1x Slaughterclaw\n\n* This Datasheet also has the Battleline keyword\n"
+    )
+
+    assert kinds_after_header(body) == [
+        (BlockKind.SECTION, "CHARACTERS"),
+        (BlockKind.UNIT, "War Dog Karnivore (145 Points)*"),
+        (BlockKind.FOOTNOTE, "* This Datasheet also has the Battleline keyword"),
+    ]
+
+
+@pytest.mark.parametrize("heading", ["ERRORS", "ERREURS"])
+def test_validation_errors_block_is_classified(heading):
+    # listhammer_adeptus_custodes_errors, listhammer_orks_fr.
+    body = f"{heading}\n• Invalid wargear selected.\n\nCHARACTERS\n"
+
+    assert kinds_after_header(body) == [
+        (BlockKind.VALIDATION_ERRORS, heading),
+        (BlockKind.SECTION, "CHARACTERS"),
+    ]
+
+
+def test_validation_errors_block_fused_onto_the_header_splits_out():
+    # listhammer_adeptus_custodes_errors: no blank line after the size line.
+    blocks = classify_blocks(HEADER.rstrip("\n") + "\nERRORS\n• Invalid.\n")
+
+    assert [(b.kind, b.lines) for b in blocks[1:]] == [
+        (BlockKind.VALIDATION_ERRORS, ("ERRORS", "• Invalid.")),
+    ]
+
+
+@pytest.mark.parametrize(
+    "heading",
+    [
+        "Unité Attachée 1",  # listhammer_orks_fr
+        "Unité 1 Attachée",  # listhammer_adeptus_mechanicus_fr
+        "Angeschlossene Einheit 1",  # listhammer_world_eaters_de
+    ],
+)
+def test_localised_group_heading_is_a_group(heading):
+    assert kinds_after_header(f"{heading}\n") == [(BlockKind.GROUP, heading)]
+
+
+@pytest.mark.parametrize(
+    "section,group",
+    [
+        ("Unités Attachées", "Unité 1 Attachée"),
+        ("Angeschlossene Einheiten", "Angeschlossene Einheit 1"),
+    ],
+)
+def test_localised_fused_section_and_group_split(section, group):
+    assert kinds_after_header(f"{section}\n{group}\n") == [
+        (BlockKind.SECTION, section),
+        (BlockKind.GROUP, group),
+    ]
+
+
+@pytest.mark.parametrize(
+    "detachment_line",
+    [
+        "Cohort Cybernetica (3 Points de Détachement)",  # listhammer_*_fr
+        "Freeblade Company (3 Kontingentspunkte)",  # listhammer_*_de
+    ],
+)
+def test_localised_detachment_line_marks_the_header(detachment_line):
+    blocks = classify_blocks(f"Army\n\nFaction\n{detachment_line}\n\nCHARACTERS\n")
+
+    assert [b.kind for b in blocks] == [
+        BlockKind.ARMY_NAME,
+        BlockKind.HEADER,
+        BlockKind.SECTION,
+    ]
+
+
+@pytest.mark.parametrize(
+    "footer",
+    [
+        # listhammer_orks_fr, listhammer_world_eaters_de.
+        "Exporté avec la Version de l'Appli : v2.7.2 (2), Version de Données : v972",
+        "Exportiert mit App-Version v2.7.1 (146), Datenversion: v972",
+    ],
+)
+def test_localised_footer_is_a_trailer(footer):
+    assert kinds_after_header(f"CHARACTERS\n\n{footer}\n")[-1] == (
+        BlockKind.TRAILER,
+        footer,
+    )
 
 
 def test_army_name_with_a_long_whitespace_run_classifies_in_linear_time():
