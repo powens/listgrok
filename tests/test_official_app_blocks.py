@@ -228,6 +228,35 @@ Bladeguard Veteran Squad (180 Points)
     assert blocks[2].lines[0] == "Bladeguard Veteran Squad (180 Points)"
 
 
+def test_underline_under_a_group_heading_is_dropped():
+    # official_31.txt: each group heading is underlined, with no blank line
+    # before its first unit.
+    body = """Attached unit 1
+============
+Marneus Calgar (180 Points)
+  • Attached as: Leader (Character)
+"""
+
+    blocks = classify_blocks(HEADER + body)[1:]
+
+    assert [(b.kind, b.lines) for b in blocks] == [
+        (BlockKind.GROUP, ("Attached unit 1",)),
+        (
+            BlockKind.UNIT,
+            (
+                "Marneus Calgar (180 Points)",
+                "  • Attached as: Leader (Character)",
+            ),
+        ),
+    ]
+
+
+def test_lone_underline_outside_a_group_heading_still_raises():
+    # Synthetic: only a group heading's underline is known to be decoration.
+    with pytest.raises(ParseError, match="Unrecognised lone line"):
+        classify_blocks(HEADER + "============\n")
+
+
 @pytest.mark.parametrize(
     "body_line",
     ["  1x Relic (5 Points)", "• 1x Relic (5 Points)", "◦ 1x Relic (5 Points)"],

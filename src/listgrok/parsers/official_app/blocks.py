@@ -44,6 +44,9 @@ BULLET_REGEX = re.compile(r"^[•◦]\s*")
 # "Attached Unit 1". The \b keeps the plural section heading ("Attached
 # Units") from matching.
 GROUP_REGEX = re.compile(r"^Attached unit\b", re.IGNORECASE)
+# Some exports underline each group heading ("Attached unit 1" / "======",
+# official_31). Only that position is decoration; a rule elsewhere still raises.
+UNDERLINE_REGEX = re.compile(r"^=+$")
 # The official app's footer is known by its prefix, "Exported with App Version: …";
 # another exporter's by naming a data version too, "Exported with New Recruit v37.14,
 # Data Version: v8". Bounded, as the text is untrusted.
@@ -156,13 +159,16 @@ def _split_fused(lines: list[str]) -> list[list[str]]:
 
     Margin is measured from the block's first line, so a uniformly indented
     block splits like any other. A group heading is always a lone line, so the
-    line after one starts a new block whatever the body's indentation.
+    line after one starts a new block whatever the body's indentation, unless
+    it is the heading's underline, which is dropped.
     """
     margin = _indent(lines[0])
     nested = any(_indent(line) > margin for line in lines)
     chunks: list[list[str]] = []
     after_group = False
     for line in lines:
+        if after_group and UNDERLINE_REGEX.match(line.strip()):
+            continue
         if (
             not chunks
             or after_group

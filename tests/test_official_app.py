@@ -362,6 +362,26 @@ OFFICIAL_EXAMPLES = {
         "attached_groups": 1,
         "decorations": {},
     },
+    # Each "Attached unit N" heading is underlined with "============".
+    "official_31.txt": {
+        "name": "Calgar does what Calgar wants",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Ultramarines",
+        "detachments": [
+            "Devastator Brethren",
+            "Tacticus Firestorm Force",
+            "Terminator Storm Force",
+        ],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 12,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
     # LVO 2026 lists (via listhammer): unindented app v2.6.0 exports. Most
     # carry player notes between the name and the header, which are dropped;
     # lvo2026_world_eaters has no "(N Points)" line, so its first block (song
