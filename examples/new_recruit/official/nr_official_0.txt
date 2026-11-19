@@ -1,0 +1,76 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Imperium - Adeptus Custodes
++ DETACHMENT: Lions of the Emperor (Against All Odds)
++ FORCE DISPOSITION: Take and Hold
++ TOTAL ARMY POINTS: 2000pts
++ WARLORD: Char1: Trajann Valoris
++ NUMBER OF UNITS: 13
++ SECONDARY: - Assassination: 4 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Attached Units
+===========
+Attached Unit 1
+
+Blade Champion (135 pts)
+• Attached as: Leader (Character)
+• Superior Creation (+25 pts)
+
+Custodian Guard (170 pts)
+• Attached as: Bodyguard
+• 4x Custodian Guard (Guardian Spear)
+
+Attached Unit 2
+
+Shield-Captain (110 pts)
+• Attached as: Leader (Character)
+• 1x Pyrithite Spear & Praesidium shield
+
+Custodian Wardens (250 pts)
+• Attached as: Bodyguard
+• 4x Custodian Warden (Guardian Spear)
+• 1x Custodian Warden with Vexilla (Guardian Spear)
+
+Attached Unit 3
+
+Shield-Captain in Allarus Terminator Armour (160 pts)
+• Attached as: Leader (Character)
+• 1x Guardian Spear
+• Admonimortis (+30 pts)
+
+Allarus Custodians (165 pts)
+• Attached as: Bodyguard
+• 3x Allarus Custodian (Guardian Spear)
+
+Attached Unit 4
+
+Trajann Valoris (135 pts)
+• Attached as: Leader (Character)
+
+Custodian Wardens (220 pts)
+• Attached as: Bodyguard
+• 3x Custodian Warden (Guardian Spear)
+• 1x Custodian Warden with Vexilla (Guardian Spear)
+
+BATTLELINE
+
+Custodian Guard (170 pts)
+• 4x Custodian Guard (Guardian Spear)
+
+OTHER DATASHEETS
+
+Allarus Custodians (165 pts)
+• 3x Allarus Custodian (Guardian Spear)
+
+Prosecutors (50 pts)
+• 1x Prosecutor Sister Superior
+• 4x Prosecutor
+
+Prosecutors (50 pts)
+• 1x Prosecutor Sister Superior
+• 4x Prosecutor
+
+Vertus Praetors (215 pts)
+• 3x Vertus Praetor (Hurricane Bolter)
+
+Created with newrecruit.eu v35.82
