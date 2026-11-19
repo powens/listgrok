@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   group heading or footer straight after a unit now starts its own block rather
   than landing in that unit's `decorations`, and a heading straight after the
   header block is no longer read as a header line.
+- A `====` underline beneath an `Attached unit N` or section heading is dropped
+  rather than raising `Unrecognised lone line`.
 
 ### Changed
 

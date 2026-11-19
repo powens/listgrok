@@ -44,6 +44,9 @@ BULLET_REGEX = re.compile(r"^[•◦]\s*")
 # "Attached Unit 1". The \b keeps the plural section heading ("Attached
 # Units") from matching.
 GROUP_REGEX = re.compile(r"^Attached unit\b", re.IGNORECASE)
+# Some exports underline headings ("Attached unit 1" / "======", official_31).
+# Only that position is decoration; a rule elsewhere still raises.
+UNDERLINE_REGEX = re.compile(r"^=+$")
 # The official app's footer is known by its prefix, "Exported with App Version: …";
 # another exporter's by naming a data version too, "Exported with New Recruit v37.14,
 # Data Version: v8". Bounded, as the text is untrusted.
@@ -92,7 +95,7 @@ def classify_blocks(text: str) -> list[Block]:
     blocks: list[Block] = []
     seen_header = False
     name_lines: list[str] = []
-    for lines in split_blocks(text):
+    for lines in split_blocks(_blank_underlines(text)):
         if not seen_header and not _is_header(lines):
             # Everything before the header is the army name: it may run over
             # several blocks ("Round 2 list", blank, "QFP (2,000 Points)") and
@@ -114,6 +117,32 @@ def classify_blocks(text: str) -> list[Block]:
         first_line = text.split("\n", 1)[0]
         raise ParseError("No header block found", first_line)
     return blocks
+
+
+def _blank_underlines(text: str) -> str:
+    """Turn a heading's "====" underline into a blank line.
+
+    Only the first rule after a section or group heading below the header's
+    detachment line goes, even across blank lines; any other rule is left to
+    raise. A blank rather than nothing, so the heading still ends its block
+    when no blank line follows the underline.
+    """
+    lines = text.replace("\r\n", "\n").split("\n")
+    past_detachments = False
+    after_heading = False
+    for index, line in enumerate(lines):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if after_heading and UNDERLINE_REGEX.match(stripped):
+            lines[index] = ""
+            after_heading = False
+            continue
+        after_heading = past_detachments and (
+            _is_section_heading(stripped) or _is_group_heading(stripped)
+        )
+        past_detachments = past_detachments or bool(DETACHMENT_REGEX.match(stripped))
+    return "\n".join(lines)
 
 
 def _classify_block(lines: list[str], seen_header: bool) -> list[Block]:

@@ -228,6 +228,112 @@ Bladeguard Veteran Squad (180 Points)
     assert blocks[2].lines[0] == "Bladeguard Veteran Squad (180 Points)"
 
 
+def test_underline_under_a_group_heading_is_dropped():
+    # official_31.txt: each group heading is underlined, with no blank line
+    # before its first unit.
+    body = """Attached unit 1
+============
+Marneus Calgar (180 Points)
+  • Attached as: Leader (Character)
+"""
+
+    blocks = classify_blocks(HEADER + body)[1:]
+
+    assert [(b.kind, b.lines) for b in blocks] == [
+        (BlockKind.GROUP, ("Attached unit 1",)),
+        (
+            BlockKind.UNIT,
+            (
+                "Marneus Calgar (180 Points)",
+                "  • Attached as: Leader (Character)",
+            ),
+        ),
+    ]
+
+
+def test_underline_after_a_blank_line_under_a_group_heading_is_dropped():
+    # Synthetic, from official_31.txt: a blank line between the heading and
+    # its underline.
+    body = """Attached unit 1
+
+============
+
+Marneus Calgar (180 Points)
+  • Attached as: Leader (Character)
+"""
+
+    blocks = classify_blocks(HEADER + body)[1:]
+
+    assert [b.kind for b in blocks] == [BlockKind.GROUP, BlockKind.UNIT]
+
+
+def test_underline_fused_with_the_unit_after_a_blank_line_is_dropped():
+    # Synthetic, from official_31.txt: the underline starts the unit's block.
+    body = """Attached unit 1
+
+============
+Marneus Calgar (180 Points)
+  • Attached as: Leader (Character)
+"""
+
+    blocks = classify_blocks(HEADER + body)[1:]
+
+    assert [(b.kind, b.lines[0]) for b in blocks] == [
+        (BlockKind.GROUP, "Attached unit 1"),
+        (BlockKind.UNIT, "Marneus Calgar (180 Points)"),
+    ]
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        "Attached unit 1\n============\n============\nA (5 Points)\n  • 1x B\n",
+        "Attached unit 1\n============\n\n============\n\nA (5 Points)\n  • 1x B\n",
+    ],
+)
+def test_second_underline_under_a_group_heading_still_raises(body):
+    # Synthetic: only the heading's own underline is decoration.
+    with pytest.raises(ParseError, match="Unrecognised lone line"):
+        classify_blocks(HEADER + body)
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        "ATTACHED UNITS\n============\nAttached unit 1\nA (5 Points)\n  • 1x B\n",
+        "ATTACHED UNITS\n\n============\n\nAttached unit 1\n\nA (5 Points)\n",
+        "OTHER DATASHEETS\n============\nA (5 Points)\n• 1x B\n",
+    ],
+)
+def test_underline_under_a_section_heading_is_dropped(body):
+    # Synthetic, from official_31.txt's underlined group headings.
+    blocks = classify_blocks(HEADER + body)[1:]
+
+    assert [b.lines[0].strip() for b in blocks if b.kind is BlockKind.SECTION] == [
+        body.split("\n", 1)[0]
+    ]
+    assert not any("=" in line for b in blocks for line in b.lines)
+
+
+def test_underline_fused_with_the_header_block_is_dropped():
+    # Synthetic, after nr_official_2.txt: no blank line after the header.
+    body = "ATTACHED UNITS\n============\n\nA (5 Points)\n  • 1x B\n"
+
+    blocks = classify_blocks(HEADER.rstrip("\n") + "\n" + body)
+
+    assert [b.kind for b in blocks] == [
+        BlockKind.HEADER,
+        BlockKind.SECTION,
+        BlockKind.UNIT,
+    ]
+
+
+def test_lone_underline_outside_a_group_heading_still_raises():
+    # Synthetic: only a group heading's underline is known to be decoration.
+    with pytest.raises(ParseError, match="Unrecognised lone line"):
+        classify_blocks(HEADER + "============\n")
+
+
 @pytest.mark.parametrize(
     "body_line",
     ["  1x Relic (5 Points)", "• 1x Relic (5 Points)", "◦ 1x Relic (5 Points)"],
