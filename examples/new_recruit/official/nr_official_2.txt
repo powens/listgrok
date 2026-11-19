@@ -1,0 +1,132 @@
+Vangaurd Onslaught Warrior Bioform Onslaught (2,000 Points)
+
+Tyranids
+Vanguard Onslaught and Warrior Bioform Onslaught (3 Detachment Points)
+Reconnaissance
+Strike Force (2,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Tyranid Prime with Lash Whip (105 Points)
+  • Attached as: Leader (Character)
+  • 1x Lash whip
+  • 1x Rending claw
+  • 1x Scything talons
+  • Enhancements: Elevated Might
+
+Hormagaunts (70 Points)
+  • Attached as: Bodyguard (Battleline)
+  • 10x Hormagaunts
+     ◦ 10x Hormagaunt talons
+
+Attached unit 2
+
+Winged Tyranid Prime (65 Points)
+  • Attached as: Leader (Character)
+  • 1x Prime talons
+
+Tyranid Warriors with Melee Bio-Weapons (150 Points)
+  • Attached as: Bodyguard (Battleline)
+  • 1x Tyranid Prime
+     ◦ 1x Tyranid Warrior claws and talons
+  • 5x Tyranid Warrior
+     ◦ 5x Tyranid Warrior claws and talons
+
+Attached unit 3
+
+Broodlord (80 Points)
+  • Attached as: Leader (Character)
+  • 1x Broodlord Claws and Talons
+
+Genestealers (140 Points)
+  • Attached as: Bodyguard
+  • 10x Genestealer
+     ◦ 10x Genestealers claws and talons
+
+Attached unit 4
+
+Broodlord (80 Points)
+  • Attached as: Leader (Character)
+  • 1x Broodlord Claws and Talons
+
+Genestealers (75 Points)
+  • Attached as: Bodyguard
+  • 5x Genestealer
+     ◦ 5x Genestealers claws and talons
+
+Attached unit 5
+
+Hyperadapted Raveners (165 Points)
+  • Attached as: Leader (Character)
+  • 1x Ravener Prime
+     ◦ 1x Prime claws and talons
+  • 4x Ravener
+     ◦ 4x Ravener heavy claws and talons
+     ◦ 1x Venom bolt
+
+Raveners (125 Points)
+  • Attached as: Bodyguard
+  • 5x Ravener
+     ◦ 5x Ravener claws and talons
+
+Attached unit 6
+
+Neurotyrant (120 Points)
+  • Attached as: Leader (Character)
+  • 1x Neurotyrant claws and lashes
+  • 1x Psychic scream
+
+Zoanthropes (190 Points)
+  • Attached as: Bodyguard
+  • 1x Neurothrope
+     ◦ 1x Chitinous claws and teeth
+     ◦ 1x Warp blast
+  • 5x Zoanthrope
+     ◦ 5x Chitinous claws and teeth
+     ◦ 5x Warp blast
+
+CHARACTERS
+
+Hyperadapted Raveners (165 Points)
+  • 1x Ravener Prime
+     ◦ 1x Prime claws and talons
+  • 4x Ravener
+     ◦ 4x Ravener heavy claws and talons
+     ◦ 1x Venom bolt
+
+Parasite of Mortrex (95 Points)
+  • Warlord
+  • 1x Barbed ovipositor
+  • 1x Clawed limbs
+  • Enhancements: Hunting Grounds
+
+
+OTHER DATASHEETS
+
+Biovores (60 Points)
+  • 1x Chitin-barbed limbs
+  • 1x Spore mine launcher
+
+Neurogaunts (45 Points)
+  • 1x Neurogaunt Nodebeast
+     ◦ 1x Chitinous claws and teeth
+  • 10x Neurogaunt
+     ◦ 10x Chitinous claws and teeth
+
+Neurolictor (80 Points)
+  • 1x Piercing claws and talons
+
+Neurolictor (80 Points)
+  • 1x Piercing claws and talons
+
+Von Ryan's Leapers (55 Points)
+  • 3x Von Ryan's Leaper
+     ◦ 3x Leaper's talons
+
+Von Ryan's Leapers (55 Points)
+  • 3x Von Ryan's Leaper
+     ◦ 3x Leaper's talons
+
+Exported with New Recruit v38.5, Data Version: v3

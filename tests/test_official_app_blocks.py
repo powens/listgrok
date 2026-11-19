@@ -161,6 +161,199 @@ def test_fused_section_and_group_block_splits_into_two_blocks():
     assert blocks[2].lines == ("Attached Unit 1",)
 
 
+HEADER = """T’au Empire
+Retaliation Cadre (3 Detachment Points)
+Purge the Foe
+Strike Force (2,000 Points)
+
+"""
+
+
+def kinds_after_header(body):
+    blocks = classify_blocks(HEADER + body)
+    return [(b.kind, b.lines[0]) for b in blocks[1:]]
+
+
+def test_new_recruit_footer_is_a_trailer():
+    # nr_official_3.txt
+    footer = "Exported with New Recruit v37.14, Data Version: v8"
+
+    assert kinds_after_header(f"CHARACTERS\n\n{footer}\n")[-1] == (
+        BlockKind.TRAILER,
+        footer,
+    )
+
+
+@pytest.mark.parametrize(
+    "footer",
+    [
+        "Exported with App Version: v2.6.0",
+        "Exported with App Version: " + "v" * 100 + ", Data Version: v946",
+    ],
+)
+def test_official_footer_is_a_trailer_without_a_nearby_data_version(footer):
+    # Synthetic, varying official_1.txt's footer: the app's own prefix is enough.
+    assert kinds_after_header(f"CHARACTERS\n\n{footer}\n")[-1] == (
+        BlockKind.TRAILER,
+        footer,
+    )
+
+
+def test_other_lone_exported_with_line_still_raises():
+    # Synthetic: no fixture has a footer from an unknown exporter.
+    with pytest.raises(ParseError, match="Unrecognised lone line"):
+        classify_blocks(HEADER + "Exported with love\n")
+
+
+def test_group_heading_fused_with_its_units_splits_out_each_unit():
+    # nr_official_4.txt
+    body = """Attached unit 1
+Marneus Calgar (180 Points)
+  • Attached as: Leader (Character)
+Bladeguard Veteran Squad (180 Points)
+  • Attached as: Bodyguard
+"""
+
+    blocks = classify_blocks(HEADER + body)[1:]
+
+    assert [b.kind for b in blocks] == [
+        BlockKind.GROUP,
+        BlockKind.UNIT,
+        BlockKind.UNIT,
+    ]
+    assert blocks[1].lines == (
+        "Marneus Calgar (180 Points)",
+        "  • Attached as: Leader (Character)",
+    )
+    assert blocks[2].lines[0] == "Bladeguard Veteran Squad (180 Points)"
+
+
+@pytest.mark.parametrize(
+    "body_line",
+    ["  1x Relic (5 Points)", "• 1x Relic (5 Points)", "◦ 1x Relic (5 Points)"],
+)
+def test_indented_or_bulleted_points_line_does_not_start_a_unit(body_line):
+    # Synthetic: no fixture has a body line with a "(N Points)" suffix.
+    body = f"Marneus Calgar (180 Points)\n{body_line}\n"
+
+    assert [kind for kind, _ in kinds_after_header(body)] == [BlockKind.UNIT]
+
+
+@pytest.mark.parametrize(
+    "transform",
+    [
+        pytest.param(lambda line: line + "\r", id="crlf"),
+        pytest.param(lambda line: line + " ", id="trailing-space"),
+        pytest.param(lambda line: " " + line, id="uniform-indent"),
+    ],
+)
+def test_fused_units_split_despite_surrounding_whitespace(transform):
+    # nr_official_4.txt, with its line endings or margin altered.
+    body = """Marneus Calgar (180 Points)
+  • Attached as: Leader (Character)
+Bladeguard Veteran Squad (180 Points)
+  • Attached as: Bodyguard
+"""
+    body = "\n".join(transform(line) for line in body.splitlines())
+
+    blocks = classify_blocks(HEADER + body)[1:]
+
+    assert [b.kind for b in blocks] == [BlockKind.UNIT, BlockKind.UNIT]
+
+
+def test_group_heading_between_fused_units_splits_out():
+    # Synthetic, a further fusing of nr_official_4.txt: see issue #31.
+    body = """Attached unit 1
+Marneus Calgar (180 Points)
+  • Attached as: Leader (Character)
+Attached unit 2
+Terminator Squad (380 Points)
+  • Attached as: Bodyguard
+"""
+
+    assert kinds_after_header(body) == [
+        (BlockKind.GROUP, "Attached unit 1"),
+        (BlockKind.UNIT, "Marneus Calgar (180 Points)"),
+        (BlockKind.GROUP, "Attached unit 2"),
+        (BlockKind.UNIT, "Terminator Squad (380 Points)"),
+    ]
+
+
+def test_section_heading_and_footer_after_a_unit_split_out():
+    # Synthetic, a further fusing of nr_official_3.txt: see issue #31.
+    footer = "Exported with New Recruit v37.14, Data Version: v8"
+    body = f"""Marneus Calgar (180 Points)
+  • 1x Gauntlets of Ultramar
+OTHER DATASHEETS
+Scout Squad (65 Points)
+  • 5x Scout
+{footer}
+"""
+
+    assert kinds_after_header(body) == [
+        (BlockKind.UNIT, "Marneus Calgar (180 Points)"),
+        (BlockKind.SECTION, "OTHER DATASHEETS"),
+        (BlockKind.UNIT, "Scout Squad (65 Points)"),
+        (BlockKind.TRAILER, footer),
+    ]
+
+
+def test_section_group_and_first_unit_in_one_block_split_out():
+    # Synthetic, a further fusing of nr_official_4.txt: see issue #31.
+    body = """ATTACHED UNITS
+Attached unit 1
+Marneus Calgar (180 Points)
+  • Warlord
+"""
+
+    assert kinds_after_header(body) == [
+        (BlockKind.SECTION, "ATTACHED UNITS"),
+        (BlockKind.GROUP, "Attached unit 1"),
+        (BlockKind.UNIT, "Marneus Calgar (180 Points)"),
+    ]
+
+
+@pytest.mark.parametrize(
+    "run_line",
+    ["Enhancements: Relic (15 Points)", "1x Relic (5 Points)", "BOLT PISTOL"],
+)
+def test_unindented_body_line_stays_in_its_compact_unit(run_line):
+    # Synthetic, in official_3.txt's shape: compact run lines sit at column 0,
+    # so only indentation elsewhere in a block makes column 0 mean anything.
+    body = f"Captain (80 Points)\n• Warlord\n{run_line}\n"
+
+    assert [kind for kind, _ in kinds_after_header(body)] == [BlockKind.UNIT]
+
+
+def test_unit_named_like_a_group_heading_is_a_unit():
+    # Synthetic: the "(N Points)" suffix outranks the "Attached unit" prefix.
+    body = "Attached Unit of Doom (90 Points)\n  • 1x Foo\n"
+
+    assert kinds_after_header(body) == [
+        (BlockKind.UNIT, "Attached Unit of Doom (90 Points)"),
+    ]
+
+
+def test_second_header_starting_with_its_size_line_stays_a_header():
+    # Synthetic: official_1.txt's header reordered, as if two lists were pasted.
+    body = (
+        "Strike Force (2,000 Points)\nT’au Empire\n"
+        "Retaliation Cadre (3 Detachment Points)\nPurge the Foe\n"
+    )
+
+    assert kinds_after_header(body) == [
+        (BlockKind.HEADER, "Strike Force (2,000 Points)"),
+    ]
+
+
+def test_many_fused_group_headings_do_not_overflow_the_stack():
+    # Crafted input, not an export: one block per heading used to mean one
+    # stack frame per heading.
+    blocks = classify_blocks(HEADER + "Attached unit 1\n" * 5000)
+
+    assert len(blocks) == 5001
+
+
 def test_capitalised_lone_group_heading_is_a_group():
     # official_3.txt: "Attached Unit 2" — the newer dialect capitalises "Unit".
     assert classify_blocks(FUSED_ATTACHED)[4].lines == ("Attached Unit 2",)
@@ -254,3 +447,71 @@ def test_oversized_army_points_stay_part_of_the_name():
 
     assert army_list.name == line
     assert army_list.points is None
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        pytest.param(
+            "Attached unit 1\nCaptain (80 Points)\n• Attached as: Leader\n"
+            "• 1x Bolt pistol\n",
+            id="group-then-compact-unit",
+        ),
+        pytest.param(
+            "Attached Units\nAttached unit 1\nCaptain (80 Points)\n"
+            "• Attached as: Leader\n• 1x Bolt pistol\n",
+            id="title-case-section-group-then-compact-unit",
+        ),
+    ],
+)
+def test_group_heading_fused_with_a_compact_unit_splits_out(body):
+    # Synthetic, nr_official_4.txt's fusing in the compact dialect's
+    # unindented body: a group heading is a lone line, so the line after it
+    # starts a block whatever the body's indentation.
+    assert kinds_after_header(body)[-2:] == [
+        (BlockKind.GROUP, "Attached unit 1"),
+        (BlockKind.UNIT, "Captain (80 Points)"),
+    ]
+
+
+def test_group_heading_after_a_compact_unit_splits_out():
+    # Synthetic, as above: the next group follows a compact unit directly.
+    body = (
+        "Attached unit 1\nCaptain (80 Points)\n• Attached as: Leader\n"
+        "• 1x Bolt pistol\nAttached unit 2\nLieutenant (70 Points)\n"
+        "• Attached as: Leader\n• 1x Bolt pistol\n"
+    )
+
+    assert kinds_after_header(body) == [
+        (BlockKind.GROUP, "Attached unit 1"),
+        (BlockKind.UNIT, "Captain (80 Points)"),
+        (BlockKind.GROUP, "Attached unit 2"),
+        (BlockKind.UNIT, "Lieutenant (70 Points)"),
+    ]
+
+
+def test_unit_header_fused_into_a_compact_body_raises():
+    # Synthetic: in an unindented body a fused unit header cannot be told from
+    # a run line by indentation, so rather than swallow it into the previous
+    # unit's decorations (and drop its points), the parse fails.
+    body = (
+        "Captain (80 Points)\n• Warlord\n• 1x Bolt pistol\n"
+        "Lieutenant (70 Points)\n• 1x Bolt pistol\n"
+    )
+
+    with pytest.raises(ParseError, match="Unit header inside a compact body"):
+        classify_blocks(HEADER + body)
+
+
+@pytest.mark.parametrize("tail", ["CHARACTERS", "Attached unit 1"])
+def test_heading_fused_onto_the_header_block_splits_out(tail):
+    # Synthetic, a further fusing of nr_official_3.txt: no blank line between
+    # the header and the first heading.
+    blocks = classify_blocks(HEADER.rstrip("\n") + f"\n{tail}\n")
+
+    assert blocks[0].kind is BlockKind.HEADER
+    assert tail not in blocks[0].lines
+    assert (blocks[1].kind, blocks[1].lines) in [
+        (BlockKind.SECTION, (tail,)),
+        (BlockKind.GROUP, (tail,)),
+    ]

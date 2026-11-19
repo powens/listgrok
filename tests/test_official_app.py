@@ -7,6 +7,17 @@ from listgrok import ParseError
 from listgrok.parsers.official_app import parse_official_app
 
 EXAMPLES = Path(__file__).parents[1] / "examples" / "official_app"
+# New Recruit's GW-style exports (nr_official_*) parse as official-app exports
+# but live with New Recruit's other formats.
+NEW_RECRUIT_EXAMPLES = (
+    Path(__file__).parents[1] / "examples" / "new_recruit" / "official"
+)
+
+
+def example_path(filename: str) -> Path:
+    folder = NEW_RECRUIT_EXAMPLES if filename.startswith("nr_") else EXAMPLES
+    return folder / filename
+
 
 OFFICIAL_EXAMPLES = {
     # official_11 and official_25 nest "Warlord" / "Enhancements:" under the
@@ -351,11 +362,70 @@ OFFICIAL_EXAMPLES = {
         "attached_groups": 1,
         "decorations": {},
     },
+    # New Recruit v38.5's GW-style export: the official layout under its own
+    # footer.
+    "nr_official_2.txt": {
+        "name": "Vangaurd Onslaught Warrior Bioform Onslaught",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Tyranids",
+        "detachments": ["Vanguard Onslaught", "Warrior Bioform Onslaught"],
+        "detachment_points": 3,
+        "disposition": "Reconnaissance",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 20,
+        "unit_points_total": 2000,
+        "attached_groups": 6,
+        "decorations": {},
+    },
+    # New Recruit's GW-style export (v37.14, examples/new_recruit/official/): the official layout under its own
+    # footer, with an Oxford comma in the detachment line.
+    "nr_official_3.txt": {
+        "name": "UM- Terminators",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Ultramarines",
+        "detachments": [
+            "Devastator Brethren",
+            "Tacticus Firestorm Force",
+            "Terminator Storm Force",
+        ],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 12,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    # The same list in New Recruit's other shape: no army-size line, and no blank
+    # line after a group heading or between the units of a group.
+    "nr_official_4.txt": {
+        "name": "UM- Terminators",
+        "points": 2000,
+        "super_faction": "Space Marines",
+        "faction": "Ultramarines",
+        "detachments": [
+            "Devastator Brethren",
+            "Tacticus Firestorm Force",
+            "Terminator Storm Force",
+        ],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "",
+        "army_size_points": None,
+        "unit_count": 12,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
 }
 
 
 def parse_example(filename: str):
-    return parse_official_app((EXAMPLES / filename).read_text())
+    return parse_official_app(example_path(filename).read_text())
 
 
 # Synthetic: no 11th edition fixture has a grouped unit that omits its
@@ -494,6 +564,14 @@ class TestAllOfficialExamples:
             others = [role for role in roles if role != "Bodyguard"]
             assert others, (group, roles)
             assert set(others) <= {"Leader", "Support"}, (group, roles)
+
+    @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
+    def test_crlf_line_endings_change_nothing(self, filename):
+        text = example_path(filename).read_text(encoding="utf-8")
+
+        crlf = parse_official_app(text.replace("\n", "\r\n"))
+
+        assert crlf.to_dict() == parse_official_app(text).to_dict()
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_attachment_comes_only_from_a_group_heading(self, filename):
