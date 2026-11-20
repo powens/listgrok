@@ -12,7 +12,12 @@ from collections.abc import Sequence
 from listgrok.exceptions import ParseError
 from listgrok.models import ArmyList, Attachment, Unit
 from listgrok.parsers.new_recruit_wtc.header import RULE_REGEX, parse_header
-from listgrok.parsers.new_recruit_wtc.units import UnitLinks, is_unit_header, parse_unit
+from listgrok.parsers.new_recruit_wtc.units import (
+    UnitLinks,
+    is_body_line,
+    is_unit_header,
+    parse_unit,
+)
 
 __all__ = ["parse_new_recruit_wtc"]
 
@@ -54,11 +59,12 @@ def _frame(lines: Sequence[str]) -> tuple[list[str], list[str]]:
         text = line.strip()
         if text.startswith((_FOOTER_PREFIX, _FENCE)):
             break
-        # A paste cropped above the footer runs straight into commentary. A
-        # unit body never resumes after a blank line (nr_wtc_8 has one after
-        # every unit, always followed by a unit header), so a non-header line
-        # there ends the export rather than becoming the last unit's wargear.
-        if text and after_blank and seen_unit and not is_unit_header(line):
+        # A paste cropped above the footer runs straight into commentary. After
+        # a blank line, only a unit header or a line of a known body form (a
+        # bullet, `K with`, `Enhancement:`, `Leading`, `Attached to`) continues
+        # the export: nr_wtc_10 puts a unit's `Enhancement:` after a blank line.
+        # Anything else ends it rather than becoming the last unit's wargear.
+        if text and after_blank and seen_unit and not is_body_line(line):
             break
         seen_unit = seen_unit or is_unit_header(line)
         after_blank = not text
@@ -85,8 +91,8 @@ def _pair_attachments(units: Sequence[Unit], links: Sequence[UnitLinks]) -> None
     """Stamp an `Attachment` on every unit in a leader/bodyguard group.
 
     Either side's line alone makes the link; a bodyguard may have several
-    leaders, but a leader leads only one bodyguard. Groups are numbered in the
-    file order of their bodyguards.
+    leaders, but a leader leads only one bodyguard and is never itself a
+    bodyguard. Groups are numbered in the file order of their bodyguards.
     """
     leaders_of: dict[int, set[int]] = {}
     for index, unit_links in enumerate(links):
@@ -100,6 +106,10 @@ def _pair_attachments(units: Sequence[Unit], links: Sequence[UnitLinks]) -> None
         for leader in leaders:
             if led_by.setdefault(leader, bodyguard) != bodyguard:
                 raise ParseError("Leader attached to two units", units[leader].name)
+    for unit_index in sorted(led_by.keys() & leaders_of.keys()):
+        raise ParseError(
+            "Unit is both a leader and a bodyguard", units[unit_index].name
+        )
 
     for number, bodyguard in enumerate(sorted(leaders_of), start=1):
         group = f"Attached unit {number}"

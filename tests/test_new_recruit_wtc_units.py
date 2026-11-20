@@ -1,7 +1,11 @@
 import pytest
 
 from listgrok import ParseError
-from listgrok.parsers.new_recruit_wtc.units import is_unit_header, parse_unit
+from listgrok.parsers.new_recruit_wtc.units import (
+    is_body_line,
+    is_unit_header,
+    parse_unit,
+)
 
 
 def model_sets(unit):
@@ -31,6 +35,28 @@ class TestIsUnitHeader:
     )
     def test_body_lines(self, line):
         assert not is_unit_header(line)
+
+
+class TestIsBodyLine:
+    @pytest.mark.parametrize(
+        "line",
+        [
+            "Enhancement: Brazenmaw (+15 pts)",  # nr_wtc_10
+            "• 5x Bloodcrusher",  # nr_wtc_10
+            "3 with Hellblade, Juggernaut's bladed horn",  # nr_wtc_10
+            "  Attached to Valerian",  # nr_wtc_0
+            "Leading Custodian Wardens",  # nr_wtc_0
+            "Char2: 1x Blade Champion (135 pts): Vaultswords",  # nr_wtc_0
+        ],
+    )
+    def test_body_lines(self, line):
+        assert is_body_line(line)
+
+    @pytest.mark.parametrize(
+        "line", ["Thanks, what do you think?", "```", "2 Storm Bolters"]
+    )
+    def test_commentary(self, line):
+        assert not is_body_line(line)
 
 
 class TestParseUnit:
@@ -197,6 +223,70 @@ class TestParseUnit:
 
         assert unit.decorations == ["2 Storm Bolters"]
         assert model_sets(unit) == [("Gladiator Lancer", 1, {})]
+
+    def test_counted_item_inside_with_multiplies(self):
+        # Not in a fixture (from review): two claws each on four models.
+        unit, _ = parse_unit(
+            "4x Terminators (170 pts)",
+            ["• 4x Terminator: 4 with 2x Lightning claws, Storm shield"],
+        )
+
+        assert model_sets(unit) == [
+            ("Terminator", 4, {"Lightning claws": 8, "Storm shield": 4})
+        ]
+
+    def test_header_items_go_to_the_bullet_named_after_the_unit(self):
+        # Not in a fixture (from review): not simply the first bullet.
+        unit, _ = parse_unit(
+            "Char1: 3x Leader (100 pts): Warlord, Relic blade",
+            ["• 2x Servitor", "• 1x Leader"],
+        )
+
+        assert unit.is_warlord
+        assert model_sets(unit) == [
+            ("Servitor", 2, {}),
+            ("Leader", 1, {"Relic blade": 1}),
+        ]
+
+    def test_header_items_with_no_matching_bullet_are_decorations(self):
+        # Not in a fixture (from review): no bullet to credit them to.
+        unit, _ = parse_unit(
+            "3x Squad (100 pts): Relic blade", ["• 2x Servitor", "• 1x Sergeant"]
+        )
+
+        assert unit.decorations == ["Relic blade"]
+        assert model_sets(unit) == [("Servitor", 2, {}), ("Sergeant", 1, {})]
+
+    @pytest.mark.parametrize(
+        "body",
+        [["• 1x Sergeant: Warlord, Storm bolter"], ["1 with Warlord, Storm bolter"]],
+    )
+    def test_warlord_in_the_body_marks_the_unit(self, body):
+        # Not in a fixture (from review): Warlord on a bullet or `with` line.
+        unit, _ = parse_unit("1x Sergeant (20 pts)", body)
+
+        assert unit.is_warlord
+        assert model_sets(unit) == [("Sergeant", 1, {"Storm bolter": 1})]
+
+    def test_second_enhancement_is_a_decoration(self):
+        # Not in a fixture (from review): the first is kept, the second shown.
+        unit, _ = parse_unit(
+            "1x Captain (100 pts)",
+            ["Enhancement: First (+10 pts)", "Enhancement: Second (+20 pts)"],
+        )
+
+        assert unit.enhancement == "First"
+        assert unit.decorations == ["Enhancement: Second (+20 pts)"]
+
+    def test_comma_inside_parentheses_does_not_split_an_item(self):
+        # Not in a fixture (from review).
+        unit, _ = parse_unit(
+            "1x Captain (100 pts): Bolt pistol (Master-crafted, Relic), Sword", []
+        )
+
+        assert model_sets(unit) == [
+            ("Captain", 1, {"Bolt pistol (Master-crafted, Relic)": 1, "Sword": 1})
+        ]
 
     def test_unknown_body_line_is_a_decoration(self):
         unit, _ = parse_unit("1x Land Raider (220 pts)", ["Some note"])

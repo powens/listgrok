@@ -5,18 +5,26 @@ from collections.abc import Sequence
 
 from listgrok.exceptions import ParseError
 from listgrok.models import ArmyList
+from listgrok.parsers.official_app.detachment_names import COMPOUND_DETACHMENTS
 
 RULE_REGEX = re.compile(r"^\+{10,}$")
 _KEY_REGEX = re.compile(r"^\+ (?P<key>[A-Z][A-Z ]*): ?(?P<value>.*)$")
 _POINTS_REGEX = re.compile(r"^(?P<points>\d+)\s*pts$")
 _RULE_SUFFIX_REGEX = re.compile(r"\s*\([^()]*\)$")
-# Detachment names that themselves contain a comma — the only one among 222
-# distinct names across the 649 LVO 2026 lists. A new one splits wrongly until
-# it is added here.
-NAMES_WITH_COMMAS = ("Ordo Xenos, Alien Hunters",)
+# Detachment names that themselves contain a comma (the Ordo detachments), taken
+# from the official-app parser's list so both parsers grow together. Longest
+# first, so a name that prefixes another cannot win the alternation.
+NAMES_WITH_COMMAS = tuple(
+    sorted(
+        (name for name in COMPOUND_DETACHMENTS if ", " in name), key=len, reverse=True
+    )
+)
 _DETACHMENT_NAME_REGEX = re.compile(
     r"\s*(?:" + "|".join(map(re.escape, NAMES_WITH_COMMAS)) + r"|[^,]+)"
 )
+# New Recruit names a parent faction by its keyword; the official app by its
+# codex name. Unlisted parents pass through verbatim.
+_PARENT_FACTION_NAMES = {"Adeptus Astartes": "Space Marines"}
 
 
 def parse_header(lines: Sequence[str], army_list: ArmyList) -> int | None:
@@ -31,11 +39,11 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> int | None:
     parts = [part.strip() for part in values["FACTION KEYWORD"].split(" - ")]
     # `Alliance - [Parent - ]Faction`: the leading alliance (Imperium, Chaos,
     # Xenos) has no counterpart in the official app's export, so only a parent
-    # faction fills super_faction — matching that parser's Space Wolves ->
-    # Space Marines.
+    # faction fills super_faction, under the official app's name for it
+    # (Adeptus Astartes -> Space Marines).
     army_list.faction = parts[-1]
     if len(parts) > 2:
-        army_list.super_faction = parts[-2]
+        army_list.super_faction = _PARENT_FACTION_NAMES.get(parts[-2], parts[-2])
 
     if "TOTAL ARMY POINTS" not in values:
         raise ParseError("Header has no TOTAL ARMY POINTS line", lines)

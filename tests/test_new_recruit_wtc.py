@@ -114,7 +114,7 @@ WTC_EXAMPLES = {
     },
     "nr_wtc_9.txt": {
         "points": 990,
-        "super_faction": "Adeptus Astartes",
+        "super_faction": "Space Marines",
         "faction": "Black Templars",
         "detachments": ["Gladius Task Force"],
         "disposition": "Priority Assets",
@@ -122,6 +122,17 @@ WTC_EXAMPLES = {
         "attached_groups": 2,
         "warlord": "Chaplain Grimaldus",
         "decorations": {"Gladiator Lancer": ["2 Storm Bolters"]},
+    },
+    "nr_wtc_10.txt": {
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Chaos Daemons",
+        "detachments": ["Blood Legion", "Cavalcade of Chaos"],
+        "disposition": "Distruption",
+        "unit_count": 11,
+        "attached_groups": 0,
+        "warlord": "Daemon Prince of Chaos with wings",
+        "decorations": {},
     },
 }
 
@@ -307,6 +318,26 @@ class TestAttachmentPairing:
                 )
             )
 
+    def test_unit_both_leader_and_bodyguard_raises(self):
+        # Not in a fixture (from review): one unit cannot sit in two groups.
+        with pytest.raises(ParseError, match="both a leader and a bodyguard"):
+            parse_new_recruit_wtc(
+                make_list(
+                    "Char1: 1x Captain (80 pts): Warlord",
+                    "Leading Intercessors",
+                    "  Attached to Lieutenant",
+                    "Char2: 1x Lieutenant (65 pts)",
+                    "5x Intercessors (80 pts)",
+                )
+            )
+
+    def test_unit_leading_itself_raises(self):
+        # Not in a fixture (from review): a self-link has no separate bodyguard.
+        with pytest.raises(ParseError, match="both a leader and a bodyguard"):
+            parse_new_recruit_wtc(
+                make_list("Char1: 1x Captain (80 pts): Warlord", "Leading Captain")
+            )
+
 
 class TestFraming:
     def test_text_around_the_export_is_ignored(self):
@@ -330,6 +361,13 @@ class TestFraming:
         army_list = parse_new_recruit_wtc(cropped + "\n" + trailer)
 
         assert army_list.to_dict() == parse_example("nr_wtc_1.txt").to_dict()
+
+    def test_body_line_after_a_blank_line_stays_in_the_unit(self):
+        # nr_wtc_10: Char1's Enhancement line follows a blank line.
+        army_list = parse_example("nr_wtc_10.txt")
+
+        assert army_list.units[0].enhancement == "Brazenmaw"
+        assert army_list.units[1].enhancement == ""
 
     def test_crlf_and_trailing_whitespace_parse(self):
         # Pastes from Windows and Reddit's editor ("  " hard breaks).

@@ -34,9 +34,9 @@ class TestParseHeader:
         assert army_list.disposition == "Purge the Foe"
         assert army_list.points == 2000
 
-    def test_three_part_faction_keeps_parent_and_faction(self):
+    def test_three_part_faction_maps_parent_to_official_name(self):
         # nr_wtc_9: the Imperium alliance is dropped; the parent faction is
-        # super_faction, as the official app's Space Wolves -> Space Marines.
+        # super_faction, under the official app's name for it.
         army_list = ArmyList()
         parse_header(
             header(
@@ -46,8 +46,21 @@ class TestParseHeader:
             army_list,
         )
 
-        assert army_list.super_faction == "Adeptus Astartes"
+        assert army_list.super_faction == "Space Marines"
         assert army_list.faction == "Black Templars"
+
+    def test_unmapped_parent_faction_passes_through(self):
+        # Not in a fixture: a parent keyword with no official-app name mapped.
+        army_list = ArmyList()
+        parse_header(
+            header(
+                "+ FACTION KEYWORD: Imperium - Some Parent - Some Faction",
+                "+ TOTAL ARMY POINTS: 1000pts",
+            ),
+            army_list,
+        )
+
+        assert army_list.super_faction == "Some Parent"
 
     def test_single_part_faction_leaves_super_faction_empty(self):
         army_list = ArmyList()
@@ -103,7 +116,7 @@ class TestParseHeader:
         assert declared is None
 
     def test_unknown_keys_are_ignored(self):
-        # nr_official_4 (Reddit) carries a PLAYER NAME line.
+        # Not in a fixture: an unknown key such as PLAYER NAME.
         army_list = ArmyList()
         parse_header(
             header(
@@ -159,8 +172,23 @@ class TestSplitDetachments:
             "Kult of Speed and More Dakka"
         ]
 
+    @pytest.mark.parametrize(
+        "name",
+        [
+            "Ordo Xenos, Alien Hunters",
+            "Ordo Malleus, Daemon Hunters",
+            "Ordo Hereticus, Purgation Force",
+        ],
+    )
+    def test_every_ordo_detachment_stays_whole(self, name):
+        # Not in a fixture (from review): every comma name in COMPOUND_DETACHMENTS.
+        assert split_detachments(f"{name}, Lions of the Emperor (Rule)") == [
+            name,
+            "Lions of the Emperor",
+        ]
+
     def test_comma_inside_a_known_name_is_not_split(self):
-        # Not in a fixture: the one detachment name with a comma in it.
+        # Not in a fixture: a detachment name with a comma in it.
         assert split_detachments(
             "Ordo Xenos, Alien Hunters, Lions of the Emperor (Rule)"
         ) == ["Ordo Xenos, Alien Hunters", "Lions of the Emperor"]
