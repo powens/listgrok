@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A `====` underline beneath an `Attached unit N` or section heading is dropped
   rather than raising `Unrecognised lone line`.
 - Python 3.15 is tested in CI and listed in the package classifiers.
+- `parse_list()` also parses New Recruit's WTC-format export, falling back to
+  it when the official-app parser rejects the input. Leader/bodyguard pairs
+  become `Attachment` groups named `Attached unit N`. `super_faction` holds
+  the parent faction under the official app's name for it (`Space Marines`
+  for Black Templars), not the Imperium/Chaos/Xenos alliance.
 
 ### Changed
 
@@ -25,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a bare army-size name (`Strike Force`), rather than mapping it as the
   disposition. A unit header fused into an unindented (compact) unit body raises
   rather than becoming that unit's decorations.
+- When no parser understands the input, the `ParseError` message names each
+  parser's reason.
 
 ### Fixed
 
