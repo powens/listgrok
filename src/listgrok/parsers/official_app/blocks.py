@@ -192,9 +192,10 @@ def _classify_block(lines: list[str], seen_header: bool) -> list[Block]:
             Block(kind=BlockKind.SECTION, lines=(lines[0],)),
             *_classify_block(lines[1:], seen_header),
         ]
+    chunks, rest = _split_fused(lines)
     return [
-        Block(kind=_classify(chunk), lines=tuple(chunk))
-        for chunk in _split_fused(lines)
+        *(Block(kind=_classify(chunk), lines=tuple(chunk)) for chunk in chunks),
+        *(_classify_block(rest, seen_header) if rest else []),
     ]
 
 
@@ -220,25 +221,32 @@ def _split_header_tail(lines: list[str]) -> tuple[list[str], list[str]]:
     return lines, []
 
 
-def _split_fused(lines: list[str]) -> list[list[str]]:
+def _split_fused(lines: list[str]) -> tuple[list[list[str]], list[str]]:
     """Split a block wherever a line starts a new one: New Recruit can leave out
     the blank line after a group heading or between units.
 
     Margin is measured from the block's first line, so a uniformly indented
     block splits like any other. A group heading is always a lone line, so the
-    line after one starts a new block whatever the body's indentation. An
-    errors block is its heading plus bulleted lines, so its first unbulleted
-    line starts a new block.
+    line after one starts a new block whatever the body's indentation.
+
+    An errors block is its heading plus bulleted lines, an unbulleted line
+    continuing the error above it; the first line that starts a block ends it.
+    The lines from there are returned unsplit, for _classify_block to classify
+    afresh, since they may open with a fused section and group heading.
     """
     margin = _indent(lines[0])
     nested = any(_indent(line) > margin for line in lines)
     chunks: list[list[str]] = []
     after_group = False
-    for line in lines:
+    for index, line in enumerate(lines):
+        if chunks and _is_validation_errors(chunks[-1]):
+            if _ends_validation_errors(lines[index:], _indent(chunks[-1][0])):
+                return chunks, lines[index:]
+            chunks[-1].append(line)
+            continue
         if (
             not chunks
             or after_group
-            or (_is_validation_errors(chunks[-1]) and not _is_bullet(line))
             or (_indent(line) <= margin and _starts_block(line, nested))
         ):
             chunks.append([line])
@@ -251,7 +259,19 @@ def _split_fused(lines: list[str]) -> list[list[str]]:
                 )
             chunks[-1].append(line)
         after_group = chunks[-1] == [line] and _is_group_heading(line.strip())
-    return chunks
+    return chunks, []
+
+
+def _ends_validation_errors(rest: list[str], margin: int) -> bool:
+    """Does rest[0] end the errors block above it? A bullet or a line indented
+    past the heading is part of an error; any other line ends the block if it
+    starts one, a title-case section heading fused onto a group heading
+    included.
+    """
+    line = rest[0]
+    if _is_bullet(line) or _indent(line) > margin:
+        return False
+    return _starts_block(line, nested=True) or _is_fused_section_group(rest[:2])
 
 
 def _starts_block(line: str, nested: bool) -> bool:

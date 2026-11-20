@@ -1080,6 +1080,23 @@ class TestArmyNameFold:
         assert army_list.points is None
 
 
+class TestValidationErrorsFold:
+    def test_wrapped_error_reads_back_as_one_error(self):
+        # Synthetic: a long error the export wraps onto an unbulleted line.
+        army_list = parse_official_app(
+            GROUPED_UNIT_WITHOUT_ATTACHED_AS.replace(
+                "ATTACHED UNITS",
+                "ERRORS\n• You must select one\n  character model\n• Too many\n\n"
+                "ATTACHED UNITS",
+            )
+        )
+
+        assert army_list.validation_errors == [
+            "You must select one character model",
+            "Too many",
+        ]
+
+
 class TestFootnoteFold:
     def test_footnote_joins_the_decorations_of_the_unit_above(self):
         # Synthetic, minimal form of listhammer_chaos_knights.

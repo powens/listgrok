@@ -589,6 +589,32 @@ def test_validation_errors_block_ends_at_its_first_unbulleted_line(following, ki
     ]
 
 
+def test_validation_errors_block_keeps_an_error_wrapped_onto_a_second_line():
+    # Synthetic: a long error the export wraps, its second line unbulleted.
+    body = "ERRORS\n• You must select one\n  character model\n\nCHARACTERS\n"
+
+    assert [(b.kind, b.lines) for b in classify_blocks(HEADER + body)[1:]] == [
+        (
+            BlockKind.VALIDATION_ERRORS,
+            ("ERRORS", "• You must select one", "  character model"),
+        ),
+        (BlockKind.SECTION, ("CHARACTERS",)),
+    ]
+
+
+def test_validation_errors_block_fused_onto_the_attached_units_headings():
+    # Synthetic: the newer dialect's title-case "Attached Units" heading, fused
+    # onto its group heading, right after an errors block with no blank line.
+    body = "ERRORS\n• oops\nAttached Units\nAttached Unit 1\nCaptain (80 Points)\n"
+
+    assert kinds_after_header(body) == [
+        (BlockKind.VALIDATION_ERRORS, "ERRORS"),
+        (BlockKind.SECTION, "Attached Units"),
+        (BlockKind.GROUP, "Attached Unit 1"),
+        (BlockKind.UNIT, "Captain (80 Points)"),
+    ]
+
+
 def test_validation_errors_block_fused_onto_the_header_splits_out():
     # listhammer_adeptus_custodes_errors: no blank line after the size line.
     blocks = classify_blocks(HEADER.rstrip("\n") + "\nERRORS\n• Invalid.\n")

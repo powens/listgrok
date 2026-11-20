@@ -55,9 +55,7 @@ def parse_official_app(list_text: str) -> ArmyList:
             if block.lines[0].strip().endswith("*"):
                 footnoted = unit
         elif block.kind is BlockKind.VALIDATION_ERRORS:
-            army_list.validation_errors += [
-                BULLET_REGEX.sub("", line.strip()) for line in block.lines[1:]
-            ]
+            army_list.validation_errors += _read_validation_errors(block.lines)
         elif block.kind is BlockKind.FOOTNOTE:
             # A footnote describes the "*"-marked unit directly above it, so
             # it joins that unit's decorations. The app prints no other kind,
@@ -95,6 +93,19 @@ def _parse_army_name(lines: Sequence[str], army_list: ArmyList) -> None:
             return
     first_block = lines[: lines.index("")] if "" in lines else lines
     army_list.name = "\n".join(first_block).strip()
+
+
+def _read_validation_errors(lines: Sequence[str]) -> list[str]:
+    """One error per bulleted line after the heading; an unbulleted line is the
+    error above it wrapped, so it joins that one."""
+    errors: list[str] = []
+    for line in lines[1:]:
+        text = BULLET_REGEX.sub("", line.strip())
+        if errors and not BULLET_REGEX.match(line.strip()):
+            errors[-1] = f"{errors[-1]} {text}"
+        else:
+            errors.append(text)
+    return errors
 
 
 def _parse_unit_in(lines: Sequence[str], sheet_type: str, group: str) -> Unit:
