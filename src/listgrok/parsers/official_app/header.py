@@ -18,12 +18,27 @@ from listgrok.parsers.official_app.blocks import (
 )
 from listgrok.parsers.official_app.detachment_names import COMPOUND_DETACHMENTS
 
-DISPOSITION_LABEL = "Force Dispositions:"
+# The newer dialect's labelled disposition line, in English, French and German.
+DISPOSITION_REGEX = re.compile(
+    r"^(?:Force Dispositions|Dispositions des Forces|Truppenaufstellungen)\s?:"
+    r"\s*(?P<name>.*)$"
+)
 # The army-size names, matched whole: a size line that lost its "(N Points)"
 # suffix would otherwise map by position as a faction or disposition line.
-ARMY_SIZES = frozenset({"Combat Patrol", "Incursion", "Strike Force", "Onslaught"})
+# Only the French and German names seen in exports are listed.
+ARMY_SIZES = frozenset(
+    {
+        "Combat Patrol",
+        "Incursion",
+        "Strike Force",
+        "Onslaught",
+        "Force de Frappe",
+        "Einsatzverband",
+    }
+)
 # ", and " first: an Oxford comma is one joiner, or "and C" would become a name.
-JOINER_REGEX = re.compile(r"(, and | and |, )")
+# The French and German apps join with "et" and "und".
+JOINER_REGEX = re.compile(r"(, and | and |, et | et |, und | und |, )")
 # The most joiners any compound name contains. Bounding the lookahead by it
 # keeps the split linear: an unbounded scan of every longer run is cubic in the
 # number of joiners, which a crafted detachment line can make arbitrarily large.
@@ -41,7 +56,9 @@ def split_detachments(text: str) -> list[str]:
     a name apart from two detachments, so those are looked up in
     `COMPOUND_DETACHMENTS`: at each position the longest run of pieces that
     spells a known compound name is kept whole, and every other joiner splits.
-    Known limitation: a new compound name not yet in that set is split apart.
+    The set holds French and German names too; in the current app data no
+    translated name contains a joiner. Known limitation: a new compound name
+    not yet in that set is split apart.
     """
     # The capture group keeps the joiners: pieces alternate name, joiner, name.
     pieces = JOINER_REGEX.split(text)
@@ -103,12 +120,12 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> None:
     # The newer dialect labels the disposition line ("Force Dispositions: X"),
     # making it the third pattern-found line; the classic dialect leaves it
     # unlabelled and it maps by order below.
-    labelled = [line for line in rest if line.startswith(DISPOSITION_LABEL)]
+    labelled = [m for m in (DISPOSITION_REGEX.match(line) for line in rest) if m]
     if labelled:
         if len(labelled) > 1:
             raise ParseError("Expected at most one disposition line", lines)
-        army_list.disposition = labelled[0].removeprefix(DISPOSITION_LABEL).strip()
-        rest = [line for line in rest if line not in labelled]
+        army_list.disposition = labelled[0].group("name").strip()
+        rest = [line for line in rest if line != labelled[0].group(0)]
         if len(rest) == 2:
             army_list.super_faction, army_list.faction = rest
         elif len(rest) == 1:

@@ -84,6 +84,25 @@ def test_official_3_header_reads_the_labelled_disposition_line():
     assert army_list.army_size_points == 2000
 
 
+@pytest.mark.parametrize(
+    "line",
+    [
+        "Force Dispositions: Disruption",
+        "Dispositions des Forces : Disruption",  # the French app's label
+        "Truppenaufstellungen: Disruption",  # the German app's label
+    ],
+)
+def test_localised_labelled_disposition_line_is_read(line):
+    army_list = ArmyList()
+    parse_header(
+        ["Orks", "Strike Force (2000 points)", "Wreckas (3 Detachment Points)", line],
+        army_list,
+    )
+
+    assert army_list.faction == "Orks"
+    assert army_list.disposition == "Disruption"
+
+
 def test_faction_only_header_leaves_disposition_empty():
     army_list = ArmyList()
     parse_header(
@@ -135,6 +154,16 @@ def test_faction_only_header_leaves_disposition_empty():
         (
             "Champions of Fenris, Veterans of the Fang",
             ["Champions of Fenris", "Veterans of the Fang"],
+        ),
+        # listhammer_orks_fr, listhammer_world_eaters_de: the French and
+        # German apps join with " et " and " und ".
+        (
+            "Bouzilleurs, Fling’boyz et Nuée de Minus",
+            ["Bouzilleurs", "Fling’boyz", "Nuée de Minus"],
+        ),
+        (
+            "Berzerker Warband und Schlächter des Khorne",
+            ["Berzerker Warband", "Schlächter des Khorne"],
         ),
     ],
 )
@@ -249,5 +278,56 @@ def test_army_size_line_without_points_raises(size_line):
                 "Purge the Foe",
                 size_line,
             ],
+            ArmyList(),
+        )
+
+
+def test_listhammer_orks_fr_header_parses():
+    army_list = ArmyList()
+    parse_header(
+        [
+            "Orks",
+            "Bouzilleurs, Fling’boyz et Nuée de Minus (3 Points de Détachement)",
+            "Atouts Prioritaires",
+            "Force de Frappe (2\u202f000 Points)",
+        ],
+        army_list,
+    )
+
+    assert army_list.faction == "Orks"
+    assert army_list.detachments == ["Bouzilleurs", "Fling’boyz", "Nuée de Minus"]
+    assert army_list.detachment_points == 3
+    assert army_list.disposition == "Atouts Prioritaires"
+    assert army_list.army_size == "Force de Frappe"
+    assert army_list.army_size_points == 2000
+
+
+def test_listhammer_world_eaters_de_header_parses():
+    army_list = ArmyList()
+    parse_header(
+        [
+            "World Eaters",
+            "Berzerker Warband und Schlächter des Khorne (3 Kontingentspunkte)",
+            "Einnehmen und halten",
+            "Einsatzverband (2000 Punkte)",
+        ],
+        army_list,
+    )
+
+    assert army_list.faction == "World Eaters"
+    assert army_list.detachments == ["Berzerker Warband", "Schlächter des Khorne"]
+    assert army_list.detachment_points == 3
+    assert army_list.disposition == "Einnehmen und halten"
+    assert army_list.army_size == "Einsatzverband"
+    assert army_list.army_size_points == 2000
+
+
+@pytest.mark.parametrize("size_line", ["Force de Frappe", "Einsatzverband"])
+def test_localised_army_size_line_without_points_raises(size_line):
+    # Synthetic, as test_army_size_line_without_points_raises, for the
+    # French and German size names.
+    with pytest.raises(ParseError, match="Malformed army-size line"):
+        parse_header(
+            ["Orks", "Bouzilleurs (3 Points de Détachement)", size_line],
             ArmyList(),
         )

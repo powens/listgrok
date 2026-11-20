@@ -67,6 +67,8 @@ class ArmyList:
     disposition: str = ""
     army_size: str = ""
     army_size_points: int | None = None
+    # The app's own ERRORS block, one entry per error, verbatim.
+    validation_errors: list[str] = field(default_factory=list)
     units: list[Unit] = field(default_factory=list)
 
     def add_unit(self, unit: Unit):

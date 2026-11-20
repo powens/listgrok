@@ -2,7 +2,8 @@
 and New Recruit's export of the same layout.
 
 The export is folded from a classified block stream into an ArmyList, carrying
-only the current sheet type and the current attachment group as state.
+only the current sheet type, the current attachment group and the unit a
+footnote may describe as state.
 """
 
 from collections.abc import Sequence
@@ -10,6 +11,7 @@ from collections.abc import Sequence
 from listgrok.exceptions import ParseError
 from listgrok.models import ArmyList, Attachment, Unit
 from listgrok.parsers.official_app.blocks import (
+    BULLET_REGEX,
     POINTS_REGEX,
     BlockKind,
     classify_blocks,
@@ -26,8 +28,12 @@ def parse_official_app(list_text: str) -> ArmyList:
     sheet_type = ""
     group = ""
     seen_header = False
+    # The unit just parsed, if its header ends in the "*" footnote marker.
+    footnoted: Unit | None = None
 
     for block in classify_blocks(list_text):
+        if block.kind is not BlockKind.FOOTNOTE:
+            footnoted = None
         if block.kind is BlockKind.ARMY_NAME:
             _parse_army_name(block.lines, army_list)
         elif block.kind is BlockKind.HEADER:
@@ -44,7 +50,25 @@ def parse_official_app(list_text: str) -> ArmyList:
         elif block.kind is BlockKind.GROUP:
             group = block.lines[0].strip()
         elif block.kind is BlockKind.UNIT:
-            army_list.add_unit(_parse_unit_in(block.lines, sheet_type, group))
+            unit = _parse_unit_in(block.lines, sheet_type, group)
+            army_list.add_unit(unit)
+            if block.lines[0].strip().endswith("*"):
+                footnoted = unit
+        elif block.kind is BlockKind.VALIDATION_ERRORS:
+            army_list.validation_errors += [
+                BULLET_REGEX.sub("", line.strip()) for line in block.lines[1:]
+            ]
+        elif block.kind is BlockKind.FOOTNOTE:
+            # A footnote describes the "*"-marked unit directly above it, so
+            # it joins that unit's decorations. The app prints no other kind,
+            # so one anywhere else is malformed input.
+            if footnoted is None:
+                raise ParseError(
+                    "Footnote not directly below a unit marked '*'", block.lines
+                )
+            footnoted.decorations += [
+                line.strip().removeprefix("*").strip() for line in block.lines
+            ]
         elif block.kind is BlockKind.TRAILER:
             pass
         else:

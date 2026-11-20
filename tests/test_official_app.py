@@ -583,6 +583,192 @@ OFFICIAL_EXAMPLES = {
         "attached_groups": 1,
         "decorations": {},
     },
+    # listhammer_*: lists from 16+ player events, Sept–Nov 2026, via
+    # listhammer.info. Each covers an export form the lvo2026 set lacks: a
+    # localised app, a thousands separator other than a comma, the app's
+    # ERRORS block, or a footnoted unit header.
+    "listhammer_adeptus_custodes.txt": {
+        # "2.000 Points": a dot as thousands separator.
+        "name": "4++ Magic",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Adeptus Custodes",
+        "detachments": [
+            "Emperor’s Chosen",
+            "Grav‑Assault Force",
+            "Might of the Moritoi",
+        ],
+        "detachment_points": 3,
+        "disposition": "Take and Hold",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 10,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+    },
+    "listhammer_adeptus_custodes_errors.txt": {
+        # An ERRORS block fused onto the header block, no blank line between.
+        "name": "11th harvester",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Adeptus Custodes",
+        "detachments": [
+            "Emperor’s Chosen",
+            "Lions of the Emperor",
+            "Might of the Moritoi",
+        ],
+        "detachment_points": 3,
+        "disposition": "Take and Hold",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 11,
+        "unit_points_total": 2000,
+        "attached_groups": 1,
+        "decorations": {},
+        "validation_errors": [
+            (
+                "You must select one **CHARACTER** model from your army to be your "
+                "**WARLORD**."
+            )
+        ],
+    },
+    "listhammer_adeptus_mechanicus_fr.txt": {
+        # The French app in the newer dialect: "Unités Attachées" fused with
+        # "Unité 1 Attachée", lower-case "points".
+        "name": "PWE",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Adeptus Mechanicus",
+        "detachments": ["Cohort Cybernetica", "Eradication Cohort"],
+        "detachment_points": 3,
+        "disposition": "Prendre et Tenir",
+        "army_size": "Force de Frappe",
+        "army_size_points": 2000,
+        "unit_count": 17,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+    },
+    "listhammer_chaos_knights.txt": {
+        # "(145 Points)*" headers, each followed by a "* …" footnote block.
+        "name": "We’re going to candy mountain!",
+        "points": 1995,
+        "super_faction": "",
+        "faction": "Chaos Knights",
+        "detachments": ["Houndpack Lance", "Hunting Warpack"],
+        "detachment_points": 3,
+        "disposition": "Reconnaissance",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 14,
+        "unit_points_total": 1995,
+        "attached_groups": 0,
+        "decorations": {
+            "War Dog Karnivore": (
+                [
+                    "Houndpack Lance Keyword: Character",
+                    "This Datasheet also has the Battleline keyword",
+                ],
+                2,
+            ),
+            "War Dog Stalker": (
+                [
+                    "Houndpack Lance Keyword: Character",
+                    "This Datasheet also has the Battleline keyword",
+                ],
+                1,
+            ),
+        },
+    },
+    "listhammer_imperial_knights_de.txt": {
+        # The German app: "Kontingentspunkte", "Punkte", "2.000".
+        "name": "Freeblade",
+        "points": 1995,
+        "super_faction": "",
+        "faction": "Imperiale Ritter",
+        "detachments": ["Freeblade Company"],
+        "detachment_points": 3,
+        "disposition": "Prioritätsziele",
+        "army_size": "Einsatzverband",
+        "army_size_points": 2000,
+        "unit_count": 9,
+        "unit_points_total": 1995,
+        "attached_groups": 0,
+        "decorations": {},
+    },
+    "listhammer_orks_fr.txt": {
+        # The French app in the glyph dialect, with narrow no-break spaces
+        # as thousands separators and an ERREURS block.
+        "name": "Ork FG",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Orks",
+        "detachments": ["Bouzilleurs", "Fling’boyz", "Nuée de Minus"],
+        "detachment_points": 3,
+        "disposition": "Atouts Prioritaires",
+        "army_size": "Force de Frappe",
+        "army_size_points": 2000,
+        "unit_count": 18,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {},
+        "validation_errors": [
+            (
+                "Vous devez choisir 1 figurine de PERSONNAGE de votre armée pour "
+                "être votre SEIGNEUR DE GUERRE."
+            )
+        ],
+    },
+    "listhammer_tau_empire.txt": {
+        # "2'000 Points": an apostrophe as thousands separator. The army
+        # name's player name is redacted.
+        "name": "A Player's shit list",
+        "points": 1990,
+        "super_faction": "",
+        "faction": "T’au Empire",
+        "detachments": ["Retaliation Cadre"],
+        "detachment_points": 3,
+        "disposition": "Purge the Foe",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 18,
+        "unit_points_total": 1990,
+        "attached_groups": 5,
+        "decorations": {},
+    },
+    "listhammer_tyranids.txt": {
+        # "2 000 Points" with a no-break space as thousands separator.
+        "name": "Hive fleet reroll",
+        "points": 2000,
+        "super_faction": "",
+        "faction": "Tyranids",
+        "detachments": ["Subterranean Assault"],
+        "detachment_points": 3,
+        "disposition": "Reconnaissance",
+        "army_size": "Strike Force",
+        "army_size_points": 2000,
+        "unit_count": 19,
+        "unit_points_total": 2000,
+        "attached_groups": 3,
+        "decorations": {"Trygon": ["Subterranean Assault Keywords: Character"]},
+    },
+    "listhammer_world_eaters_de.txt": {
+        # The German app in the newer dialect, joining detachments with "und".
+        "name": "2k",
+        "points": 1990,
+        "super_faction": "",
+        "faction": "World Eaters",
+        "detachments": ["Berzerker Warband", "Schlächter des Khorne"],
+        "detachment_points": 3,
+        "disposition": "Einnehmen und halten",
+        "army_size": "Einsatzverband",
+        "army_size_points": 2000,
+        "unit_count": 11,
+        "unit_points_total": 1990,
+        "attached_groups": 1,
+        "decorations": {},
+    },
     # New Recruit v38.5's GW-style export: the official layout under its own
     # footer.
     "nr_official_2.txt": {
@@ -703,6 +889,8 @@ class TestAllOfficialExamples:
         assert army_list.army_size == expected["army_size"]
         assert army_list.army_size_points == expected["army_size_points"]
         assert len(army_list.units) == expected["unit_count"]
+        # Optional key: only an export carrying the app's ERRORS block has any.
+        assert army_list.validation_errors == expected.get("validation_errors", [])
 
     @pytest.mark.parametrize("filename", sorted(OFFICIAL_EXAMPLES))
     def test_units_are_well_formed(self, filename):
@@ -778,8 +966,11 @@ class TestAllOfficialExamples:
         assert len(groups) == OFFICIAL_EXAMPLES[filename]["attached_groups"]
         for group, roles in groups.items():
             # Case-insensitive: the classic dialect writes "Attached unit 1",
-            # the newer one "Attached Unit 1"; both are kept verbatim.
-            assert group.lower().startswith("attached unit "), group
+            # the newer one "Attached Unit 1"; both are kept verbatim, as are
+            # the French and German forms (listhammer_*_fr, *_de).
+            assert group.lower().startswith(
+                ("attached unit ", "unité ", "angeschlossene einheit ")
+            ), group
             if not any(roles):
                 # official_15 writes the group with no "Attached as:" lines.
                 continue
@@ -887,3 +1078,42 @@ class TestArmyNameFold:
 
         assert army_list.name == "No more Overwatch"
         assert army_list.points is None
+
+
+class TestFootnoteFold:
+    def test_footnote_joins_the_decorations_of_the_unit_above(self):
+        # Synthetic, minimal form of listhammer_chaos_knights.
+        army_list = parse_official_app(
+            GROUPED_UNIT_WITHOUT_ATTACHED_AS.replace(
+                "Test Unit (50 Points)", "Test Unit (50 Points)*"
+            )
+            + "\n* This Datasheet also has the Battleline keyword\n"
+        )
+
+        assert army_list.units[0].decorations == [
+            "This Datasheet also has the Battleline keyword"
+        ]
+
+    def test_footnote_before_any_unit_raises(self):
+        with pytest.raises(ParseError, match="Footnote not directly below"):
+            parse_official_app(
+                GROUPED_UNIT_WITHOUT_ATTACHED_AS.replace(
+                    "ATTACHED UNITS", "* A stray footnote\n\nATTACHED UNITS"
+                )
+            )
+
+    def test_footnote_below_an_unmarked_unit_raises(self):
+        with pytest.raises(ParseError, match="Footnote not directly below"):
+            parse_official_app(
+                GROUPED_UNIT_WITHOUT_ATTACHED_AS + "\n* A stray footnote\n"
+            )
+
+    def test_footnote_after_a_heading_raises(self):
+        # Synthetic: a heading between the marked unit and the footnote.
+        with pytest.raises(ParseError, match="Footnote not directly below"):
+            parse_official_app(
+                GROUPED_UNIT_WITHOUT_ATTACHED_AS.replace(
+                    "Test Unit (50 Points)", "Test Unit (50 Points)*"
+                )
+                + "\nBATTLELINE\n\n* This Datasheet also has the Battleline keyword\n"
+            )

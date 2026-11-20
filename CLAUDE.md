@@ -18,22 +18,23 @@ uv run python examples/examples.py   # smoke run over examples/official_app/
 
 `parse_list(text)` delegates to `parse_official_app`, the only parser: GW's official app 11th edition export, plus New Recruit's export of the same layout. A parser raises `ParseError` on input it does not understand, never a half-filled `ArmyList`. That keeps a bad parse visible, and lets a future second format be detected by attempted parse rather than by sniffing.
 
-**Data model** (`models.py`): dataclasses whose `to_dict()` keys are stable (optional fields present as `None`/`False`/`""`). `ArmyList` → `Unit` → `UnitComposition` (a model set: name, num_models, wargear counts). Every unit has at least one model set; a single-model unit's is named after the unit. `Unit.decorations` holds body lines that are neither `Nx <wargear>` nor a keyword. Attached units stay in the flat `ArmyList.units`, in file order, with `Unit.attachment` set; other units have `attachment = None`.
+**Data model** (`models.py`): dataclasses whose `to_dict()` keys are stable (optional fields present as `None`/`False`/`""`). `ArmyList` → `Unit` → `UnitComposition` (a model set: name, num_models, wargear counts). Every unit has at least one model set; a single-model unit's is named after the unit. `Unit.decorations` holds body lines that are neither `Nx <wargear>` nor a keyword, plus any footnote the app prints below the unit. `ArmyList.validation_errors` holds the app's own `ERRORS` block. Attached units stay in the flat `ArmyList.units`, in file order, with `Unit.attachment` set; other units have `attachment = None`.
 
 ### `parsers/official_app/`: classify, then fold
 
 This is the map; module and function docstrings carry the mechanics.
 
-- `blocks.py` classifies blank-line-separated blocks by shape alone (`ARMY_NAME`, `HEADER`, `SECTION`, `GROUP`, `UNIT`, `TRAILER`), keying the header off its `(N Detachment Points)` line, and splits the blocks New Recruit fuses. Home of all shared regexes.
-- `header.py` reads faction metadata: labelled lines by pattern, the 1–3 left over by order. `split_detachments` keeps names in `COMPOUND_DETACHMENTS` (`detachment_names.py`) whole; that set is regenerated from GW's app data by the maintainer-local `refresh-detachment-names` skill and only ever grows.
+- `blocks.py` classifies blank-line-separated blocks by shape alone (`ARMY_NAME`, `HEADER`, `SECTION`, `GROUP`, `UNIT`, `VALIDATION_ERRORS`, `FOOTNOTE`, `TRAILER`), keying the header off its `(N Detachment Points)` line, and splits the blocks New Recruit fuses. Home of all shared regexes.
+- Localised exports: the French and German apps translate the fixed labels (detachment line, group headings, `Attached as:`, `Warlord`, `Enhancement(s):`, army sizes, joiners, footer) and use locale thousands separators (`2.000`, `2'000`, no-break spaces). Each pattern accepts those forms. Attached-as roles and details are normalised to English (`ROLE_NAMES`/`ROLE_DETAILS` in `units.py`); every other string stays verbatim.
+- `header.py` reads faction metadata: labelled lines by pattern, the 1–3 left over by order. `split_detachments` keeps names in `COMPOUND_DETACHMENTS` (`detachment_names.py`) whole; that set is regenerated from GW's app data (English, French and German names) by the maintainer-local `refresh-detachment-names` skill and only ever grows.
 - `units.py` builds a unit body into a forest in one of three dialects: *classic* (indented), *compact* (unindented bullet runs, `_run_tree`) or *glyph* (unindented, every line bulleted, `_glyph_tree`). `Warlord`, `Enhancement(s):` and `Attached as:` are lifted off the roots and off a model set's children.
 - `__init__.py` reads the army name and points from the text before the header, then folds the blocks into an `ArmyList`, carrying only the current sheet type and attachment group.
 
-Section headings are recognised structurally, not from an allow-list, so a new GW heading lands in `sheet_type` with no code change. `ParseError` is reserved for a missing or malformed header, an unparseable unit header, and an unclassifiable block after the header.
+Section headings are recognised structurally, not from an allow-list, so a new GW heading lands in `sheet_type` with no code change. `ParseError` is reserved for a missing or malformed header, an unparseable unit header, an unclassifiable block after the header, and a footnote not directly below a `*`-marked unit.
 
 ## Fixtures are the spec
 
-`examples/official_app/` holds real exports: `official_*.txt`, and `lvo2026_*.txt` (LVO 2026 lists via listhammer; unindented app v2.6.0 exports, some hand-annotated). Every file there except `lvo2026_genestealer_cults.txt`, which does not parse, is an `OFFICIAL_EXAMPLES` entry in `tests/test_official_app.py`, checked end to end by `TestAllOfficialExamples`.
+`examples/official_app/` holds real exports: `official_*.txt`, `lvo2026_*.txt` (LVO 2026 lists via listhammer; unindented app v2.6.0 exports, some hand-annotated), and `listhammer_*.txt` (Sept–Nov 2026 lists via listhammer.info's `/api/recentLists`, picked for forms the others lack: French/German, locale separators, `ERRORS`, footnotes; player names redacted). Every file there except `lvo2026_genestealer_cults.txt`, which does not parse, is an `OFFICIAL_EXAMPLES` entry in `tests/test_official_app.py`, checked end to end by `TestAllOfficialExamples`.
 
 To add an export, add an `OFFICIAL_EXAMPLES` entry (an `nr_`-prefixed key reads from `examples/new_recruit/official/`). Every entry needs `attached_groups`, `unit_points_total` and `decorations` keys; the comments in `test_units_are_well_formed` explain the `decorations` value forms. Cases in `test_official_app_{blocks,header,units}.py` name the example file they came from; keep that convention.
 

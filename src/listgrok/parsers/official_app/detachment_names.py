@@ -1,6 +1,8 @@
-"""Detachment names that contain a list joiner (", " or " and ").
+"""Detachment names that contain a list joiner (", ", " and ", " et ", " und ").
 
-The official app writes several detachments as a serial list ("A, B and C"),
+Names are English, French and German: the localised apps translate some
+detachment names and keep others in English. The official app writes several
+detachments as a serial list ("A, B and C"),
 so these names are matched whole before the line is split on its joiners.
 Generated from the app's detachment data; names are only ever added, because
 old exports still carry detachments GW has since removed.
