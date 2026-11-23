@@ -42,6 +42,14 @@ def parse_new_recruit_wtc(list_text: str) -> ArmyList:
             f"Header declares {declared_units} units but the list has "
             f"{len(army_list.units)}"
         )
+    # Unit points always sum to the header's total, so a shortfall means units
+    # were lost, e.g. to a commentary cutoff in `_frame`.
+    unit_points = sum(unit.points or 0 for unit in army_list.units)
+    if unit_points != army_list.points:
+        raise ParseError(
+            f"Units total {unit_points} pts but the header declares "
+            f"{army_list.points} pts"
+        )
     _pair_attachments(army_list.units, links)
     return army_list
 
@@ -53,9 +61,11 @@ def _frame(lines: Sequence[str]) -> tuple[list[str], list[str]]:
         raise ParseError("No +++ ruled header block")
     opening, closing = rules[0], rules[1]
 
+    rest = lines[closing + 1 :]
+    has_footer = any(line.strip().startswith(_FOOTER_PREFIX) for line in rest)
     body = []
     seen_unit = after_blank = False
-    for line in lines[closing + 1 :]:
+    for line in rest:
         text = line.strip()
         if text.startswith((_FOOTER_PREFIX, _FENCE)):
             break
@@ -64,7 +74,14 @@ def _frame(lines: Sequence[str]) -> tuple[list[str], list[str]]:
         # bullet, `K with`, `Enhancement:`, `Leading`, `Attached to`) continues
         # the export: nr_wtc_10 puts a unit's `Enhancement:` after a blank line.
         # Anything else ends it rather than becoming the last unit's wargear.
-        if text and after_blank and seen_unit and not is_body_line(line):
+        # With the footer present nothing was cropped, so no cutoff applies.
+        if (
+            not has_footer
+            and text
+            and after_blank
+            and seen_unit
+            and not is_body_line(line)
+        ):
             break
         seen_unit = seen_unit or is_unit_header(line)
         after_blank = not text

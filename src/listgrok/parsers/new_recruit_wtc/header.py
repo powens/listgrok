@@ -22,9 +22,13 @@ NAMES_WITH_COMMAS = tuple(
 _DETACHMENT_NAME_REGEX = re.compile(
     r"\s*(?:" + "|".join(map(re.escape, NAMES_WITH_COMMAS)) + r"|[^,]+)"
 )
-# New Recruit names a parent faction by its keyword; the official app by its
-# codex name. Unlisted parents pass through verbatim.
-_PARENT_FACTION_NAMES = {"Adeptus Astartes": "Space Marines"}
+_NUMBER_REGEX = re.compile(r"\d+")
+# New Recruit names a faction by its keyword; the official app by its codex
+# name. Unlisted names pass through verbatim.
+_FACTION_NAMES = {
+    "Adeptus Astartes": "Space Marines",
+    "Heretic Astartes": "Chaos Space Marines",
+}
 
 
 def parse_header(lines: Sequence[str], army_list: ArmyList) -> int | None:
@@ -39,11 +43,11 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> int | None:
     parts = [part.strip() for part in values["FACTION KEYWORD"].split(" - ")]
     # `Alliance - [Parent - ]Faction`: the leading alliance (Imperium, Chaos,
     # Xenos) has no counterpart in the official app's export, so only a parent
-    # faction fills super_faction, under the official app's name for it
-    # (Adeptus Astartes -> Space Marines).
-    army_list.faction = parts[-1]
+    # faction fills super_faction. Both take the official app's name for a
+    # faction (Adeptus Astartes -> Space Marines).
+    army_list.faction = _FACTION_NAMES.get(parts[-1], parts[-1])
     if len(parts) > 2:
-        army_list.super_faction = _PARENT_FACTION_NAMES.get(parts[-2], parts[-2])
+        army_list.super_faction = _FACTION_NAMES.get(parts[-2], parts[-2])
 
     if "TOTAL ARMY POINTS" not in values:
         raise ParseError("Header has no TOTAL ARMY POINTS line", lines)
@@ -59,7 +63,7 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> int | None:
     declared = values.get("NUMBER OF UNITS")
     if declared is None:
         return None
-    if not declared.isdigit():
+    if not _NUMBER_REGEX.fullmatch(declared):
         raise ParseError("Unreadable NUMBER OF UNITS", declared)
     return int(declared)
 

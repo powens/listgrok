@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -393,6 +394,29 @@ class TestFraming:
         with pytest.raises(ParseError, match="declares 10 units but the list has 9"):
             parse_new_recruit_wtc(text.replace("1x Trukk (60 pts)", "Trukk", 1))
 
+    def test_text_between_units_before_the_footer_keeps_later_units(self):
+        # Not in a fixture: with the footer present nothing was cropped, so a
+        # stray line after a blank line must not end the export.
+        army_list = parse_new_recruit_wtc(
+            make_list(
+                "1x Land Raider (100 pts)",
+                "",
+                "Some note",
+                "1x Land Raider (100 pts)",
+                number_of_units=None,
+            )
+        )
+
+        assert [unit.points for unit in army_list.units] == [100, 100]
+
+    def test_unit_points_short_of_the_total_raise(self):
+        # A cropped paste whose commentary cutoff dropped units, with no
+        # NUMBER OF UNITS line to catch it.
+        text = make_list("1x Trukk (60 pts)", number_of_units=None, points=120)
+        cropped = text[: text.index("Created with")]
+        with pytest.raises(ParseError, match="Units total 60 pts"):
+            parse_new_recruit_wtc(cropped + "Thoughts?\n\n1x Trukk (60 pts)\n")
+
     def test_header_without_unit_count_skips_the_check(self):
         army_list = parse_new_recruit_wtc(
             make_list("1x Trukk (60 pts)", number_of_units=None)
@@ -401,16 +425,27 @@ class TestFraming:
         assert len(army_list.units) == 1
 
 
-def make_list(*body: str, number_of_units: int | None = -1) -> str:
-    """A minimal WTC export around `body`; NUMBER OF UNITS counts unit headers."""
+def make_list(
+    *body: str, number_of_units: int | None = -1, points: int | None = None
+) -> str:
+    """A minimal WTC export around `body`.
+
+    NUMBER OF UNITS counts unit headers and TOTAL ARMY POINTS sums their points,
+    unless given.
+    """
+    unit_headers = [line for line in body if is_unit_header(line)]
     if number_of_units == -1:
-        number_of_units = sum(1 for line in body if is_unit_header(line))
+        number_of_units = len(unit_headers)
+    if points is None:
+        points = sum(
+            int(re.search(r"\((\d+) pts\)", line).group(1)) for line in unit_headers
+        )
     header = [
         "+++++++++++++++++++++++++++++++++++++++++++++++",
         "+ FACTION KEYWORD: Imperium - Adeptus Astartes",
         "+ DETACHMENT: Gladius Task Force (Combat Doctrines)",
         "+ FORCE DISPOSITION: Purge the Foe",
-        "+ TOTAL ARMY POINTS: 2000pts",
+        f"+ TOTAL ARMY POINTS: {points}pts",
     ]
     if number_of_units is not None:
         header.append(f"+ NUMBER OF UNITS: {number_of_units}")

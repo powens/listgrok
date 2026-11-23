@@ -49,6 +49,25 @@ class TestParseHeader:
         assert army_list.super_faction == "Space Marines"
         assert army_list.faction == "Black Templars"
 
+    @pytest.mark.parametrize(
+        ("keyword", "faction"),
+        [
+            ("Imperium - Adeptus Astartes", "Space Marines"),
+            ("Chaos - Heretic Astartes", "Chaos Space Marines"),
+        ],
+    )
+    def test_two_part_faction_maps_to_official_name(self, keyword, faction):
+        # Not in a fixture: vanilla Space Marines and Chaos Space Marines lists,
+        # named as the official app exports name them (e.g. lvo2026 CSM lists).
+        army_list = ArmyList()
+        parse_header(
+            header(f"+ FACTION KEYWORD: {keyword}", "+ TOTAL ARMY POINTS: 2000pts"),
+            army_list,
+        )
+
+        assert army_list.super_faction == ""
+        assert army_list.faction == faction
+
     def test_unmapped_parent_faction_passes_through(self):
         # Not in a fixture: a parent keyword with no official-app name mapped.
         army_list = ArmyList()
@@ -114,6 +133,19 @@ class TestParseHeader:
         )
 
         assert declared is None
+
+    @pytest.mark.parametrize("value", ["²", "lots", "-1", ""])
+    def test_unreadable_number_of_units_raises(self, value):
+        # Not in a fixture: "²" passes str.isdigit() but int() rejects it.
+        with pytest.raises(ParseError, match="Unreadable NUMBER OF UNITS"):
+            parse_header(
+                header(
+                    "+ FACTION KEYWORD: Xenos - Orks",
+                    "+ TOTAL ARMY POINTS: 995pts",
+                    f"+ NUMBER OF UNITS: {value}",
+                ),
+                ArmyList(),
+            )
 
     def test_unknown_keys_are_ignored(self):
         # Not in a fixture: an unknown key such as PLAYER NAME.
