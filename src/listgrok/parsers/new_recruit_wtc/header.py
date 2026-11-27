@@ -10,7 +10,9 @@ from listgrok.parsers.official_app.detachment_names import COMPOUND_DETACHMENTS
 RULE_REGEX = re.compile(r"^\+{10,}$")
 _KEY_REGEX = re.compile(r"^\+ (?P<key>[A-Z][A-Z ]*): ?(?P<value>.*)$")
 _POINTS_REGEX = re.compile(r"^(?P<points>\d+)\s*pts$")
-_RULE_SUFFIX_REGEX = re.compile(r"\s*\([^()]*\)$")
+# A detachment's rule in parentheses, allowing one level of nesting:
+# `(Rule)`, `(Rule (Aura))`. No detachment name contains a parenthesis.
+_RULE_REGEX = re.compile(r"\s*\((?:[^()]|\([^()]*\))*\)")
 # Detachment names that themselves contain a comma (the Ordo detachments), taken
 # from the official-app parser's list so both parsers grow together. Longest
 # first, so a name that prefixes another cannot win the alternation.
@@ -19,9 +21,20 @@ NAMES_WITH_COMMAS = tuple(
         (name for name in COMPOUND_DETACHMENTS if ", " in name), key=len, reverse=True
     )
 )
-_DETACHMENT_NAME_REGEX = re.compile(
-    r"\s*(?:" + "|".join(map(re.escape, NAMES_WITH_COMMAS)) + r"|[^,]+)"
-)
+
+
+def _detachment_name_regex(names_with_commas: Sequence[str]) -> re.Pattern[str]:
+    """A name from `names_with_commas` ending at a comma or the end, else up to
+    the next comma. An empty tuple leaves only the comma split, so no empty
+    alternative can match first and swallow every name."""
+    plain = r"[^,]+"
+    if not names_with_commas:
+        return re.compile(r"\s*(?:" + plain + ")")
+    whole = "|".join(map(re.escape, names_with_commas))
+    return re.compile(r"\s*(?:(?:" + whole + r")(?=\s*(?:,|$))|" + plain + ")")
+
+
+_DETACHMENT_NAME_REGEX = _detachment_name_regex(NAMES_WITH_COMMAS)
 _NUMBER_REGEX = re.compile(r"\d+")
 # New Recruit names a faction by its keyword; the official app by its codex
 # name. Unlisted names pass through verbatim.
@@ -69,11 +82,13 @@ def parse_header(lines: Sequence[str], army_list: ArmyList) -> int | None:
 
 
 def split_detachments(value: str) -> list[str]:
-    """`A, B (Rule)` -> `["A", "B"]`: drop the trailing rule, split on commas.
+    """`A (RuleA), B (RuleB)` -> `["A", "B"]`: drop every rule, split on commas.
 
-    A name from NAMES_WITH_COMMAS is matched whole before any comma splits it.
+    A name from NAMES_WITH_COMMAS is matched whole before any comma splits it,
+    but only when it is the whole name: `Ordo Xenos, Alien Hunters Extended`
+    is not the Ordo detachment.
     """
-    names = _DETACHMENT_NAME_REGEX.findall(_RULE_SUFFIX_REGEX.sub("", value))
+    names = _DETACHMENT_NAME_REGEX.findall(_RULE_REGEX.sub("", value))
     return [name.strip() for name in names if name.strip()]
 
 

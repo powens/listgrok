@@ -19,10 +19,13 @@ def parse_list(list_text: str) -> ArmyList:
     understands raises `ParseError` naming each parser's reason, rather than
     returning a half-filled `ArmyList`.
     """
-    failures = []
+    errors: list[tuple[str, ParseError]] = []
     for label, parser in _PARSERS:
         try:
             return parser(list_text)
         except ParseError as error:
-            failures.append(f"{label}: {error}")
-    raise ParseError("Unrecognised army list; " + "; ".join(failures))
+            errors.append((label, error))
+    reasons = "; ".join(f"{label}: {error}" for label, error in errors)
+    # Chained from the first parser's error, so its `message` and `block` stay
+    # reachable as `__cause__`; the message names every parser's reason.
+    raise ParseError("Unrecognised army list; " + reasons) from errors[0][1]

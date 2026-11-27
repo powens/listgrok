@@ -1,7 +1,11 @@
 import pytest
 
 from listgrok import ArmyList, ParseError
-from listgrok.parsers.new_recruit_wtc.header import parse_header, split_detachments
+from listgrok.parsers.new_recruit_wtc.header import (
+    _detachment_name_regex,
+    parse_header,
+    split_detachments,
+)
 
 
 def header(*lines: str) -> list[str]:
@@ -227,3 +231,25 @@ class TestSplitDetachments:
         assert split_detachments(
             "Lions of the Emperor, Ordo Xenos, Alien Hunters (Rule)"
         ) == ["Lions of the Emperor", "Ordo Xenos, Alien Hunters"]
+
+    def test_known_name_prefixing_a_longer_name_does_not_split_it(self):
+        # Not in a fixture (from review): a known comma name only matches whole.
+        assert split_detachments("Ordo Xenos, Alien Hunters Extended (Rule)") == [
+            "Ordo Xenos",
+            "Alien Hunters Extended",
+        ]
+
+    def test_each_detachment_drops_its_own_rule(self):
+        # Not in a fixture (from review).
+        assert split_detachments("A (RuleA), B (RuleB)") == ["A", "B"]
+
+    def test_rule_with_nested_parentheses_is_dropped(self):
+        # Not in a fixture (from review).
+        assert split_detachments("Foo (Rule (Aura))") == ["Foo"]
+
+    def test_no_known_comma_names_still_splits_on_commas(self):
+        # Not in a fixture (from review): an empty alternation once matched
+        # the empty string first and dropped every name.
+        regex = _detachment_name_regex(())
+
+        assert [name.strip() for name in regex.findall("A, B")] == ["A", "B"]

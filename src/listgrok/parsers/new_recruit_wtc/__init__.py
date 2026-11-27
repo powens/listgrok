@@ -14,6 +14,7 @@ from listgrok.models import ArmyList, Attachment, Unit
 from listgrok.parsers.new_recruit_wtc.header import RULE_REGEX, parse_header
 from listgrok.parsers.new_recruit_wtc.units import (
     UnitLinks,
+    continues_after_blank,
     is_body_line,
     is_unit_header,
     parse_unit,
@@ -69,20 +70,18 @@ def _frame(lines: Sequence[str]) -> tuple[list[str], list[str]]:
         text = line.strip()
         if text.startswith((_FOOTER_PREFIX, _FENCE)):
             break
-        # A paste cropped above the footer runs straight into commentary. After
-        # a blank line, only a unit header or a line of a known body form (a
-        # bullet, `K with`, `Enhancement:`, `Leading`, `Attached to`) continues
-        # the export: nr_wtc_10 puts a unit's `Enhancement:` after a blank line.
-        # Anything else ends it rather than becoming the last unit's wargear.
-        # With the footer present nothing was cropped, so no cutoff applies.
-        if (
-            not has_footer
-            and text
-            and after_blank
-            and seen_unit
-            and not is_body_line(line)
-        ):
-            break
+        # A paste cropped above the footer runs straight into commentary, so
+        # once a unit has been seen the export ends at the first line of no
+        # known body form (a unit header, bullet, `K with`, `Enhancement:`,
+        # `Leading`, `Attached to`). After a blank line the bar is higher: a
+        # bullet or `K with` line there is commentary too, but nr_wtc_10 puts a
+        # unit's `Enhancement:` after one. With the footer present nothing was
+        # cropped, so no cutoff applies.
+        if not has_footer and text and seen_unit:
+            if not is_body_line(line):
+                break
+            if after_blank and not continues_after_blank(line):
+                break
         seen_unit = seen_unit or is_unit_header(line)
         after_blank = not text
         body.append(line)

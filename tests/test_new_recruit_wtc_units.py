@@ -19,6 +19,9 @@ class TestIsUnitHeader:
             "Char1: 1x Valerian (110 pts): Warlord, Gnosis",  # nr_wtc_0
             "5x Custodian Wardens (250 pts)",  # nr_wtc_0
             "1x Land Raider (220 pts)",  # nr_wtc_9
+            # Not in a fixture (from review): nr_wtc_10's ENHANCEMENT line
+            # uses a `Moun5:` label, so any such label may prefix a unit.
+            "Moun5: 6x Bloodcrushers (220 pts)",
         ],
     )
     def test_unit_headers(self, line):
@@ -107,6 +110,34 @@ class TestParseUnit:
 
         assert unit.is_warlord
         assert model_sets(unit) == [("Foo", 2, {"A": 2, "B": 2})]
+
+    def test_two_with_items_on_the_header_line_stay_separate(self):
+        # Not in a fixture (from review): each `K with` item starts its own group.
+        unit, _ = parse_unit(
+            "2x Vertus Praetors (145 pts): 1 with Interceptor lance, B, "
+            "1 with Salvo launcher",
+            [],
+        )
+
+        assert model_sets(unit) == [
+            (
+                "Vertus Praetors",
+                2,
+                {"Interceptor lance": 1, "B": 1, "Salvo launcher": 1},
+            )
+        ]
+
+    def test_two_with_groups_on_one_body_line_stay_separate(self):
+        # Not in a fixture (from review).
+        unit, _ = parse_unit("2x Foo (100 pts)", ["1 with A, 1 with B"])
+
+        assert model_sets(unit) == [("Foo", 2, {"A": 1, "B": 1})]
+
+    def test_with_line_before_a_bullet_raises(self):
+        # Not in a fixture (from review): the implicit model set already
+        # claims every model, so a later bullet would count models twice.
+        with pytest.raises(ParseError, match="before a model bullet"):
+            parse_unit("1x Squad (100 pts)", ["5 with Bolter", "• 4x Marine"])
 
     def test_counted_and_repeated_inline_items(self):
         # nr_wtc_3 Defiler: "2x" counts, and a repeated name sums.

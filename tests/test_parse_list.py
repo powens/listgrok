@@ -31,3 +31,6 @@ def test_unrecognised_export_raises_naming_every_parser():
     message = str(raised.value)
     assert "official app:" in message
     assert "New Recruit WTC:" in message
+    # The first parser's own error stays reachable, `block` and all.
+    assert isinstance(raised.value.__cause__, ParseError)
+    assert raised.value.__cause__.message in message

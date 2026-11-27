@@ -363,6 +363,23 @@ class TestFraming:
 
         assert army_list.to_dict() == parse_example("nr_wtc_1.txt").to_dict()
 
+    @pytest.mark.parametrize(
+        "trailer",
+        [
+            "\n\n10 with friends I won 3 games\n",
+            "\n\n• 3x beers\n",
+            "\nThanks, what do you think?\n",  # no blank line before it
+        ],
+    )
+    def test_commentary_shaped_like_a_body_line_is_ignored(self, trailer):
+        # Not in a fixture (from review): without the footer, a bullet or
+        # `K with` line after a blank line, or any non-body line, ends the export.
+        text = (EXAMPLES / "nr_wtc_0.txt").read_text()
+        cropped = text[: text.index("Created with newrecruit.eu")].rstrip("\n")
+        army_list = parse_new_recruit_wtc(cropped + trailer)
+
+        assert army_list.to_dict() == parse_example("nr_wtc_0.txt").to_dict()
+
     def test_body_line_after_a_blank_line_stays_in_the_unit(self):
         # nr_wtc_10: Char1's Enhancement line follows a blank line.
         army_list = parse_example("nr_wtc_10.txt")

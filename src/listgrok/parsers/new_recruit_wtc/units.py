@@ -13,7 +13,7 @@ from listgrok.exceptions import ParseError
 from listgrok.models import Unit, UnitComposition
 
 UNIT_HEADER_REGEX = re.compile(
-    r"^(?:Char\d+: )?(?P<count>\d+)x (?P<name>.+?) \((?P<points>\d+) pts\)"
+    r"^(?:[A-Za-z]+\d+: )?(?P<count>\d+)x (?P<name>.+?) \((?P<points>\d+) pts\)"
     r"(?:: (?P<inline>.*))?$"
 )
 _BULLET_REGEX = re.compile(r"^• (?P<count>\d+)x (?P<name>.+?)(?:: (?P<items>.*))?$")
@@ -48,6 +48,18 @@ def is_body_line(line: str) -> bool:
     )
 
 
+def continues_after_blank(line: str) -> bool:
+    """A line that can follow a blank line inside the export: a unit header or
+    a unit-level line (`Enhancement:`, `Leading`, `Attached to`), not a bullet
+    or `K with` line, which belong directly under their unit."""
+    text = line.strip()
+    return (
+        is_unit_header(text)
+        or _ENHANCEMENT_REGEX.match(text) is not None
+        or text.startswith((_LEADING_PREFIX, _ATTACHED_PREFIX))
+    )
+
+
 def parse_unit(header: str, body: Sequence[str]) -> tuple[Unit, UnitLinks]:
     match = UNIT_HEADER_REGEX.match(header.strip())
     if match is None:
@@ -58,11 +70,16 @@ def parse_unit(header: str, body: Sequence[str]) -> tuple[Unit, UnitLinks]:
     inline = _split_items(match.group("inline") or "")
 
     model_set: UnitComposition | None = None
+    implicit = False  # model_set is the unit-named set a `K with` line created
     for raw in body:
         line = raw.strip()
         if not line:
             continue
         if (bullet := _BULLET_REGEX.match(line)) is not None:
+            if implicit:
+                # The implicit set already claims every model in the unit, so
+                # a bullet after it would count models twice.
+                raise ParseError("`K with` line before a model bullet", line)
             model_set = UnitComposition(
                 name=bullet.group("name"), num_models=int(bullet.group("count"))
             )
@@ -71,7 +88,8 @@ def parse_unit(header: str, body: Sequence[str]) -> tuple[Unit, UnitLinks]:
         elif _WITH_REGEX.match(line) is not None:
             if model_set is None:
                 model_set = _implicit_model_set(unit, match)
-            _add_items(unit, model_set, [line])
+                implicit = True
+            _add_items(unit, model_set, _split_items(line))
         elif (enhancement := _ENHANCEMENT_REGEX.match(line)) is not None:
             if unit.enhancement:
                 # A unit takes one enhancement; keep any further line visible
@@ -136,11 +154,16 @@ def _split_commas(text: str) -> list[str]:
 
 
 def _split_items(text: str) -> list[str]:
-    """Split a wargear list on commas — but a `K with A, B` item owns the rest."""
-    items = _split_commas(text)
-    for i, item in enumerate(items):
-        if _WITH_REGEX.match(item):
-            return [*items[:i], ", ".join(items[i:])]
+    """Split a wargear list on commas — but a `K with A, B` item owns the items
+    after it, up to the next `K with` item:
+    `X, 1 with A, B, 1 with C` -> `["X", "1 with A, B", "1 with C"]`.
+    """
+    items: list[str] = []
+    for item in _split_commas(text):
+        if items and _WITH_REGEX.match(items[-1]) and not _WITH_REGEX.match(item):
+            items[-1] += ", " + item
+        else:
+            items.append(item)
     return items
 
 
