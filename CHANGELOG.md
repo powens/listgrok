@@ -7,8 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-26
+
 ### Added
 
+- French and German official-app exports parse: translated labels (detachment
+  line, group headings, `Attached as:`, `Warlord`, `Enhancement(s):`, army
+  sizes, joiners, footer) are recognised, and attached-as roles and details are
+  normalised to English. Point totals with locale thousands separators
+  (`2.000`, `2'000`, no-break spaces) parse.
+- `ArmyList.validation_errors` holds the app's own `ERRORS` block, and a
+  footnote the app prints below a `*`-marked unit lands in that unit's
+  `decorations`.
 - New Recruit's GW-style export parses: its `Exported with New Recruit …` footer,
   an absent army-size line (`army_size` stays `""`, `army_size_points` `None`),
   and no blank line after a group heading or between units. A section heading,
@@ -79,7 +89,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fully typed package (`py.typed`), zero runtime dependencies,
   Python 3.10–3.14.
 
-[Unreleased]: https://github.com/powens/listgrok/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/powens/listgrok/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/powens/listgrok/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/powens/listgrok/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/powens/listgrok/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/powens/listgrok/releases/tag/v0.1.0
