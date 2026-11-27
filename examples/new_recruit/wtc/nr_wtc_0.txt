@@ -1,0 +1,43 @@
+++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Imperium - Adeptus Custodes
++ DETACHMENT: Lions of the Emperor (Against All Odds)
++ FORCE DISPOSITION: Take and Hold
++ TOTAL ARMY POINTS: 1990pts
++
++ WARLORD: Char1: Valerian
++ ENHANCEMENT: Superior Creation (on Char2: Blade Champion)
+& Praesidius (on Char3: Shield-Captain on Dawneagle Jetbike)
++ NUMBER OF UNITS: 12
++ SECONDARY: - Assassination: 3 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char2: 1x Blade Champion (135 pts): Vaultswords
+Enhancement: Superior Creation (+25 pts)
+Leading Custodian Guard
+Char3: 1x Shield-Captain on Dawneagle Jetbike (165 pts): Interceptor lance, Vertus hurricane bolter
+Enhancement: Praesidius (+25 pts)
+Char1: 1x Valerian (110 pts): Warlord, Gnosis
+Leading Custodian Wardens
+
+5x Custodian Guard (215 pts): 5 with Guardian Spear
+  Attached to Blade Champion
+
+6x Allarus Custodians (340 pts): 6 with Balistus grenade launcher, Guardian Spear
+6x Allarus Custodians (340 pts): 6 with Balistus grenade launcher, Guardian Spear
+5x Custodian Wardens (250 pts)
+• 4x Custodian Warden (Guardian Spear): 4 with Guardian Spear
+• 1x Custodian Warden: Vexilla, Guardian Spear
+  Attached to Valerian
+4x Prosecutors (45 pts)
+• 1x Prosecutor Sister Superior: Boltgun, Close combat weapon
+• 3x Prosecutor: 3 with Boltgun, Close combat weapon
+4x Prosecutors (45 pts)
+• 1x Prosecutor Sister Superior: Boltgun, Close combat weapon
+• 3x Prosecutor: 3 with Boltgun, Close combat weapon
+2x Vertus Praetors (145 pts): 2 with Interceptor lance, Vertus hurricane bolter
+2x Vertus Praetors (145 pts): 2 with Interceptor lance, Vertus hurricane bolter
+5x Witchseekers (55 pts)
+• 1x Witchseeker Sister Superior: Close combat weapon, Witchseeker flamer
+• 4x Witchseeker: 4 with Close combat weapon, Witchseeker flamer
+
+Created with newrecruit.eu v36.27
